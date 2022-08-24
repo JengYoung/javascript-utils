@@ -6,10 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "typescript": "^4.6.4",
-    "vite": "^3.0.7"
-  }
+    "vite": "^3.0.9",
+    "vitest": "^0.22.1"
+  },
+  "packageManager": "yarn@3.2.2"
 }
