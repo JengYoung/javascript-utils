@@ -62,7 +62,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:^18.7.12":
   version: 18.7.12
   resolution: "@types/node@npm:18.7.12"
   checksum: 61755955729081cea40e7e25054ce53b7f2ddc84635f94d03d80e55c5376b8c298dd2379d31f8f07c928b6da7b020dcde65ebb6e12ffb8b56a5e51c2b02b5b51
@@ -767,6 +767,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "javascript-utils@workspace:."
   dependencies:
+    "@types/node": ^18.7.12
     typescript: ^4.6.4
     vite: ^3.0.9
     vitest: ^0.22.1

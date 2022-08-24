@@ -13,7 +13,8 @@
   "devDependencies": {
     "typescript": "^4.6.4",
     "vite": "^3.0.9",
-    "vitest": "^0.22.1"
+    "vitest": "^0.22.1",
+    "@types/node": "^18.7.12"
   },
   "packageManager": "yarn@3.2.2"
 }
