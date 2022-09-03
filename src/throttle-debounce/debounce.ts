@@ -1,15 +1,12 @@
-
-const throttle = (cb: Function, delay = 300) => {
+const debounce = (cb: (e: Event) => void, delay = 300) => {
   let timerFunc: null | NodeJS.Timeout = null;
-
+  
   return (e: Event) => {
-    if (timerFunc) return;
-    
+    if (timerFunc) clearTimeout(timerFunc);
     timerFunc = setTimeout(() => {
       cb(e);
-      timerFunc = null;
     }, delay)
   }
 }
 
-export default throttle;
+export default debounce;
