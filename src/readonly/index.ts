@@ -1,5 +1,5 @@
 const readonly = (object: any) => {
-  if (object?.constructor?.name !== 'Object') return object;
+  if (object?.constructor?.name !== 'Object' && object?.constructor?.name !== 'Array') return object;
   
   
   for (const key in object) {
