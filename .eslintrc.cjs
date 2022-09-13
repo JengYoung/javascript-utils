@@ -20,9 +20,7 @@ module.exports = {
       'ignorePackages',
       {
         js: 'never',
-        jsx: 'never',
         ts: 'never',
-        tsx: 'never',
       },
     ],
   },
@@ -32,6 +30,7 @@ module.exports = {
         extensions: ['.js', '.ts'],
         moduleDirectory: ['node_modules', 'src/'],
       },
+      typescript: {}, // this loads <rootdir>/tsconfig.json to eslint
     },
   },
 };
