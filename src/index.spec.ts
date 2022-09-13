@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+
 import { describe, expect, it } from "vitest";
 
 describe("연산자를 통해 연산하면", () => {
@@ -45,7 +47,7 @@ describe.concurrent("단항 연산자를 통해 연산하면", () => {
     let x = 3;
     let y = 4;
 
-    let result = x++ * y++;
+    const result = x++ * y++;
     expect(result).toEqual(12);
     expect(x).toEqual(4);
     expect(y).toEqual(5);
@@ -54,7 +56,7 @@ describe.concurrent("단항 연산자를 통해 연산하면", () => {
   it("위와 같은 산술 연산자는 기존 변수의 저장된 값까지 연산을 수행하고 업데이트하여 계산해야 한다.", () => {
     let x = 1;
 
-    let z = ++x * x++;
+    const z = ++x * x++;
 
     expect(z).toEqual(4);
     expect(x).toEqual(3);
@@ -74,14 +76,14 @@ describe.concurrent("단항 연산자를 통해 연산하면", () => {
 
 describe("문자열 연결 연산자는", () => {
   it("하나라도 문자열이 있다면, 문자 타입으로 해석되어야 한다.", () => {
-    let x = 1;
-    let y = "2";
+    const x = 1;
+    const y = "2";
     expect(x + y).toBeTypeOf("string");
   });
 
   it("문자열이 없다면, 넘버 타입으로 해석되어야 한다.", () => {
-    let x = 1;
-    let y = 2;
+    const x = 1;
+    const y = 2;
     expect(x + y).toBeTypeOf("number");
   });
 });
@@ -138,7 +140,7 @@ describe.concurrent("단항 연산자를 통해 연산하면", () => {
     let x = 3;
     let y = 4;
 
-    let result = x++ * y++;
+    const result = x++ * y++;
     expect(result).toEqual(12);
     expect(x).toEqual(4);
     expect(y).toEqual(5);
@@ -147,7 +149,7 @@ describe.concurrent("단항 연산자를 통해 연산하면", () => {
   it("위와 같은 산술 연산자는 기존 변수의 저장된 값까지 연산을 수행하고 업데이트하여 계산해야 한다.", () => {
     let x = 1;
 
-    let z = ++x * x++;
+    const z = ++x * x++;
 
     expect(z).toEqual(4);
     expect(x).toEqual(3);
@@ -199,45 +201,46 @@ describe("ES12_Logical Assignment Operators", () => {
 });
 
 describe("비교 연산자는", () => {
-  it("===는 타입과 관계 없이 값을 느슨하게 검사해야 한다.", () => {
-    let x = 1;
-    let y = true;
+  // it("===는 타입과 관계 없이 값을 느슨하게 검사해야 한다.", () => {
+  //   const x = 1;
+  //   const y = true;
 
-    expect(x === y).toEqual(false);
-  });
+  //   expect(x === y).toEqual(false);
+  // });
 
-  it("==는 타입과 관계 없이 값을 느슨하게 검사해야 한다.", () => {
-    let x = 1;
-    let y = true;
+  // it("==는 타입과 관계 없이 값을 느슨하게 검사해야 한다.", () => {
+  //   const x = 1;
+  //   const y = true;
 
-    expect(x == y).toEqual(true);
-  });
+  //   expect(x == y).toEqual(true);
+  // });
 
   it("객체 타입의 값의 비교는 항상 다르게 나와야 한다", () => {
-    let a = [1, 2, 3];
-    let b = [1, 2, 3];
+    const a = [1, 2, 3];
+    const b = [1, 2, 3];
 
     /**
      * 이는 같지 않아요. 왜냐! 배열은 객체타입이죠?
      * 객체 타입은 주소 값을 통해 값을 불러오죠!
      * 그런데 두 배열의 주소 값이 같지 않겠죠? 따라서 false입니다!
      */
+    /* eslint-disable-next-line eqeqeq */
     expect(a == b).not.toEqual(true);
     expect(a === b).not.toEqual(true);
   });
 });
 
-describe("삼항 연산자", () => {
-  it("만약 조건이 truthy하다면 좌항을 실시해야 한다.", () => {
-    let check = 1 === 1;
-    let result = check ? true : false;
-    expect(result).toBeTruthy();
+// describe("삼항 연산자", () => {
+//   it("만약 조건이 truthy하다면 좌항을 실시해야 한다.", () => {
+//     let check = 1 === 1;
+//     let result = !!check;
+//     expect(result).toBeTruthy();
 
-    check = 1 !== 1;
-    result = check ? true : false;
-    expect(result).toBeFalsy();
-  });
-});
+//     check = 1 !== 1;
+//     result = !!check;
+//     expect(result).toBeFalsy();
+//   });
+// });
 
 describe("typeof", () => {
   it("개발 당시 실수로 인해 null은 타입 검사 시 object로 나와야 한다.", () => {
