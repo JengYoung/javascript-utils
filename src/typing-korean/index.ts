@@ -1,3 +1,5 @@
+import readonly from '../readonly';
+
 export const Chosungs = [
   'ㄱ',
   'ㄲ',
@@ -152,25 +154,45 @@ export const getTypingAnimationTextArr = (text: string) => {
   document.body.appendChild(text);
 
   const nowText = '안녕하세요, Jengyoung입니다.';
-  const arr = getTypingAnimationTextArr(nowText);
+  const arr = readonly([''].concat(getTypingAnimationTextArr(nowText)));
 
   let idx = 0;
   const maxIdx = arr.length - 1;
 
   let isCountUp = true;
 
-  setInterval(() => {
-    idx += isCountUp ? 1 : -1;
+  let timer: null | NodeJS.Timeout = null;
+  let backspaceCallback: Function;
 
+  const typingCallback = () => {
+    if (timer === null) return;
+
+    idx += 1;
     text.innerText = arr[idx];
-    console.log(idx);
 
     if (idx === maxIdx) {
       isCountUp = false;
+      clearInterval(timer);
+      setTimeout(() => {
+        timer = setInterval(backspaceCallback, 50) as unknown as NodeJS.Timeout;
+      }, 1000);
     }
+  };
+
+  backspaceCallback = () => {
+    if (timer === null) return;
+
+    idx -= 1;
+    text.innerText = arr[idx];
 
     if (idx === 0) {
       isCountUp = true;
+      clearInterval(timer);
+      setTimeout(() => {
+        timer = setInterval(typingCallback, 50);
+      }, 1000);
     }
-  }, 50);
+  };
+
+  if (isCountUp) timer = setInterval(typingCallback, 50); // 처음부터 뒤로 갈 수는 없으니, 조건문으로 안정적으로 관리
 })();
