@@ -145,3 +145,32 @@ export const getTypingAnimationTextArr = (text: string) => {
 
   return arr;
 };
+
+(() => {
+  const text = document.createElement('div');
+  text.classList.add('text');
+  document.body.appendChild(text);
+
+  const nowText = '안녕하세요, Jengyoung입니다.';
+  const arr = getTypingAnimationTextArr(nowText);
+
+  let idx = 0;
+  const maxIdx = arr.length - 1;
+
+  let isCountUp = true;
+
+  setInterval(() => {
+    idx += isCountUp ? 1 : -1;
+
+    text.innerText = arr[idx];
+    console.log(idx);
+
+    if (idx === maxIdx) {
+      isCountUp = false;
+    }
+
+    if (idx === 0) {
+      isCountUp = true;
+    }
+  }, 50);
+})();
