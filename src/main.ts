@@ -9,13 +9,6 @@ const $side2 = document.createElement('div');
 const $side3 = document.createElement('div');
 const $side4 = document.createElement('div');
 
-$top.classList.add('top');
-$bottom.classList.add('bottom');
-$side1.classList.add('side1');
-$side2.classList.add('side2');
-$side3.classList.add('side3');
-$side4.classList.add('side4');
-
 const cube = new Cube({
   target: $app as HTMLElement,
   top: $top,
