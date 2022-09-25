@@ -11,7 +11,7 @@
   position: relative;
   margin: 100px auto;
   transform-style: preserve-3d;
-  transition: all 1s;
+  transition: all 0.3s ease-out;
   transform-origin: 150px 150px -150px;
   // transform: rotateX(90deg) translateY(-300px);
 }
@@ -41,41 +41,64 @@
     transform: rotate3d(360deg);
   }
 }
+
+// 바꾼 다음 transition을 이용해서 가는 건 각기 따로 분리되어 움직여서, 주사위가 이쁘지 않음.
+// .top,
+// .bottom,
+// .left,
+// .right,
+// .front,
+// .back {
+//   transition: all 1s;
+// }
 .top {
   transform-origin: bottom;
-  background-color: red;
   transform: translateY(-100%) rotateX(90deg);
   z-index: 12;
-  transition: all 1s;
 }
+
 .bottom {
   position: absolute;
-  background-color: orange;
   transform-origin: top;
   transform: translateY(100%) rotateX(-90deg);
   z-index: -1;
 }
 .front {
   position: relative;
-  background-color: blue;
   z-index: 6;
   // opacity: 0.3;
 }
 .right {
   transform-origin: left;
   transform: translateX(100%) rotateY(90deg);
-  background-color: green;
   z-index: -1;
 }
 .back {
-  background-color: yellow;
   transform-origin: center;
   transform: translateZ(-300px);
   z-index: -1;
 }
 .left {
-  background-color: navy;
   transform-origin: right;
   transform: translateX(-100%) rotateY(-90deg);
   z-index: -1;
+}
+
+.origin-top-side {
+  background-color: red;
+}
+.origin-bottom-side {
+  background-color: orange;
+}
+.origin-front-side {
+  background-color: blue;
+}
+.origin-right-side {
+  background-color: green;
+}
+.origin-back-side {
+  background-color: yellow;
+}
+.origin-left-side {
+  background-color: navy;
 }

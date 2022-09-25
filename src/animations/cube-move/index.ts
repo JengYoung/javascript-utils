@@ -19,7 +19,7 @@ class Cube {
 
   constructor({target, top, bottom, sides}: CubeParams) {
     this.cube = document.createElement('div');
-    this.cube.classList.add('cube');
+    this.cube.classList.add('cube', 'animate');
 
     this.target = target;
     this.$top = top;
@@ -31,10 +31,14 @@ class Cube {
 
   init() {
     const classNames = ['front', 'right', 'back', 'left'];
-    this.$top.classList.add('top', 'cube-side');
-    this.$bottom.classList.add('bottom', 'cube-side');
+    this.$top.classList.add('top', 'cube-side', 'origin-top-side');
+    this.$bottom.classList.add('bottom', 'cube-side', 'origin-bottom-side');
     this.$sides.forEach((side, index) => {
-      side.classList.add(classNames[index], 'cube-side');
+      side.classList.add(
+        classNames[index],
+        'cube-side',
+        `origin-${classNames[index]}-side`,
+      );
     });
   }
 
