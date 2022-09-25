@@ -1,3 +1,7 @@
+#app {
+  perspective: 600px;
+}
+
 .cube {
   display: flex;
   justify-content: center;
@@ -9,7 +13,7 @@
   transform-style: preserve-3d;
   transition: all 3s;
   transform-origin: top;
-  transform: rotateX(90deg);
+  transform: rotateX(90deg) translateY(-300px);
 }
 
 .cube-side {
