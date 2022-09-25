@@ -11,9 +11,9 @@
   position: relative;
   margin: 100px auto;
   transform-style: preserve-3d;
-  transition: all 3s;
-  transform-origin: top;
-  transform: rotateX(90deg) translateY(-300px);
+  transition: all 1s;
+  transform-origin: 150px 150px -150px;
+  // transform: rotateX(90deg) translateY(-300px);
 }
 
 .cube-side {
@@ -45,7 +45,8 @@
   transform-origin: bottom;
   background-color: red;
   transform: translateY(-100%) rotateX(90deg);
-  z-index: 1;
+  z-index: 12;
+  transition: all 1s;
 }
 .bottom {
   position: absolute;

@@ -1,3 +1,4 @@
+import CubeController from './animations/cube-move/controls';
 import Cube from './animations/cube-move/index';
 
 const $app = document.querySelector('#app');
@@ -16,4 +17,7 @@ const cube = new Cube({
   sides: [$side1, $side2, $side3, $side4],
 });
 
+const cubeController = new CubeController($app as HTMLElement);
+
 cube.render();
+cubeController.render();
