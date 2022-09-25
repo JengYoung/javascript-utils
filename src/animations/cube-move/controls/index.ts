@@ -4,6 +4,10 @@ interface CounterInterface {
   right: number;
   bottom: number;
 }
+interface RotateElementsInterface {
+  element: HTMLElement;
+  className: string;
+}
 
 class CubeController {
   direction: keyof CounterInterface | null;
@@ -96,70 +100,47 @@ class CubeController {
   }
 
   update() {
-    if (this.direction === 'top') {
-      const $top = document.querySelector('.top');
-      const $bottom = document.querySelector('.bottom');
-      const $front = document.querySelector('.front');
-      const $back = document.querySelector('.back');
+    const $top = document.querySelector('.top') as HTMLElement;
+    const $bottom = document.querySelector('.bottom') as HTMLElement;
+    const $front = document.querySelector('.front') as HTMLElement;
+    const $back = document.querySelector('.back') as HTMLElement;
+    const $left = document.querySelector('.left') as HTMLElement;
+    const $right = document.querySelector('.right') as HTMLElement;
 
-      $top?.classList.add('back');
-      $bottom?.classList.add('front');
-      $front?.classList.add('top');
-      $back?.classList.add('bottom');
+    const rotateXs: RotateElementsInterface[] = [
+      {element: $top, className: 'top'},
+      {element: $back, className: 'back'},
+      {element: $bottom, className: 'bottom'},
+      {element: $front, className: 'front'},
+    ];
+    const rotateYs: RotateElementsInterface[] = [
+      {element: $front, className: 'front'},
+      {element: $right, className: 'right'},
+      {element: $back, className: 'back'},
+      {element: $left, className: 'left'},
+    ];
 
-      $top?.classList.remove('top');
-      $bottom?.classList.remove('bottom');
-      $front?.classList.remove('front');
-      $back?.classList.remove('back');
-    }
-    if (this.direction === 'bottom') {
-      const $top = document.querySelector('.top');
-      const $bottom = document.querySelector('.bottom');
-      const $front = document.querySelector('.front');
-      const $back = document.querySelector('.back');
+    const updateClassName = (
+      origin: RotateElementsInterface[],
+      isDirectionRight: boolean,
+    ) => {
+      origin.forEach(({element}, index) => {
+        const nextIndex = isDirectionRight
+          ? (index + 1) % 4
+          : (4 + index - 1) % 4;
 
-      $top?.classList.add('front');
-      $bottom?.classList.add('back');
-      $front?.classList.add('bottom');
-      $back?.classList.add('top');
+        element.classList.add(origin[nextIndex].className);
+      });
 
-      $top?.classList.remove('top');
-      $bottom?.classList.remove('bottom');
-      $front?.classList.remove('front');
-      $back?.classList.remove('back');
-    }
-    if (this.direction === 'left') {
-      const $left = document.querySelector('.left');
-      const $back = document.querySelector('.back');
-      const $right = document.querySelector('.right');
-      const $front = document.querySelector('.front');
+      origin.forEach(({element, className}) => {
+        element.classList.remove(className);
+      });
+    };
 
-      $left?.classList.add('back');
-      $back?.classList.add('right');
-      $right?.classList.add('front');
-      $front?.classList.add('left');
-
-      $left?.classList.remove('left');
-      $back?.classList.remove('back');
-      $right?.classList.remove('right');
-      $front?.classList.remove('front');
-    }
-    if (this.direction === 'right') {
-      const $left = document.querySelector('.left');
-      const $back = document.querySelector('.back');
-      const $right = document.querySelector('.right');
-      const $front = document.querySelector('.front');
-
-      $left?.classList.add('front');
-      $back?.classList.add('left');
-      $right?.classList.add('back');
-      $front?.classList.add('right');
-
-      $left?.classList.remove('left');
-      $back?.classList.remove('back');
-      $right?.classList.remove('right');
-      $front?.classList.remove('front');
-    }
+    if (this.direction === 'top') updateClassName(rotateXs, true);
+    if (this.direction === 'bottom') updateClassName(rotateXs, false);
+    if (this.direction === 'left') updateClassName(rotateYs, false);
+    if (this.direction === 'right') updateClassName(rotateYs, true);
   }
 
   move(direction: keyof CounterInterface) {
