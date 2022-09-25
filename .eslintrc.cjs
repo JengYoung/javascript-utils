@@ -23,6 +23,7 @@ module.exports = {
         ts: 'never',
       },
     ],
+    'class-methods-use-this': 0,
   },
   settings: {
     'import/resolver': {

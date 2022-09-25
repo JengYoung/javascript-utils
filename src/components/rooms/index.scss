@@ -1,0 +1,78 @@
+#app {
+  perspective: 100px;
+}
+
+.cube {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 600px;
+  position: relative;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  transform: rotateY(180deg);
+  transition: all 3s;
+}
+
+.cube-side {
+  position: absolute;
+  opacity: 0.2;
+  width: 300px;
+  height: 300px;
+}
+
+@keyframes rotateTop {
+  0% {
+    transform: rotate3d(0);
+  }
+  25% {
+    transform: rotate3d(90deg);
+  }
+  50% {
+    transform: rotate3d(180deg);
+  }
+  75% {
+    transform: rotate3d(270deg);
+  }
+  100% {
+    transform: rotate3d(360deg);
+  }
+}
+.top {
+  transform-origin: bottom;
+  background-color: red;
+  transform: translateY(-100%) rotateX(90deg);
+  z-index: 1;
+}
+.bottom {
+  position: absolute;
+  background-color: orange;
+  transform-origin: top;
+  transform: translateY(100%) rotateX(-90deg);
+  z-index: -1;
+}
+.front {
+  position: relative;
+  background-color: blue;
+  z-index: 6;
+  opacity: 0.3;
+}
+.right {
+  transform-origin: left;
+  transform: translateX(100%) rotateY(90deg);
+  background-color: green;
+  z-index: -1;
+}
+.back {
+  background-color: yellow;
+  transform-origin: center;
+  transform: translateZ(-300px);
+  z-index: -1;
+}
+.left {
+  opacity: 0.5;
+  background-color: navy;
+  transform-origin: right;
+  transform: translateX(-100%) rotateY(-90deg);
+  z-index: -1;
+}
