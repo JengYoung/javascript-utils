@@ -1,24 +1,23 @@
-#app {
-  perspective: 100px;
-}
-
 .cube {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 600px;
+  width: 300px;
+  height: 300px;
   position: relative;
-  perspective: 1000px;
+  margin: 100px auto;
   transform-style: preserve-3d;
-  transform: rotateY(180deg);
   transition: all 3s;
+  transform-origin: top;
+  transform: rotateX(90deg);
 }
 
 .cube-side {
   position: absolute;
-  opacity: 0.2;
-  width: 300px;
-  height: 300px;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
 }
 
 @keyframes rotateTop {
@@ -55,7 +54,7 @@
   position: relative;
   background-color: blue;
   z-index: 6;
-  opacity: 0.3;
+  // opacity: 0.3;
 }
 .right {
   transform-origin: left;
@@ -70,7 +69,6 @@
   z-index: -1;
 }
 .left {
-  opacity: 0.5;
   background-color: navy;
   transform-origin: right;
   transform: translateX(-100%) rotateY(-90deg);
