@@ -1,29 +1,34 @@
 export class TwinkleEye {
   target: HTMLElement;
 
-  sight: HTMLElement;
-
-  aboveSight: HTMLElement;
+  sight: HTMLCanvasElement;
 
   belowSight: HTMLElement;
 
   constructor(target: HTMLElement) {
     this.target = target;
 
-    this.sight = document.createElement('div');
+    this.sight = document.createElement('canvas');
     this.sight.classList.add('twinkle-eye-sight');
+    console.log(target.clientHeight);
+    this.sight.width = window.screen.width;
+    this.sight.height = target.clientHeight;
 
-    this.aboveSight = document.createElement('div');
-    this.aboveSight.classList.add('twinkle-eye-sight__above');
+    const ctx = this.sight.getContext('2d') as CanvasRenderingContext2D;
 
-    this.belowSight = document.createElement('div');
-    this.belowSight.classList.add('twinkle-eye-sight__below');
+    ctx.fillStyle = 'rgba(0, 0, 0)';
+    ctx?.fillRect(0, 0, this.sight.width, 0.5 * this.sight.height);
+
+    ctx.fillStyle = 'rgba(0, 0, 0)';
+    ctx?.fillRect(
+      0,
+      0.5 * this.sight.height,
+      this.sight.width,
+      0.5 * this.sight.height,
+    );
   }
 
   render() {
-    this.sight.appendChild(this.aboveSight);
-    this.sight.appendChild(this.belowSight);
-
     this.target.appendChild(this.sight);
   }
 }
