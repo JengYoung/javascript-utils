@@ -3,8 +3,6 @@ export class TwinkleEye {
 
   sight: HTMLCanvasElement;
 
-  belowSight: HTMLElement;
-
   constructor(target: HTMLElement) {
     this.target = target;
 
@@ -16,8 +14,34 @@ export class TwinkleEye {
 
     const ctx = this.sight.getContext('2d') as CanvasRenderingContext2D;
 
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, this.sight.height * 0.5);
+
+    ctx.bezierCurveTo(
+      this.sight.width * 0.25,
+      this.sight.height * 0.4,
+      this.sight.width * 0.5,
+      this.sight.height * 0.4,
+      this.sight.width * 0.5,
+      this.sight.height * 0.4,
+    );
+
+    ctx.bezierCurveTo(
+      this.sight.width * 0.5,
+      this.sight.height * 0.4,
+      this.sight.width * 0.75,
+      this.sight.height * 0.4,
+      this.sight.width,
+      this.sight.height * 0.5,
+    );
+
+    // ctx.lineTo(this.sight.width, this.sight.height * 0.5);
+    ctx.lineTo(this.sight.width, 0);
+
     ctx.fillStyle = 'rgba(0, 0, 0)';
-    ctx?.fillRect(0, 0, this.sight.width, 0.5 * this.sight.height);
+    ctx.fill();
+    // ctx?.fillRect(0, 0, this.sight.width, 0.5 * this.sight.height);
 
     ctx.fillStyle = 'rgba(0, 0, 0)';
     ctx?.fillRect(
