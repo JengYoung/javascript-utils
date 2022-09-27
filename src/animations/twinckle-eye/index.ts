@@ -3,6 +3,10 @@ export class TwinkleEye {
 
   isCloseEye: boolean;
 
+  isReOpenEyeCompleted: boolean;
+
+  isFilterCleared: boolean;
+
   isAnimationEnd: boolean;
 
   target: HTMLElement;
@@ -17,6 +21,8 @@ export class TwinkleEye {
 
   #ORIGIN_SKEW_EYE_DEGREE: number;
 
+  #filter: number = 10;
+
   constructor(
     target: HTMLElement,
     height: number = 100,
@@ -24,6 +30,8 @@ export class TwinkleEye {
   ) {
     this.isInitOpenEye = false;
     this.isCloseEye = false;
+    this.isReOpenEyeCompleted = false;
+    this.isFilterCleared = false;
     this.isAnimationEnd = false;
 
     this.target = target;
@@ -31,6 +39,10 @@ export class TwinkleEye {
 
     this.#ORIGIN_SKEW_EYE_DEGREE = skewEyeDegree;
     this.height = height;
+
+    (this.target.querySelector('.page') as HTMLElement).style.cssText = `
+      filter: blur(10px);
+    `;
 
     this.sight = document.createElement('canvas');
     this.sight.classList.add('twinkle-eye-sight');
@@ -47,17 +59,25 @@ export class TwinkleEye {
   }
 
   animate(timestamp: number) {
+    if (
+      this.isInitOpenEye &&
+      this.isCloseEye &&
+      this.isFilterCleared &&
+      this.isReOpenEyeCompleted
+    ) {
+      this.isAnimationEnd = true;
+    }
+
     this.ctx.clearRect(0, 0, this.sight.width, this.sight.height);
 
     this.init(timestamp);
 
     this.render();
 
-    requestAnimationFrame(this.animate.bind(this));
+    if (!this.isAnimationEnd) requestAnimationFrame(this.animate.bind(this));
   }
 
   init(timestamp: number) {
-    console.log(timestamp);
     const initOpenEye = (height: number) => {
       if (this.isInitOpenEye) return;
 
@@ -65,8 +85,6 @@ export class TwinkleEye {
         this.isInitOpenEye = true;
         return;
       }
-
-      console.log(this.height);
 
       this.height *= 1.015;
     };
@@ -89,23 +107,44 @@ export class TwinkleEye {
       if (!this.isInitOpenEye || !this.isCloseEye) return;
 
       if (this.skewEyeDegree < this.#ORIGIN_SKEW_EYE_DEGREE) {
-        if (this.skewEyeDegree < this.#ORIGIN_SKEW_EYE_DEGREE * 0.001) {
-          this.skewEyeDegree = this.#ORIGIN_SKEW_EYE_DEGREE * 0.001;
-        }
+        this.skewEyeDegree = Math.max(
+          this.skewEyeDegree,
+          this.#ORIGIN_SKEW_EYE_DEGREE * 0.1,
+        );
+
         this.skewEyeDegree *= 1.05;
       }
 
       if (this.height > height) {
-        this.isAnimationEnd = true;
+        this.isReOpenEyeCompleted = true;
         return;
       }
 
       this.height *= 1.1;
     };
 
+    const clearFilter = () => {
+      if (this.isFilterCleared) return;
+      if (timestamp < 1800) return;
+
+      this.#filter = Math.floor(this.#filter) ? this.#filter - 0.1 : 0;
+
+      const $page = this.target.querySelector('.page') as HTMLElement;
+      if (!this.#filter) {
+        this.isFilterCleared = true;
+        $page.style.cssText = '';
+        return;
+      }
+
+      $page.style.cssText = `
+        filter: blur(${this.#filter}px);
+      `;
+    };
+
     initOpenEye(200);
     closeEye(0);
     reOpenEye(this.sight.height);
+    clearFilter();
   }
 
   resize() {
