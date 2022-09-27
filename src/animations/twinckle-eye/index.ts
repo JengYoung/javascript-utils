@@ -3,6 +3,8 @@ export class TwinkleEye {
 
   isCloseEye: boolean;
 
+  isAnimationEnd: boolean;
+
   target: HTMLElement;
 
   sight: HTMLCanvasElement;
@@ -13,6 +15,8 @@ export class TwinkleEye {
 
   skewEyeDegree: number;
 
+  #ORIGIN_SKEW_EYE_DEGREE: number;
+
   constructor(
     target: HTMLElement,
     height: number = 100,
@@ -20,9 +24,12 @@ export class TwinkleEye {
   ) {
     this.isInitOpenEye = false;
     this.isCloseEye = false;
+    this.isAnimationEnd = false;
 
     this.target = target;
     this.skewEyeDegree = skewEyeDegree;
+
+    this.#ORIGIN_SKEW_EYE_DEGREE = skewEyeDegree;
     this.height = height;
 
     this.sight = document.createElement('canvas');
@@ -39,17 +46,18 @@ export class TwinkleEye {
     requestAnimationFrame(this.animate.bind(this));
   }
 
-  animate() {
+  animate(timestamp: number) {
     this.ctx.clearRect(0, 0, this.sight.width, this.sight.height);
 
-    this.init();
+    this.init(timestamp);
 
     this.render();
 
     requestAnimationFrame(this.animate.bind(this));
   }
 
-  init() {
+  init(timestamp: number) {
+    console.log(timestamp);
     const initOpenEye = (height: number) => {
       if (this.isInitOpenEye) return;
 
@@ -60,10 +68,11 @@ export class TwinkleEye {
 
       console.log(this.height);
 
-      this.height *= 1.1;
+      this.height *= 1.015;
     };
 
     const closeEye = (height: number) => {
+      if (timestamp < 1000) return;
       if (!this.isInitOpenEye || this.isCloseEye) return;
 
       if (Math.floor(this.height) <= height) {
@@ -75,8 +84,28 @@ export class TwinkleEye {
       this.height *= 0.95;
     };
 
+    const reOpenEye = (height: number) => {
+      if (timestamp < 1800) return;
+      if (!this.isInitOpenEye || !this.isCloseEye) return;
+
+      if (this.skewEyeDegree < this.#ORIGIN_SKEW_EYE_DEGREE) {
+        if (this.skewEyeDegree < this.#ORIGIN_SKEW_EYE_DEGREE * 0.001) {
+          this.skewEyeDegree = this.#ORIGIN_SKEW_EYE_DEGREE * 0.001;
+        }
+        this.skewEyeDegree *= 1.05;
+      }
+
+      if (this.height > height) {
+        this.isAnimationEnd = true;
+        return;
+      }
+
+      this.height *= 1.1;
+    };
+
     initOpenEye(200);
     closeEye(0);
+    reOpenEye(this.sight.height);
   }
 
   resize() {
