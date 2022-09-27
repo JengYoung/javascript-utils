@@ -3,53 +3,74 @@ export class TwinkleEye {
 
   sight: HTMLCanvasElement;
 
-  constructor(target: HTMLElement) {
+  height: number;
+
+  constructor(target: HTMLElement, height: number = 100) {
     this.target = target;
 
     this.sight = document.createElement('canvas');
     this.sight.classList.add('twinkle-eye-sight');
-    console.log(target.clientHeight);
+
     this.sight.width = window.screen.width;
-    this.sight.height = target.clientHeight;
+    this.sight.height = window.innerHeight;
+
+    this.height = height;
 
     const ctx = this.sight.getContext('2d') as CanvasRenderingContext2D;
 
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(0, this.sight.height * 0.5);
+    ctx.lineTo(0, (this.sight.height - this.height) * 0.5);
 
     ctx.bezierCurveTo(
       this.sight.width * 0.25,
-      this.sight.height * 0.4,
+      this.sight.height * 0.4 - this.height * 0.5,
       this.sight.width * 0.5,
-      this.sight.height * 0.4,
+      this.sight.height * 0.4 - this.height * 0.5,
       this.sight.width * 0.5,
-      this.sight.height * 0.4,
+      this.sight.height * 0.4 - this.height * 0.5,
     );
 
     ctx.bezierCurveTo(
       this.sight.width * 0.5,
-      this.sight.height * 0.4,
+      this.sight.height * 0.4 - this.height * 0.5,
       this.sight.width * 0.75,
-      this.sight.height * 0.4,
+      this.sight.height * 0.4 - this.height * 0.5,
       this.sight.width,
-      this.sight.height * 0.5,
+      this.sight.height * 0.5 - this.height * 0.5,
     );
 
-    // ctx.lineTo(this.sight.width, this.sight.height * 0.5);
     ctx.lineTo(this.sight.width, 0);
 
     ctx.fillStyle = 'rgba(0, 0, 0)';
     ctx.fill();
-    // ctx?.fillRect(0, 0, this.sight.width, 0.5 * this.sight.height);
+
+    // 아래쪽 눈도 구현한다.
+    ctx.beginPath();
+    ctx.moveTo(0, (this.sight.height + this.height) * 0.5);
+    ctx.bezierCurveTo(
+      this.sight.width * 0.25,
+      this.sight.height * 0.6 + this.height * 0.5,
+      this.sight.width * 0.5,
+      this.sight.height * 0.6 + this.height * 0.5,
+      this.sight.width * 0.5,
+      this.sight.height * 0.6 + this.height * 0.5,
+    );
+
+    ctx.bezierCurveTo(
+      this.sight.width * 0.5,
+      this.sight.height * 0.6 + this.height * 0.5,
+      this.sight.width * 0.75,
+      this.sight.height * 0.6 + this.height * 0.5,
+      this.sight.width,
+      this.sight.height * 0.5 + this.height * 0.5,
+    );
+
+    ctx.lineTo(this.sight.width, this.sight.height);
+    ctx.lineTo(0, this.sight.height);
 
     ctx.fillStyle = 'rgba(0, 0, 0)';
-    ctx?.fillRect(
-      0,
-      0.5 * this.sight.height,
-      this.sight.width,
-      0.5 * this.sight.height,
-    );
+    ctx?.fill();
   }
 
   render() {
