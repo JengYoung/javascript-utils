@@ -1,1 +1,1 @@
-import './animations/twinckle-eye/index';
+import './animations/cd-player/index';
