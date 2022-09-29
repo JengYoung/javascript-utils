@@ -12,13 +12,13 @@ class PlayerBody {
   constructor(root: HTMLElement) {
     this.root = root;
     this.cdPlayer = document.createElement('div');
-    this.cdPlayer.classList.add('cd-player__body');
+    this.cdPlayer.classList.add('cd-player');
 
     this.cdPlayerTrack = document.createElement('div');
     this.cdPlayerTrack.classList.add('cd-player__track');
 
     this.cd = document.createElement('div');
-    this.cd.classList.add('cd-player__cd');
+    this.cd.classList.add('cd-player__cd', 'cd');
 
     this.cdCenter = document.createElement('div');
     this.cdCenter.classList.add('cd__center');
