@@ -1,3 +1,5 @@
+import CD from './cd';
+
 class PlayerBody {
   root: HTMLElement;
 
@@ -5,9 +7,7 @@ class PlayerBody {
 
   cdPlayerTrack: HTMLElement;
 
-  cd: HTMLElement;
-
-  cdCenter: HTMLElement;
+  cd: CD;
 
   constructor(root: HTMLElement) {
     this.root = root;
@@ -17,22 +17,32 @@ class PlayerBody {
     this.cdPlayerTrack = document.createElement('div');
     this.cdPlayerTrack.classList.add('cd-player__track');
 
-    this.cd = document.createElement('div');
-    this.cd.classList.add('cd-player__cd', 'cd');
+    this.cd = new CD(this.cdPlayer);
 
-    this.cdCenter = document.createElement('div');
-    this.cdCenter.classList.add('cd__center');
+    const $button = document.createElement('button');
+    $button.textContent = 'STOP';
+
+    $button?.addEventListener('click', () => {
+      console.log('hi');
+      if ($button.textContent === 'STOP') {
+        this.cd.stop();
+        $button.textContent = 'PLAY';
+      } else {
+        this.cd.play();
+        $button.textContent = 'STOP';
+      }
+    });
+    this.root.appendChild($button);
   }
 
   render() {
     const documentFragment = new DocumentFragment();
     documentFragment.appendChild(this.cdPlayerTrack);
-    documentFragment.appendChild(this.cd);
-
-    this.cd.appendChild(this.cdCenter);
 
     this.cdPlayer.appendChild(documentFragment);
     this.root.appendChild(this.cdPlayer);
+
+    this.cd.render();
   }
 }
 

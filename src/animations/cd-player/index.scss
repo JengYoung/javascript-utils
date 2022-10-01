@@ -1,17 +1,18 @@
-@keyframes rotateCD {
-  0% {
-    transfrom: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
+// @keyframes rotateCD {
+//   0% {
+//     transfrom: rotate(0deg);
+//   }
+//   100% {
+//     transform: rotate(360deg);
+//   }
+// }
+
 $cd-player-bg: #f5f5ec;
 
 .cd-player {
   position: relative;
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
   background-color: #f5f5ec;
   border-radius: 40px;
   display: flex;
@@ -42,7 +43,16 @@ $cd-player-bg: #f5f5ec;
     background-image: url('https://image.board.sbs.co.kr/2022/01/26/nUA1643193086342-cr.jpg');
     background-position: 50% 50%;
     background-size: cover;
-    animation: rotateCD 4s infinite linear;
+    // &.playing {
+    //   animation: rotateCD 4s;
+    //   animation-iteration-count: infinite;
+    //   animation-timing-function: linear;
+    // }
+
+    // &.end {
+    //   animation-iteration-count: inherit;
+    //   animation-timing-function: ease-out;
+    // }
 
     .cd__center {
       position: absolute;

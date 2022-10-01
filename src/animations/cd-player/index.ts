@@ -19,5 +19,11 @@ const $app = document.querySelector<HTMLElement>('#app');
 
 if ($app) {
   const app = new App($app);
+
   app.render();
 }
+
+const $button = document.createElement('button');
+$button.textContent = 'STOP';
+
+document.body.appendChild($button);
