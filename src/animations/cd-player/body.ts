@@ -23,7 +23,6 @@ class PlayerBody {
     $button.textContent = 'STOP';
 
     $button?.addEventListener('click', () => {
-      console.log('hi');
       if ($button.textContent === 'STOP') {
         this.cd.stop();
         $button.textContent = 'PLAY';

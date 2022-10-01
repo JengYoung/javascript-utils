@@ -7,6 +7,8 @@ class CD {
 
   degree: number;
 
+  detail: number;
+
   isRotate: boolean;
 
   constructor(parent: HTMLElement) {
@@ -19,6 +21,7 @@ class CD {
     this.cdCenter.classList.add('cd__center');
 
     this.degree = 0;
+    this.detail = 0;
 
     this.isRotate = false;
     requestAnimationFrame(this.animate.bind(this, this.isRotate));
@@ -37,10 +40,14 @@ class CD {
     this.target.appendChild(this.cd);
   }
 
-  animate(flag: boolean, timestamp) {
+  animate(flag: boolean) {
+    this.cd.style.cssText = `transform: rotate(${this.degree}deg)`;
+    this.degree = (this.degree + this.detail) % 360;
+
     if (flag) {
-      this.cd.style.cssText = `transform: rotate(${this.degree}deg)`;
-      this.degree = (this.degree + 1.8) % 360;
+      this.detail = Math.min(1.8, this.detail + 0.005);
+    } else {
+      this.detail = this.detail > 0.01 ? this.detail * 0.99 : 0;
     }
 
     requestAnimationFrame(this.animate.bind(this, this.isRotate));
