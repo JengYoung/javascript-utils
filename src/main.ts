@@ -1,1 +1,1 @@
-import './animations/cd-player/index';
+import './date/getGlobalTime';
