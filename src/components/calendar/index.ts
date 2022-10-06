@@ -1,3 +1,5 @@
+import DateCell from './dateCell';
+
 class Calendar {
   target: Element;
 
@@ -12,17 +14,23 @@ class Calendar {
     this.container.classList.add('calendar');
 
     this.inner = document.createElement('div');
-    this.inner.classList.add('inner');
-
-    this.init();
+    this.inner.classList.add('calendar__inner');
   }
 
-  init() {
+  addCell() {
+    for (let i = 0; i < 32; i += 1) {
+      const dateCell = new DateCell(this.inner);
+      dateCell.setDate(i);
+
+      dateCell.render();
+    }
+  }
+
+  render() {
+    this.addCell();
     this.container.appendChild(this.inner);
     this.target.appendChild(this.container);
   }
-
-  render() {}
 }
 
 export default Calendar;

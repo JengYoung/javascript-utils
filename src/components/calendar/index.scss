@@ -1,0 +1,36 @@
+$calendar-line: 1px solid #333333;
+
+.calendar {
+  .calendar__inner {
+    display: flex;
+    flex-wrap: wrap;
+
+    width: 490px;
+
+    border-top: $calendar-line;
+    border-left: $calendar-line;
+
+    .calendar__date {
+      box-sizing: border-box;
+
+      width: calc(100% / 7);
+      height: 100px;
+
+      border-right: $calendar-line;
+      border-bottom: $calendar-line;
+
+      .date__name {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 1.5rem;
+        height: 1.5rem;
+
+        border-radius: 50%;
+        background: #753bad;
+        color: #fff;
+      }
+    }
+  }
+}
