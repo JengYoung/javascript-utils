@@ -14,13 +14,13 @@ class CalendarHeader {
 
   selectBox: Element;
 
-  yearSelect: Element;
+  yearSelect: HTMLSelectElement;
 
-  monthSelect: Element;
+  monthSelect: HTMLSelectElement;
+
+  dateSelect: HTMLSelectElement;
 
   state: CalendarHeaderState;
-
-  dateSelect: Element;
 
   dayBox: Element;
 
@@ -32,6 +32,7 @@ class CalendarHeader {
     this.header.classList.add('calendar__header');
 
     this.selectBox = document.createElement('section');
+    this.selectBox.classList.add('calender__selects');
 
     this.yearSelect = document.createElement('select');
     this.yearSelect.classList.add('header__year');
@@ -50,64 +51,53 @@ class CalendarHeader {
   }
 
   #initialize() {
-    const yearDocumentFragment = new DocumentFragment();
-    const latestYear = new Date().getFullYear();
+    const renderOption = (
+      key: keyof CalendarHeaderState,
+      select: HTMLSelectElement,
+      iterNumFrom: number,
+      iterNumTo: number,
+    ) => {
+      const documentFragment = new DocumentFragment();
 
-    for (let i = 1970; i <= latestYear; i += 1) {
-      const option = document.createElement('option');
-      option.textContent = i.toString();
-      option.value = i.toString();
+      for (let i = iterNumFrom; i <= iterNumTo; i += 1) {
+        const option = document.createElement('option');
+        option.textContent = (
+          i + Number(select === this.monthSelect)
+        ).toString();
+        option.value = i.toString();
 
-      if (i === this.state.year) {
-        option.selected = true;
+        if (i === this.state[key]) {
+          option.selected = true;
+        }
+
+        documentFragment.appendChild(option);
       }
 
-      yearDocumentFragment.appendChild(option);
-    }
+      select.appendChild(documentFragment);
+    };
 
-    this.yearSelect.appendChild(yearDocumentFragment);
+    renderOption('year', this.yearSelect, 1970, new Date().getFullYear() + 30);
+    renderOption('month', this.monthSelect, 0, 11);
+    renderOption('date', this.dateSelect, 0, this.state.lastDate);
 
-    const monthDocumentFragment = new DocumentFragment();
+    const days: string[] = readonly([
+      'SUN',
+      'MON',
+      'TUE',
+      'WED',
+      'THU',
+      'FRI',
+      'SAT',
+    ]);
 
-    for (let i = 0; i < 12; i += 1) {
-      const option = document.createElement('option');
-      option.textContent = (i + 1).toString();
-
-      option.value = i.toString();
-
-      if (i === this.state.month) {
-        option.selected = true;
-      }
-
-      monthDocumentFragment.appendChild(option);
-    }
-
-    this.monthSelect.appendChild(monthDocumentFragment);
-
-    const dateDocumentFragment = new DocumentFragment();
-
-    for (let i = 1; i <= this.state.lastDate; i += 1) {
-      const option = document.createElement('option');
-      option.textContent = i.toString();
-      option.value = i.toString();
-
-      if (i === this.state.date) {
-        option.selected = true;
-      }
-
-      dateDocumentFragment.appendChild(option);
-    }
-
-    this.dateSelect.appendChild(dateDocumentFragment);
-
-    const days = readonly(['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']);
     const dayDocumentFragment = new DocumentFragment();
 
-    for (let i = 0; i < 7; i += 1) {
+    days.forEach(value => {
       const day = document.createElement('div');
-      day.textContent = days[i];
+      day.className = 'days__day';
+      day.textContent = value;
       dayDocumentFragment.appendChild(day);
-    }
+    });
 
     this.dayBox.appendChild(dayDocumentFragment);
   }
@@ -140,9 +130,14 @@ class CalendarHeader {
   }
 
   render() {
-    (this.yearSelect as HTMLSelectElement).value = this.state.year.toString();
-    (this.monthSelect as HTMLSelectElement).value = this.state.month.toString();
-    (this.dateSelect as HTMLSelectElement).value = this.state.date.toString();
+    this.header.innerHTML = '';
+    this.selectBox.innerHTML = '';
+    this.dayBox.innerHTML = '';
+    this.yearSelect.innerHTML = '';
+    this.monthSelect.innerHTML = '';
+    this.dateSelect.innerHTML = '';
+
+    this.#initialize();
 
     this.selectBox.appendChild(this.yearSelect);
     this.selectBox.appendChild(this.monthSelect);

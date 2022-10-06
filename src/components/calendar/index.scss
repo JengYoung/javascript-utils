@@ -5,7 +5,7 @@ $calendar-line: 1px solid #333333;
   align-items: center;
   margin-bottom: 0.5rem;
 
-  section {
+  .calender__selects {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -15,13 +15,15 @@ $calendar-line: 1px solid #333333;
   .header__days {
     display: flex;
     width: 100%;
-    div {
+    .days__day {
       padding-left: 0.5rem;
       width: calc(100% / 7);
       font-weight: 500;
+
       &:first-of-type {
         color: red;
       }
+
       &:last-of-type {
         color: mediumblue;
       }
@@ -91,7 +93,7 @@ $calendar-line: 1px solid #333333;
 
         &.date__name--active {
           border-radius: 50%;
-          background: #753bad;
+          background: #ffd000;
           color: #fff;
         }
       }

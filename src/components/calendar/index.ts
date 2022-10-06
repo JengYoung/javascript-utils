@@ -42,11 +42,7 @@ class Calendar {
       date: this.nowDate.getDate(),
     };
 
-    this.state.lastDate = this.#getLastDate(
-      this.state.year,
-      this.state.month,
-      this.state.date,
-    );
+    this.state.lastDate = this.lastDate;
 
     this.header = new CalendarHeader(this.calendar, {
       year: this.state.year,
@@ -76,11 +72,7 @@ class Calendar {
       ...state,
     };
 
-    this.state.lastDate = this.#getLastDate(
-      this.state.year,
-      this.state.month,
-      this.state.date,
-    );
+    this.state.lastDate = this.lastDate;
 
     this.header.setState({
       year: this.state.year,
@@ -105,9 +97,9 @@ class Calendar {
     this.calendar.appendChild(this.container);
   }
 
-  #getLastDate(year: number, month: number, date: number) {
+  get lastDate() {
     let dateCount = 1;
-    let now = new Date(year, month, date);
+    let now = new Date(this.state.year, this.state.month, this.state.date);
 
     while (now.getMonth() === this.state.month) {
       dateCount += 1;
@@ -128,22 +120,21 @@ class Calendar {
   }
 
   makeCalendar() {
-    const lastDate = this.#getLastDate(
-      this.state.year,
-      this.state.month,
-      this.state.date,
-    );
+    if (this.state.lastDate === undefined) {
+      return;
+    }
 
     // NOTE: 윌월화수목금토
     const firstDayIndex = new Date(this.state.year, this.state.month).getDay();
 
-    const afterLastDateCount = 7 - ((firstDayIndex + lastDate) % 7);
+    const afterLastDateCount =
+      (7 - ((firstDayIndex + this.state.lastDate) % 7)) % 7;
 
     for (let i = 0; i < firstDayIndex; i += 1) {
       this.#makeCell();
     }
 
-    for (let i = 1; i <= lastDate; i += 1) {
+    for (let i = 1; i <= this.state.lastDate; i += 1) {
       this.#makeCell(i);
     }
 
