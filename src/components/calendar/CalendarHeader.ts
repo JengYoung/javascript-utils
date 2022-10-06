@@ -68,18 +68,28 @@ class CalendarHeader {
     this.monthSelect.appendChild(monthDocumentFragment);
 
     const event = new CustomEvent('update:header', {
-      detail: {
-        year: this.state.year,
-        month: this.state.month,
-      },
+      detail: this.getState.bind(this),
     });
 
-    this.monthSelect.addEventListener('change', () => {
+    this.monthSelect.addEventListener('change', (e: Event) => {
+      this.state.month = Number((e.target as HTMLSelectElement).value);
       document.body.dispatchEvent(event);
     });
-    this.yearSelect.addEventListener('change', () => {
+
+    this.yearSelect.addEventListener('change', (e: Event) => {
+      this.state.year = Number((e.target as HTMLSelectElement).value);
       document.body.dispatchEvent(event);
     });
+  }
+
+  getState() {
+    return this.state;
+  }
+
+  setState(state: CalendarHeaderState) {
+    this.state = {
+      ...state,
+    };
   }
 
   render() {

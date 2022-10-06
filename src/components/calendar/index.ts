@@ -54,7 +54,7 @@ class Calendar {
 
   addEvent() {
     document.body.addEventListener('update:header', (e: CustomEventInit) => {
-      this.setState(e.detail);
+      this.setState(e.detail());
     });
   }
 
@@ -63,9 +63,21 @@ class Calendar {
       ...this.state,
       ...state,
     };
+
+    this.header.setState({
+      year: this.state.year,
+      month: this.state.month,
+      date: this.state.date,
+    });
+
+    this.render();
   }
 
   render() {
+    this.calendar.innerHTML = '';
+    this.container.innerHTML = '';
+    this.inner.innerHTML = '';
+
     this.makeCalendar();
 
     this.header.render();
