@@ -51,6 +51,13 @@ class CalendarHeader {
   }
 
   #initialize() {
+    this.header.innerHTML = '';
+    this.selectBox.innerHTML = '';
+    this.dayBox.innerHTML = '';
+    this.yearSelect.innerHTML = '';
+    this.monthSelect.innerHTML = '';
+    this.dateSelect.innerHTML = '';
+
     const renderOption = (
       key: keyof CalendarHeaderState,
       select: HTMLSelectElement,
@@ -109,6 +116,21 @@ class CalendarHeader {
 
     const onChange = (e: Event, key: keyof CalendarHeaderState) => {
       this.state[key] = Number((e.target as HTMLSelectElement).value);
+
+      const nextDate = new Date(
+        this.state.year,
+        this.state.month,
+        this.state.date,
+      );
+
+      if (
+        Number.isNaN(nextDate.getTime()) ||
+        nextDate.getMonth() !== this.state.month ||
+        nextDate.getDate() !== this.state.date
+      ) {
+        this.state.date = 1;
+      }
+
       document.body.dispatchEvent(event);
     };
 
@@ -130,13 +152,6 @@ class CalendarHeader {
   }
 
   render() {
-    this.header.innerHTML = '';
-    this.selectBox.innerHTML = '';
-    this.dayBox.innerHTML = '';
-    this.yearSelect.innerHTML = '';
-    this.monthSelect.innerHTML = '';
-    this.dateSelect.innerHTML = '';
-
     this.#initialize();
 
     this.selectBox.appendChild(this.yearSelect);

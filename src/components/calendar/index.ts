@@ -51,9 +51,19 @@ class Calendar {
       lastDate: this.state.lastDate,
     });
 
+    this.makeCalendar();
+
     this.target.appendChild(this.calendar);
 
     this.addEvent();
+  }
+
+  #initialize() {
+    this.calendar.innerHTML = '';
+    this.container.innerHTML = '';
+    this.inner.innerHTML = '';
+
+    this.makeCalendar();
   }
 
   addEvent() {
@@ -85,11 +95,7 @@ class Calendar {
   }
 
   render() {
-    this.calendar.innerHTML = '';
-    this.container.innerHTML = '';
-    this.inner.innerHTML = '';
-
-    this.makeCalendar();
+    this.#initialize();
 
     this.header.render();
 
