@@ -53,9 +53,11 @@ $calendar-line: 1px solid #333333;
         width: 1.5rem;
         height: 1.5rem;
 
-        border-radius: 50%;
-        background: #753bad;
-        color: #fff;
+        &.date__name--active {
+          border-radius: 50%;
+          background: #753bad;
+          color: #fff;
+        }
       }
     }
   }

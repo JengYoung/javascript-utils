@@ -56,6 +56,10 @@ class Calendar {
     document.body.addEventListener('update:header', (e: CustomEventInit) => {
       this.setState(e.detail());
     });
+
+    document.body.addEventListener('update:date-name', (e: CustomEventInit) => {
+      this.setState(e.detail());
+    });
   }
 
   setState(state: CalendarState) {
@@ -99,11 +103,13 @@ class Calendar {
   }
 
   #makeCell(date?: number) {
-    const dateCell = new DateCell(this.inner);
-    dateCell.render();
+    const dateCell = new DateCell(this.inner, {date: this.state.date});
+
     if (typeof date === 'number') {
       dateCell.setDate(date);
     }
+
+    dateCell.render();
   }
 
   makeCalendar() {
