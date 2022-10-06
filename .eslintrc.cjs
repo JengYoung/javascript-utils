@@ -34,4 +34,14 @@ module.exports = {
       typescript: {}, // this loads <rootdir>/tsconfig.json to eslint
     },
   },
+  overrides: [
+    // Typescript related rules
+    {
+      files: ['*.ts'],
+      plugins: ['@typescript-eslint/eslint-plugin'],
+      parserOptions: {
+        project: ['./tsconfig.json'],
+      },
+    },
+  ],
 };

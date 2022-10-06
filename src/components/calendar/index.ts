@@ -1,6 +1,11 @@
 import CalendarHeader from './CalendarHeader';
-import DateCell from './DateCell';
+import DateCell from './Cell';
 
+interface CalendarState {
+  year: number;
+  month: number;
+  date: number;
+}
 class Calendar {
   target: Element;
 
@@ -12,11 +17,7 @@ class Calendar {
 
   nowDate: Date;
 
-  year: number;
-
-  month: number;
-
-  date: number;
+  state: CalendarState;
 
   header: CalendarHeader;
 
@@ -34,22 +35,50 @@ class Calendar {
 
     this.nowDate = new Date();
 
-    this.year = this.nowDate.getFullYear();
-    this.month = this.nowDate.getMonth();
-    this.date = this.nowDate.getDate();
+    this.state = {
+      year: this.nowDate.getFullYear(),
+      month: this.nowDate.getMonth(),
+      date: this.nowDate.getDate(),
+    };
 
     this.header = new CalendarHeader(this.calendar, {
-      year: this.year,
-      month: this.month,
-      date: this.date,
+      year: this.state.year,
+      month: this.state.month,
+      date: this.state.date,
     });
+
+    this.target.appendChild(this.calendar);
+
+    this.addEvent();
+  }
+
+  addEvent() {
+    document.body.addEventListener('update:header', (e: CustomEventInit) => {
+      this.setState(e.detail);
+    });
+  }
+
+  setState(state: CalendarState) {
+    this.state = {
+      ...this.state,
+      ...state,
+    };
+  }
+
+  render() {
+    this.makeCalendar();
+
+    this.header.render();
+
+    this.container.appendChild(this.inner);
+    this.calendar.appendChild(this.container);
   }
 
   #getLastDate(year: number, month: number, date: number) {
     let dateCount = 1;
     let now = new Date(year, month, date);
 
-    while (now.getMonth() === this.month) {
+    while (now.getMonth() === this.state.month) {
       dateCount += 1;
       now = new Date(now.setDate(dateCount));
     }
@@ -66,10 +95,14 @@ class Calendar {
   }
 
   makeCalendar() {
-    const lastDate = this.#getLastDate(this.year, this.month, this.date);
+    const lastDate = this.#getLastDate(
+      this.state.year,
+      this.state.month,
+      this.state.date,
+    );
 
     // NOTE: 윌월화수목금토
-    const firstDayIndex = new Date(this.year, this.month).getDay();
+    const firstDayIndex = new Date(this.state.year, this.state.month).getDay();
 
     const afterLastDateCount = 7 - ((firstDayIndex + lastDate) % 7);
 
@@ -84,16 +117,6 @@ class Calendar {
     for (let i = 0; i < afterLastDateCount; i += 1) {
       this.#makeCell();
     }
-  }
-
-  render() {
-    this.makeCalendar();
-
-    this.header.render();
-
-    this.container.appendChild(this.inner);
-    this.calendar.appendChild(this.container);
-    this.target.appendChild(this.calendar);
   }
 }
 
