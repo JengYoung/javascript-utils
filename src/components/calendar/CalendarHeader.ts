@@ -1,3 +1,5 @@
+import readonly from '~/src/readonly';
+
 interface CalendarHeaderState {
   year: number;
   month: number;
@@ -10,6 +12,8 @@ class CalendarHeader {
 
   header: Element;
 
+  selectBox: Element;
+
   yearSelect: Element;
 
   monthSelect: Element;
@@ -18,12 +22,16 @@ class CalendarHeader {
 
   dateSelect: Element;
 
+  dayBox: Element;
+
   constructor(parent: Element, state: CalendarHeaderState) {
     this.parent = parent;
     this.state = state;
 
     this.header = document.createElement('header');
     this.header.classList.add('calendar__header');
+
+    this.selectBox = document.createElement('section');
 
     this.yearSelect = document.createElement('select');
     this.yearSelect.classList.add('header__year');
@@ -34,10 +42,14 @@ class CalendarHeader {
     this.dateSelect = document.createElement('select');
     this.dateSelect.classList.add('header__date');
 
-    this.#initializeSelect();
+    this.dayBox = document.createElement('div');
+    this.dayBox.classList.add('header__days');
+
+    this.#initialize();
+    this.addEvent();
   }
 
-  #initializeSelect() {
+  #initialize() {
     const yearDocumentFragment = new DocumentFragment();
     const latestYear = new Date().getFullYear();
 
@@ -88,6 +100,19 @@ class CalendarHeader {
 
     this.dateSelect.appendChild(dateDocumentFragment);
 
+    const days = readonly(['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']);
+    const dayDocumentFragment = new DocumentFragment();
+
+    for (let i = 0; i < 7; i += 1) {
+      const day = document.createElement('div');
+      day.textContent = days[i];
+      dayDocumentFragment.appendChild(day);
+    }
+
+    this.dayBox.appendChild(dayDocumentFragment);
+  }
+
+  addEvent() {
     const event = new CustomEvent('update:header', {
       detail: this.getState.bind(this),
     });
@@ -110,12 +135,21 @@ class CalendarHeader {
     this.state = {
       ...state,
     };
+
+    this.render();
   }
 
   render() {
-    this.header.appendChild(this.yearSelect);
-    this.header.appendChild(this.monthSelect);
-    this.header.appendChild(this.dateSelect);
+    (this.yearSelect as HTMLSelectElement).value = this.state.year.toString();
+    (this.monthSelect as HTMLSelectElement).value = this.state.month.toString();
+    (this.dateSelect as HTMLSelectElement).value = this.state.date.toString();
+
+    this.selectBox.appendChild(this.yearSelect);
+    this.selectBox.appendChild(this.monthSelect);
+    this.selectBox.appendChild(this.dateSelect);
+
+    this.header.appendChild(this.selectBox);
+    this.header.appendChild(this.dayBox);
 
     this.parent.appendChild(this.header);
   }

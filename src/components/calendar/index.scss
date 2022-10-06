@@ -1,15 +1,41 @@
 $calendar-line: 1px solid #333333;
 .calendar__header {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 0.5rem;
+
+  section {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 0.75rem;
+  }
+
+  .header__days {
+    display: flex;
+    width: 100%;
+    div {
+      padding-left: 0.5rem;
+      width: calc(100% / 7);
+      font-weight: 500;
+      &:first-of-type {
+        color: red;
+      }
+      &:last-of-type {
+        color: mediumblue;
+      }
+    }
+  }
 
   .header__year,
   .header__month,
   .header__date {
+    cursor: pointer;
     height: 40px;
 
     font-size: 1rem;
+    font-weight: bold;
 
     border: 1px solid transparent;
     border-radius: 5px;
@@ -17,13 +43,13 @@ $calendar-line: 1px solid #333333;
 
     transition: all 0.3s;
 
+    &:not(:last-of-type) {
+      margin-right: 0.25rem;
+    }
+
     &:hover {
       border: 1px solid lightgray;
     }
-  }
-
-  .header__year {
-    margin-right: 0.25rem;
   }
 }
 .calendar {
@@ -45,6 +71,14 @@ $calendar-line: 1px solid #333333;
 
       border-right: $calendar-line;
       border-bottom: $calendar-line;
+
+      &:nth-child(7n + 1) {
+        color: red;
+      }
+
+      &:nth-child(7n) {
+        color: mediumblue;
+      }
 
       .date__name {
         cursor: pointer;
