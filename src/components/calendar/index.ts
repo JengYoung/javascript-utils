@@ -5,6 +5,7 @@ interface CalendarState {
   year: number;
   month: number;
   date: number;
+  lastDate?: number;
 }
 class Calendar {
   target: Element;
@@ -41,10 +42,17 @@ class Calendar {
       date: this.nowDate.getDate(),
     };
 
+    this.state.lastDate = this.#getLastDate(
+      this.state.year,
+      this.state.month,
+      this.state.date,
+    );
+
     this.header = new CalendarHeader(this.calendar, {
       year: this.state.year,
       month: this.state.month,
       date: this.state.date,
+      lastDate: this.state.lastDate,
     });
 
     this.target.appendChild(this.calendar);
@@ -68,10 +76,17 @@ class Calendar {
       ...state,
     };
 
+    this.state.lastDate = this.#getLastDate(
+      this.state.year,
+      this.state.month,
+      this.state.date,
+    );
+
     this.header.setState({
       year: this.state.year,
       month: this.state.month,
       date: this.state.date,
+      lastDate: this.state.lastDate,
     });
 
     this.render();

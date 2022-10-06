@@ -2,6 +2,7 @@ interface CalendarHeaderState {
   year: number;
   month: number;
   date: number;
+  lastDate: number;
 }
 
 class CalendarHeader {
@@ -15,8 +16,11 @@ class CalendarHeader {
 
   state: CalendarHeaderState;
 
+  dateSelect: Element;
+
   constructor(parent: Element, state: CalendarHeaderState) {
     this.parent = parent;
+    this.state = state;
 
     this.header = document.createElement('header');
     this.header.classList.add('calendar__header');
@@ -27,7 +31,8 @@ class CalendarHeader {
     this.monthSelect = document.createElement('select');
     this.monthSelect.classList.add('header__month');
 
-    this.state = state;
+    this.dateSelect = document.createElement('select');
+    this.dateSelect.classList.add('header__date');
 
     this.#initializeSelect();
   }
@@ -67,19 +72,34 @@ class CalendarHeader {
 
     this.monthSelect.appendChild(monthDocumentFragment);
 
+    const dateDocumentFragment = new DocumentFragment();
+
+    for (let i = 1; i <= this.state.lastDate; i += 1) {
+      const option = document.createElement('option');
+      option.textContent = i.toString();
+      option.value = i.toString();
+
+      if (i === this.state.date) {
+        option.selected = true;
+      }
+
+      dateDocumentFragment.appendChild(option);
+    }
+
+    this.dateSelect.appendChild(dateDocumentFragment);
+
     const event = new CustomEvent('update:header', {
       detail: this.getState.bind(this),
     });
 
-    this.monthSelect.addEventListener('change', (e: Event) => {
-      this.state.month = Number((e.target as HTMLSelectElement).value);
+    const onChange = (e: Event, key: keyof CalendarHeaderState) => {
+      this.state[key] = Number((e.target as HTMLSelectElement).value);
       document.body.dispatchEvent(event);
-    });
+    };
 
-    this.yearSelect.addEventListener('change', (e: Event) => {
-      this.state.year = Number((e.target as HTMLSelectElement).value);
-      document.body.dispatchEvent(event);
-    });
+    this.yearSelect.addEventListener('change', e => onChange(e, 'year'));
+    this.monthSelect.addEventListener('change', e => onChange(e, 'month'));
+    this.dateSelect.addEventListener('change', e => onChange(e, 'date'));
   }
 
   getState() {
@@ -95,6 +115,7 @@ class CalendarHeader {
   render() {
     this.header.appendChild(this.yearSelect);
     this.header.appendChild(this.monthSelect);
+    this.header.appendChild(this.dateSelect);
 
     this.parent.appendChild(this.header);
   }

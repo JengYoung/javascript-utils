@@ -5,7 +5,8 @@ $calendar-line: 1px solid #333333;
   margin-bottom: 0.5rem;
 
   .header__year,
-  .header__month {
+  .header__month,
+  .header__date {
     height: 40px;
 
     font-size: 1rem;
@@ -46,6 +47,7 @@ $calendar-line: 1px solid #333333;
       border-bottom: $calendar-line;
 
       .date__name {
+        cursor: pointer;
         display: flex;
         justify-content: center;
         align-items: center;
