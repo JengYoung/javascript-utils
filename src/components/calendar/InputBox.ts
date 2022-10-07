@@ -1,8 +1,14 @@
+import {
+  CalendarFormDateInputInterface,
+  CalendarFormTitleInputInterface,
+} from './Form';
+
 /* eslint-disable-next-line no-unused-vars */
 type InputEventCallback = (_event: Event) => any;
 
 export interface InputParam {
   parent: HTMLElement;
+  state: CalendarFormDateInputInterface | CalendarFormTitleInputInterface;
   label: string;
   type?: string;
   idName: string;
@@ -13,6 +19,8 @@ export interface InputParam {
 
 class InputBox {
   parent: InputParam['parent'];
+
+  state: InputParam['state'];
 
   inputBox: Element;
 
@@ -25,6 +33,7 @@ class InputBox {
   constructor(param: InputParam) {
     const {
       parent,
+      state,
       label,
       type = 'text',
       idName,
@@ -34,6 +43,8 @@ class InputBox {
     } = param;
 
     this.parent = parent;
+
+    this.state = state;
 
     this.inputBox = document.createElement('div');
     this.inputBox.classList.add('input-box');
@@ -48,20 +59,31 @@ class InputBox {
     if (className) this.input.classList.add(className, 'input-box__input');
     this.input.type = type;
     this.input.placeholder = placeholder;
+    this.input.autofocus = true;
 
     this.onInput = onInput;
 
     this.addEvent();
+
+    this.render();
   }
 
   addEvent() {
     this.input.addEventListener('input', this.onInput);
   }
 
+  setState(state: typeof this.state) {
+    this.state = {
+      ...this.state,
+      ...state,
+    };
+  }
+
   render() {
     this.inputBox.innerHTML = '';
 
     this.parent.appendChild(this.inputBox);
+
     this.inputBox.appendChild(this.label);
     this.inputBox.appendChild(this.input);
   }
