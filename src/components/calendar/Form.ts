@@ -91,6 +91,8 @@ class CalendarForm {
     this.addEvent();
 
     this.target.appendChild(this.form);
+
+    this.render();
   }
 
   setState(state: Partial<CalendarFormState>) {
@@ -101,6 +103,7 @@ class CalendarForm {
 
     this.dateStartInput.setState(this.state.dateStart);
     this.dateEndInput.setState(this.state.dateEnd);
+
     this.titleInput.setState({title: this.state.title});
   }
 

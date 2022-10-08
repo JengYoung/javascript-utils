@@ -73,6 +73,8 @@ class InputBox {
   }
 
   setState(state: typeof this.state) {
+    if (JSON.stringify(this.state) === JSON.stringify(state)) return;
+
     this.state = {
       ...this.state,
       ...state,
@@ -80,8 +82,6 @@ class InputBox {
   }
 
   render() {
-    this.inputBox.innerHTML = '';
-
     this.parent.appendChild(this.inputBox);
 
     this.inputBox.appendChild(this.label);
