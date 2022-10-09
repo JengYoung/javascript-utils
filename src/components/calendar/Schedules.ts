@@ -128,9 +128,25 @@ class Schedule {
           (scheduleElement as HTMLElement).dataset.to = '6';
 
           for (let i = +dateStart; i <= +dateEnd; i += 1) {
+            const [nowDateStartTimeStamp, nowDateEndTimeStamp] =
+              this.#getScheduleTimeStamp({
+                dateStart: {
+                  year: this.state.year,
+                  month: this.state.month,
+                  date: +i,
+                },
+                dateEnd: {
+                  year: this.state.year,
+                  month: this.state.month,
+                  date: +i,
+                },
+                title: `${scheduleState.title}`,
+              });
+
+            // NOTE: 캘린더 일정의 순서를 정해준다.
             if (
-              +scheduleState.dateStart.date <= i &&
-              +scheduleState.dateEnd.date >= i
+              scheduleDateStartTimeStamp <= nowDateStartTimeStamp &&
+              scheduleDateEndTimeStamp >= nowDateEndTimeStamp
             ) {
               (scheduleElement as HTMLElement).dataset.order = `${
                 dateScheduleCounts[idx][i - +dateStart]
@@ -139,16 +155,30 @@ class Schedule {
               dateScheduleCounts[idx][i - +dateStart] += 1;
             }
 
-            if (+scheduleState.dateStart.date === i) {
-              console.log(scheduleState, i);
+            // 만약 스케줄 일정이 이번 주 일정보다 크면, 이번 주 첫 날부터 쭉 그어져야 한다.
+            if (scheduleDateStartTimeStamp < nowDateStartTimeStamp) {
+              if (+dateStart < 1) {
+                (scheduleElement as HTMLElement).dataset.from = (
+                  -+dateStart + 1
+                ).toString();
+              }
+            }
+
+            if (scheduleDateStartTimeStamp === nowDateStartTimeStamp) {
               (scheduleElement as HTMLElement).dataset.from = (
                 +scheduleState.dateStart.date - +dateStart
               ).toString();
             }
 
-            if (+scheduleState.dateEnd.date === i) {
+            if (scheduleDateEndTimeStamp === nowDateEndTimeStamp) {
               (scheduleElement as HTMLElement).dataset.to = (
                 +scheduleState.dateEnd.date - +dateStart
+              ).toString();
+            }
+
+            if (scheduleDateEndTimeStamp > nowDateEndTimeStamp) {
+              (scheduleElement as HTMLElement).dataset.to = (
+                i - +dateStart
               ).toString();
             }
           }
