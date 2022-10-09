@@ -1,6 +1,7 @@
 import {getLocalStorageItem} from '~/src/storage';
 import CalendarHeader from './CalendarHeader';
 import DateCell from './Cell';
+import {DISPATCH_UPDATE_SCHEDULE, STORAGE_KEY} from './constants';
 import {CalendarScheduleInterface} from './Form';
 import Schedules from './Schedules';
 
@@ -46,7 +47,7 @@ class Calendar {
 
     this.state.lastDate = this.lastDate;
 
-    this.state.schedules = getLocalStorageItem('calendar-schedule', []);
+    this.state.schedules = getLocalStorageItem(STORAGE_KEY, []);
 
     this.calendar = document.createElement('article');
     this.calendar.classList.add('calendar');
@@ -103,12 +104,17 @@ class Calendar {
     document.body.addEventListener('update:date-name', (e: CustomEventInit) => {
       this.setState(e.detail());
     });
+
+    document.body.addEventListener(DISPATCH_UPDATE_SCHEDULE, () => {
+      this.setState(getLocalStorageItem(STORAGE_KEY, []));
+    });
   }
 
   setState(state: CalendarState) {
     this.state = {
       ...this.state,
       ...state,
+      schedules: getLocalStorageItem(STORAGE_KEY, []),
     };
 
     this.state.lastDate = this.lastDate;

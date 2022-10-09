@@ -1,5 +1,6 @@
 import {getLocalStorageItem, setLocalStorageItem} from '~/src/storage';
 import {CalendarDateInterface} from '.';
+import {DISPATCH_UPDATE_SCHEDULE} from './constants';
 import InputBox from './InputBox';
 
 export interface CalendarFormTitleInputInterface {
@@ -137,6 +138,9 @@ class CalendarForm {
           dateEnd: this.state.dateEnd,
         }),
       );
+
+      const event = new CustomEvent(DISPATCH_UPDATE_SCHEDULE);
+      document.body.dispatchEvent(event);
     });
   }
 
