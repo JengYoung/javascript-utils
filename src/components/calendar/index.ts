@@ -1,12 +1,20 @@
+import {getLocalStorageItem} from '~/src/storage';
 import CalendarHeader from './CalendarHeader';
 import DateCell from './Cell';
+import {CalendarScheduleInterface} from './Form';
+import Schedules from './Schedules';
 
-interface CalendarState {
+export interface CalendarDateInterface {
   year: number;
   month: number;
   date: number;
-  lastDate?: number;
 }
+
+interface CalendarState extends CalendarDateInterface {
+  lastDate?: number;
+  schedules: CalendarScheduleInterface[];
+}
+
 class Calendar {
   target: Element;
 
@@ -22,8 +30,23 @@ class Calendar {
 
   header: CalendarHeader;
 
+  schedules: Schedules;
+
   constructor(target: Element) {
     this.target = target;
+
+    this.nowDate = new Date();
+
+    this.state = {
+      year: this.nowDate.getFullYear(),
+      month: this.nowDate.getMonth() + 1,
+      date: this.nowDate.getDate(),
+      schedules: [],
+    };
+
+    this.state.lastDate = this.lastDate;
+
+    this.state.schedules = getLocalStorageItem('calendar-schedule', []);
 
     this.calendar = document.createElement('article');
     this.calendar.classList.add('calendar');
@@ -34,16 +57,6 @@ class Calendar {
     this.inner = document.createElement('div');
     this.inner.classList.add('calendar__inner');
 
-    this.nowDate = new Date();
-
-    this.state = {
-      year: this.nowDate.getFullYear(),
-      month: this.nowDate.getMonth(),
-      date: this.nowDate.getDate(),
-    };
-
-    this.state.lastDate = this.lastDate;
-
     this.header = new CalendarHeader(this.calendar, {
       year: this.state.year,
       month: this.state.month,
@@ -51,7 +64,15 @@ class Calendar {
       lastDate: this.state.lastDate,
     });
 
-    this.makeCalendar();
+    this.schedules = new Schedules(this.inner, {
+      year: this.state.year,
+      month: this.state.month,
+      date: this.state.date,
+
+      schedules: this.state.schedules,
+    });
+
+    this.#initialize();
 
     this.target.appendChild(this.calendar);
 
@@ -64,6 +85,14 @@ class Calendar {
     this.inner.innerHTML = '';
 
     this.makeCalendar();
+
+    this.schedules = new Schedules(this.inner, {
+      year: this.state.year,
+      month: this.state.month,
+      date: this.state.date,
+
+      schedules: this.state.schedules,
+    });
   }
 
   addEvent() {
@@ -135,7 +164,10 @@ class Calendar {
     }
 
     // NOTE: 윌월화수목금토
-    const firstDayIndex = new Date(this.state.year, this.state.month).getDay();
+    const firstDayIndex = new Date(
+      this.state.year,
+      this.state.month - 1,
+    ).getDay();
 
     // NOTE: 첫 빈칸부터, 마지막 날까지의 인덱스
     const dateEndIndex = firstDayIndex + this.state.lastDate;
@@ -146,7 +178,7 @@ class Calendar {
 
     const weekCount = totalCellCount / 7;
 
-    const documentFragment = new DocumentFragment();
+    const innerChildrenDocumentFragment = new DocumentFragment();
 
     const dateArr = Array.from({length: totalCellCount}, (_, idx) => {
       if (idx >= firstDayIndex && idx < dateEndIndex) {
@@ -158,25 +190,39 @@ class Calendar {
 
     for (let i = 0; i < weekCount; i += 1) {
       const week = document.createElement('div');
-      week.classList.add('week');
+      week.classList.add('calendar__week');
+      week.dataset.dateStart = Infinity.toString();
+      week.dataset.dateEnd = (0).toString();
 
       const DAY_COUNT_PER_WEEK = 7;
 
-      documentFragment.appendChild(week);
+      innerChildrenDocumentFragment.appendChild(week);
 
-      const weekDocumentFragment = new DocumentFragment();
+      const weekChildrenDocumentFragment = new DocumentFragment();
 
       for (
         let j = i * DAY_COUNT_PER_WEEK;
         j < (i + 1) * DAY_COUNT_PER_WEEK;
         j += 1
       ) {
-        this.#makeCell(weekDocumentFragment, dateArr, j);
+        const now = j + 1 - firstDayIndex;
+        if (now >= 1 && now <= this.lastDate) {
+          week.dataset.dateStart = Math.min(
+            +week.dataset.dateStart,
+            now,
+          ).toString();
+          week.dataset.dateEnd = Math.max(
+            +week.dataset.dateEnd,
+            now,
+          ).toString();
+        }
+
+        this.#makeCell(weekChildrenDocumentFragment, dateArr, j);
       }
 
-      week.appendChild(weekDocumentFragment);
+      week.appendChild(weekChildrenDocumentFragment);
     }
-    this.inner.appendChild(documentFragment);
+    this.inner.appendChild(innerChildrenDocumentFragment);
     // for (let i = 0; i < firstDayIndex; i += 1) {
     //   this.#makeCell();
     // }

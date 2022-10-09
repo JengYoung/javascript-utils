@@ -1,14 +1,12 @@
-import {
-  CalendarFormDateInputInterface,
-  CalendarFormTitleInputInterface,
-} from './Form';
+import {CalendarDateInterface} from '.';
+import {CalendarFormTitleInputInterface} from './Form';
 
 /* eslint-disable-next-line no-unused-vars */
 type InputEventCallback = (_event: Event) => any;
 
 export interface InputParam {
   parent: HTMLElement;
-  state: CalendarFormDateInputInterface | CalendarFormTitleInputInterface;
+  state: CalendarFormTitleInputInterface | CalendarDateInterface;
   label: string;
   type?: string;
   idName: string;

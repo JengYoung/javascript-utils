@@ -68,7 +68,7 @@ $activeColor: #ffd000;
     border-top: $calendar-line;
     border-left: $calendar-line;
 
-    .week {
+    .calendar__week {
       display: flex;
       flex-wrap: wrap;
     }

@@ -1,19 +1,21 @@
-import {setLocalStorageItem} from '~/src/storage';
+import {getLocalStorageItem, setLocalStorageItem} from '~/src/storage';
+import {CalendarDateInterface} from '.';
 import InputBox from './InputBox';
 
-export interface CalendarFormDateInputInterface {
-  year: string;
-  month: string;
-  date: string;
-}
 export interface CalendarFormTitleInputInterface {
   title: string;
 }
-interface CalendarFormState {
+
+export interface CalendarScheduleInterface {
   title: string;
-  dateStart: CalendarFormDateInputInterface;
-  dateEnd: CalendarFormDateInputInterface;
+  dateStart: CalendarDateInterface;
+  dateEnd: CalendarDateInterface;
 }
+
+export interface CalendarFormState extends CalendarScheduleInterface {
+  schedules: CalendarScheduleInterface[];
+}
+
 class CalendarForm {
   target: Element;
 
@@ -39,15 +41,17 @@ class CalendarForm {
     this.state = {
       title: '',
       dateStart: {
-        year: '',
-        month: '',
-        date: '',
+        year: -1,
+        month: -1,
+        date: -1,
       },
       dateEnd: {
-        year: '',
-        month: '',
-        date: '',
+        year: -1,
+        month: -1,
+        date: -1,
       },
+
+      schedules: getLocalStorageItem(this.#STORAGE_KEY, []),
     };
 
     this.form = document.createElement('form');
@@ -125,7 +129,14 @@ class CalendarForm {
     this.form.addEventListener('submit', e => {
       e.preventDefault();
 
-      setLocalStorageItem(this.#STORAGE_KEY, JSON.stringify(this.state));
+      setLocalStorageItem(
+        this.#STORAGE_KEY,
+        this.state.schedules.concat({
+          title: this.state.title,
+          dateStart: this.state.dateStart,
+          dateEnd: this.state.dateEnd,
+        }),
+      );
     });
   }
 

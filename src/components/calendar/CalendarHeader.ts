@@ -73,7 +73,7 @@ class CalendarHeader {
         ).toString();
         option.value = i.toString();
 
-        if (i === this.state[key]) {
+        if (i === this.state[key] - 1) {
           option.selected = true;
         }
 
