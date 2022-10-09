@@ -74,10 +74,23 @@ $activeColor: #ffd000;
       position: relative;
 
       .calendar__schedule {
+        cursor: pointer;
+
         position: absolute;
         top: 50px;
-        background: yellow;
         left: 0%;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        border: 1px solid lightgray;
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        font-size: 12px;
+        background: #ffffff;
+        padding: 0.25rem;
+        margin: 0.25rem;
 
         $indices: 0, 1, 2, 3, 4, 5, 6;
 
@@ -88,6 +101,20 @@ $activeColor: #ffd000;
           &[data-to='#{$index}'] {
             right: calc(100% / 7 * (6 - #{$index}));
           }
+        }
+
+        &.calendar__schedule--later {
+          margin-right: 1px;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          border-right-color: transparent;
+        }
+
+        &.calendar__schedule--earlier {
+          margin-left: 0;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          border-left-color: transparent;
         }
 
         // &[data-from='6'] {
