@@ -140,6 +140,7 @@ class Schedule {
             }
 
             if (+scheduleState.dateStart.date === i) {
+              console.log(scheduleState, i);
               (scheduleElement as HTMLElement).dataset.from = (
                 +scheduleState.dateStart.date - +dateStart
               ).toString();

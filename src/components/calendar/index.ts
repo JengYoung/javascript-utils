@@ -233,7 +233,7 @@ class Calendar {
         j += 1
       ) {
         const now = j + 1 - firstDayIndex;
-        if (now >= 1 && now <= this.lastDate) {
+        if (now <= this.lastDate) {
           week.dataset.dateStart = Math.min(
             +week.dataset.dateStart,
             now,
