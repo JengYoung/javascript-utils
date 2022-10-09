@@ -1,3 +1,4 @@
+import {setLocalStorageItem} from '~/src/storage';
 import InputBox from './InputBox';
 
 export interface CalendarFormDateInputInterface {
@@ -29,6 +30,8 @@ class CalendarForm {
   dateEndInput: InputBox;
 
   submitButton: HTMLButtonElement;
+
+  #STORAGE_KEY = 'calendar-schedule';
 
   constructor(target: Element) {
     this.target = target;
@@ -122,7 +125,7 @@ class CalendarForm {
     this.form.addEventListener('submit', e => {
       e.preventDefault();
 
-      console.log(this.state);
+      setLocalStorageItem(this.#STORAGE_KEY, JSON.stringify(this.state));
     });
   }
 

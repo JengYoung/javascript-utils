@@ -9,7 +9,7 @@ interface DateCellProps {
 class DateCell {
   #activeClassName = 'date__name--active';
 
-  parent: Element;
+  parent: Element | DocumentFragment;
 
   cell: HTMLElement;
 
@@ -19,7 +19,7 @@ class DateCell {
 
   props: DateCellProps;
 
-  constructor(parent: Element, props: DateCellProps) {
+  constructor(parent: Element | DocumentFragment, props: DateCellProps) {
     this.parent = parent;
 
     this.props = props;

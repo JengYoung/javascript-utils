@@ -65,11 +65,13 @@ $activeColor: #ffd000;
   width: 630px;
 
   .calendar__inner {
-    display: flex;
-    flex-wrap: wrap;
-
     border-top: $calendar-line;
     border-left: $calendar-line;
+
+    .week {
+      display: flex;
+      flex-wrap: wrap;
+    }
 
     .calendar__date {
       padding: 0.5rem;

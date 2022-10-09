@@ -115,11 +115,15 @@ class Calendar {
     return dateCount - 1;
   }
 
-  #makeCell(date?: number) {
-    const dateCell = new DateCell(this.inner, {date: this.state.date});
+  #makeCell(
+    parent: Element | DocumentFragment,
+    dateArr: number[],
+    date?: number,
+  ) {
+    const dateCell = new DateCell(parent, {date: this.state.date});
 
-    if (typeof date === 'number') {
-      dateCell.setDate(date);
+    if (typeof date === 'number' && dateArr[date] > 0) {
+      dateCell.setDate(dateArr[date]);
     }
 
     dateCell.render();
@@ -133,20 +137,57 @@ class Calendar {
     // NOTE: 윌월화수목금토
     const firstDayIndex = new Date(this.state.year, this.state.month).getDay();
 
-    const afterLastDateCount =
-      (7 - ((firstDayIndex + this.state.lastDate) % 7)) % 7;
+    // NOTE: 첫 빈칸부터, 마지막 날까지의 인덱스
+    const dateEndIndex = firstDayIndex + this.state.lastDate;
 
-    for (let i = 0; i < firstDayIndex; i += 1) {
-      this.#makeCell();
-    }
+    const afterLastDateCount = (7 - (dateEndIndex % 7)) % 7;
 
-    for (let i = 1; i <= this.state.lastDate; i += 1) {
-      this.#makeCell(i);
-    }
+    const totalCellCount = dateEndIndex + afterLastDateCount;
 
-    for (let i = 0; i < afterLastDateCount; i += 1) {
-      this.#makeCell();
+    const weekCount = totalCellCount / 7;
+
+    const documentFragment = new DocumentFragment();
+
+    const dateArr = Array.from({length: totalCellCount}, (_, idx) => {
+      if (idx >= firstDayIndex && idx < dateEndIndex) {
+        return idx - firstDayIndex + 1;
+      }
+
+      return -1;
+    });
+
+    for (let i = 0; i < weekCount; i += 1) {
+      const week = document.createElement('div');
+      week.classList.add('week');
+
+      const DAY_COUNT_PER_WEEK = 7;
+
+      documentFragment.appendChild(week);
+
+      const weekDocumentFragment = new DocumentFragment();
+
+      for (
+        let j = i * DAY_COUNT_PER_WEEK;
+        j < (i + 1) * DAY_COUNT_PER_WEEK;
+        j += 1
+      ) {
+        this.#makeCell(weekDocumentFragment, dateArr, j);
+      }
+
+      week.appendChild(weekDocumentFragment);
     }
+    this.inner.appendChild(documentFragment);
+    // for (let i = 0; i < firstDayIndex; i += 1) {
+    //   this.#makeCell();
+    // }
+
+    // for (let i = 1; i <= this.state.lastDate; i += 1) {
+    //   this.#makeCell(i);
+    // }
+
+    // for (let i = 0; i < afterLastDateCount; i += 1) {
+    //   this.#makeCell();
+    // }
   }
 }
 
