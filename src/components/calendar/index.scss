@@ -1,6 +1,7 @@
 $calendar-line: 1px solid #333333;
 $activeColor: #ffd000;
 $calendar-week-height: 100px;
+$schedule-default-top: 50px;
 
 #app {
   display: flex;
@@ -79,7 +80,7 @@ $calendar-week-height: 100px;
         cursor: pointer;
 
         position: absolute;
-        top: 50px;
+        top: $schedule-default-top;
         left: 0%;
 
         overflow: hidden;
@@ -102,6 +103,12 @@ $calendar-week-height: 100px;
           }
           &[data-to='#{$index}'] {
             right: calc(100% / 7 * (6 - #{$index}));
+          }
+        }
+
+        @for $order from 0 to 30 {
+          &[data-order='#{$order}'] {
+            top: calc(#{$schedule-default-top} + (25px * #{$order}));
           }
         }
 

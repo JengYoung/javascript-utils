@@ -69,13 +69,16 @@ class Schedule {
   }
 
   render() {
+    const weeks = this.parent.querySelectorAll('.calendar__week');
+    if (!weeks.length) return;
+
+    const dateScheduleCounts = Array.from({length: weeks.length}, () =>
+      new Array(7).fill(0),
+    );
+
     this.state.schedules.forEach((scheduleState: CalendarScheduleInterface) => {
       if (this.#checkThisMonthSchedule(scheduleState)) {
-        const weeks = this.parent.querySelectorAll('.calendar__week');
-
-        if (!weeks.length) return;
-
-        weeks.forEach((weekElement: Element) => {
+        weeks.forEach((weekElement: Element, idx) => {
           const {dateStart} = (weekElement as HTMLElement).dataset;
           const {dateEnd} = (weekElement as HTMLElement).dataset;
 
@@ -125,6 +128,17 @@ class Schedule {
           (scheduleElement as HTMLElement).dataset.to = '6';
 
           for (let i = +dateStart; i <= +dateEnd; i += 1) {
+            if (
+              +scheduleState.dateStart.date <= i &&
+              +scheduleState.dateEnd.date >= i
+            ) {
+              (scheduleElement as HTMLElement).dataset.order = `${
+                dateScheduleCounts[idx][i - +dateStart]
+              }`;
+
+              dateScheduleCounts[idx][i - +dateStart] += 1;
+            }
+
             if (+scheduleState.dateStart.date === i) {
               (scheduleElement as HTMLElement).dataset.from = (
                 +scheduleState.dateStart.date - +dateStart

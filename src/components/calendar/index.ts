@@ -47,7 +47,7 @@ class Calendar {
 
     this.state.lastDate = this.lastDate;
 
-    this.state.schedules = getLocalStorageItem(STORAGE_KEY, []);
+    this.state.schedules = this.sortedSchedules;
 
     this.calendar = document.createElement('article');
     this.calendar.classList.add('calendar');
@@ -106,15 +106,15 @@ class Calendar {
     });
 
     document.body.addEventListener(DISPATCH_UPDATE_SCHEDULE, () => {
-      this.setState(getLocalStorageItem(STORAGE_KEY, []));
+      this.setState({schedules: this.sortedSchedules});
     });
   }
 
-  setState(state: CalendarState) {
+  setState(state: Partial<CalendarState>) {
     this.state = {
       ...this.state,
       ...state,
-      schedules: getLocalStorageItem(STORAGE_KEY, []),
+      schedules: this.sortedSchedules,
     };
 
     this.state.lastDate = this.lastDate;
@@ -127,6 +127,27 @@ class Calendar {
     });
 
     this.render();
+  }
+
+  get sortedSchedules(): CalendarScheduleInterface[] {
+    const item: CalendarScheduleInterface[] = [
+      ...getLocalStorageItem(STORAGE_KEY, []),
+    ];
+    item.sort((a: CalendarScheduleInterface, b: CalendarScheduleInterface) => {
+      if (a.dateStart !== b.dateStart) {
+        return (
+          +new Date(a.dateStart.year, a.dateStart.month, a.dateStart.date) -
+          +new Date(b.dateStart.year, b.dateStart.month, b.dateStart.date)
+        );
+      }
+
+      return (
+        +new Date(a.dateEnd.year, a.dateEnd.month, a.dateEnd.date) -
+        +new Date(b.dateEnd.year, b.dateEnd.month, b.dateEnd.date)
+      );
+    });
+
+    return item;
   }
 
   render() {
@@ -229,17 +250,6 @@ class Calendar {
       week.appendChild(weekChildrenDocumentFragment);
     }
     this.inner.appendChild(innerChildrenDocumentFragment);
-    // for (let i = 0; i < firstDayIndex; i += 1) {
-    //   this.#makeCell();
-    // }
-
-    // for (let i = 1; i <= this.state.lastDate; i += 1) {
-    //   this.#makeCell(i);
-    // }
-
-    // for (let i = 0; i < afterLastDateCount; i += 1) {
-    //   this.#makeCell();
-    // }
   }
 }
 
