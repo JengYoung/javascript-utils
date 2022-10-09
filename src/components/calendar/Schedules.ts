@@ -154,6 +154,12 @@ class Schedule {
 
           scheduleElement.textContent = scheduleState.title;
           weekElement.appendChild(scheduleElement);
+
+          const elem = weekElement;
+
+          (elem as HTMLElement).dataset.maxScheduleCount = `${Math.max(
+            ...dateScheduleCounts[idx],
+          )}`;
         });
       }
     });
