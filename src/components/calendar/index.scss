@@ -1,5 +1,6 @@
 $calendar-line: 1px solid #333333;
 $activeColor: #ffd000;
+$calendar-week-height: 100px;
 
 #app {
   display: flex;
@@ -72,6 +73,7 @@ $activeColor: #ffd000;
       display: flex;
       flex-wrap: wrap;
       position: relative;
+      height: $calendar-week-height;
 
       .calendar__schedule {
         cursor: pointer;
@@ -124,7 +126,6 @@ $activeColor: #ffd000;
       box-sizing: border-box;
 
       width: calc(100% / 7);
-      height: 100px;
 
       border-right: $calendar-line;
       border-bottom: $calendar-line;

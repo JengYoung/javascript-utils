@@ -10,9 +10,27 @@ class Schedule {
 
   state: ScheduleState;
 
+  timeStampState: {
+    dateStart: number;
+    dateEnd: number;
+  }[];
+
   constructor(parent: Element, state: ScheduleState) {
     this.parent = parent;
     this.state = state;
+
+    this.timeStampState = this.state.schedules.map(schedule => ({
+      dateStart: +new Date(
+        +schedule.dateStart.year,
+        +schedule.dateStart.month - 1,
+        +schedule.dateStart.date,
+      ),
+      dateEnd: +new Date(
+        +schedule.dateEnd.year,
+        +schedule.dateEnd.month - 1,
+        +schedule.dateEnd.date,
+      ),
+    }));
 
     this.render();
   }
@@ -24,6 +42,21 @@ class Schedule {
     };
 
     this.render();
+  }
+
+  #getScheduleTimeStamp(schedule: CalendarScheduleInterface): [number, number] {
+    return [
+      +new Date(
+        +schedule.dateStart.year,
+        +schedule.dateStart.month - 1,
+        +schedule.dateStart.date,
+      ),
+      +new Date(
+        +schedule.dateEnd.year,
+        +schedule.dateEnd.month - 1,
+        +schedule.dateEnd.date,
+      ),
+    ];
   }
 
   #checkThisMonthSchedule(scheduleState: CalendarScheduleInterface): boolean {
@@ -39,6 +72,7 @@ class Schedule {
     this.state.schedules.forEach((scheduleState: CalendarScheduleInterface) => {
       if (this.#checkThisMonthSchedule(scheduleState)) {
         const weeks = this.parent.querySelectorAll('.calendar__week');
+
         if (!weeks.length) return;
 
         weeks.forEach((weekElement: Element) => {
@@ -47,29 +81,23 @@ class Schedule {
 
           if (!dateStart || !dateEnd) return;
 
-          const dateStartTimeStamp = +new Date(
-            this.state.year,
-            this.state.month - 1,
-            +dateStart,
-          );
+          const [dateStartTimeStamp, dateEndTimeStamp] =
+            this.#getScheduleTimeStamp({
+              dateStart: {
+                year: this.state.year,
+                month: this.state.month,
+                date: +dateStart,
+              },
+              dateEnd: {
+                year: this.state.year,
+                month: this.state.month,
+                date: +dateEnd,
+              },
+              title: `${scheduleState.title}ㅎㅎ`,
+            });
 
-          const dateEndTimeStamp = +new Date(
-            this.state.year,
-            this.state.month - 1,
-            +dateEnd,
-          );
-
-          const scheduleDateStartTimeStamp = +new Date(
-            +scheduleState.dateStart.year,
-            +scheduleState.dateStart.month - 1,
-            +scheduleState.dateStart.date,
-          );
-
-          const scheduleDateEndTimeStamp = +new Date(
-            +scheduleState.dateEnd.year,
-            +scheduleState.dateEnd.month - 1,
-            +scheduleState.dateEnd.date,
-          );
+          const [scheduleDateStartTimeStamp, scheduleDateEndTimeStamp] =
+            this.#getScheduleTimeStamp(scheduleState);
 
           // NOTE: 범위가 겹치지 않는 경우 리턴
           if (
@@ -90,6 +118,8 @@ class Schedule {
           if (scheduleDateEndTimeStamp > dateEndTimeStamp) {
             scheduleElement.classList.add('calendar__schedule--later');
           }
+
+          // 해당 날짜와 중복되는 일정 개수를 구한다.
 
           (scheduleElement as HTMLElement).dataset.from = '0';
           (scheduleElement as HTMLElement).dataset.to = '6';

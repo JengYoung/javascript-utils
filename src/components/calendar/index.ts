@@ -140,9 +140,9 @@ class Calendar {
 
   get lastDate() {
     let dateCount = 1;
-    let now = new Date(this.state.year, this.state.month, this.state.date);
+    let now = new Date(this.state.year, this.state.month - 1, this.state.date);
 
-    while (now.getMonth() === this.state.month) {
+    while (now.getMonth() === this.state.month - 1) {
       dateCount += 1;
       now = new Date(now.setDate(dateCount));
     }
