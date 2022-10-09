@@ -83,7 +83,7 @@ class Schedule {
           scheduleElement.classList.add('calendar__schedule');
           scheduleElement.textContent = scheduleState.title;
 
-          if (scheduleDateEndTimeStamp < dateStartTimeStamp) {
+          if (scheduleDateStartTimeStamp < dateStartTimeStamp) {
             scheduleElement.classList.add('calendar__schedule--earlier');
           }
 
@@ -91,16 +91,19 @@ class Schedule {
             scheduleElement.classList.add('calendar__schedule--later');
           }
 
+          (scheduleElement as HTMLElement).dataset.from = '0';
+          (scheduleElement as HTMLElement).dataset.to = '6';
+
           for (let i = +dateStart; i <= +dateEnd; i += 1) {
             if (+scheduleState.dateStart.date === i) {
               (scheduleElement as HTMLElement).dataset.from = (
-                i - +dateStart
+                +scheduleState.dateStart.date - +dateStart
               ).toString();
             }
 
             if (+scheduleState.dateEnd.date === i) {
               (scheduleElement as HTMLElement).dataset.to = (
-                i - +dateEnd
+                +scheduleState.dateEnd.date - +dateStart
               ).toString();
             }
           }
