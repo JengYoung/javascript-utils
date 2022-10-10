@@ -68,12 +68,10 @@ class CalendarHeader {
 
       for (let i = iterNumFrom; i <= iterNumTo; i += 1) {
         const option = document.createElement('option');
-        option.textContent = (
-          i + Number(select === this.monthSelect)
-        ).toString();
+        option.textContent = i.toString();
         option.value = i.toString();
 
-        if (i === this.state[key] - 1) {
+        if (i === this.state[key]) {
           option.selected = true;
         }
 
@@ -115,7 +113,7 @@ class CalendarHeader {
     });
 
     const onChange = (e: Event, key: keyof CalendarHeaderState) => {
-      this.state[key] = Number((e.target as HTMLSelectElement).value);
+      this.setState({[key]: Number((e.target as HTMLSelectElement).value)});
 
       const nextDate = new Date(
         this.state.year,
@@ -143,8 +141,9 @@ class CalendarHeader {
     return this.state;
   }
 
-  setState(state: CalendarHeaderState) {
+  setState(state: Partial<CalendarHeaderState>) {
     this.state = {
+      ...this.state,
       ...state,
     };
 

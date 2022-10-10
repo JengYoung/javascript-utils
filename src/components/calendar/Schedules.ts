@@ -59,12 +59,13 @@ class Schedule {
     ];
   }
 
-  #checkThisMonthSchedule(scheduleState: CalendarScheduleInterface): boolean {
+  #checkValidSchedule(scheduleState: CalendarScheduleInterface): boolean {
     return (
-      +scheduleState.dateStart.year <= +this.state.year &&
-      +scheduleState.dateStart.month <= +this.state.month &&
-      +scheduleState.dateEnd.year >= +this.state.year &&
-      +scheduleState.dateEnd.month >= +this.state.month
+      +scheduleState.dateStart.year < +this.state.year ||
+      (+scheduleState.dateStart.year === +this.state.year &&
+        +scheduleState.dateStart.month <= +this.state.month &&
+        +scheduleState.dateEnd.year >= +this.state.year &&
+        +scheduleState.dateEnd.month >= +this.state.month)
     );
   }
 
@@ -88,7 +89,7 @@ class Schedule {
     }
 
     this.state.schedules.forEach((scheduleState: CalendarScheduleInterface) => {
-      if (this.#checkThisMonthSchedule(scheduleState)) {
+      if (this.#checkValidSchedule(scheduleState)) {
         weeks.forEach((weekElement: Element, idx) => {
           const {dateStart} = (weekElement as HTMLElement).dataset;
           const {dateEnd} = (weekElement as HTMLElement).dataset;
@@ -205,19 +206,11 @@ class Schedule {
               id => id === +(scheduleState.id as string),
             );
             if (orderIdx > -1) {
-              if ((scheduleState.id as string) === '1665390940909') {
-                console.log(orderIdx);
-              }
               (scheduleElement as HTMLElement).dataset.order = `${orderIdx}`;
             }
           }
 
           for (let i = +dateStart; i <= +dateEnd; i += 1) {
-            console.log(
-              i,
-              scheduleState,
-              +scheduleState.dateStart.date - +dateStart,
-            );
             const [nowDateStartTimeStamp, nowDateEndTimeStamp] =
               this.#getScheduleTimeStamp({
                 dateStart: {
