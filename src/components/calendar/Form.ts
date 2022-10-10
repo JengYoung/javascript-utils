@@ -1,6 +1,6 @@
 import {getLocalStorageItem, setLocalStorageItem} from '~/src/storage';
 import {CalendarDateInterface} from '.';
-import {DISPATCH_UPDATE_SCHEDULE} from './constants';
+import {DISPATCH_UPDATE_SCHEDULE, STORAGE_KEY} from './constants';
 import InputBox from './InputBox';
 
 export interface CalendarFormTitleInputInterface {
@@ -22,6 +22,29 @@ export interface CalendarFormState extends CalendarScheduleInterface {
   schedules: CalendarScheduleInterface[];
 }
 
+export interface CalendarFormOptions {
+  headerText?: string;
+  // eslint-disable-next-line no-unused-vars
+  onSubmit?: (e: Event) => void;
+}
+
+export const initialState = {
+  id: (+new Date()).toString(),
+  title: '',
+  dateStart: {
+    year: -1,
+    month: -1,
+    date: -1,
+  },
+  dateEnd: {
+    year: -1,
+    month: -1,
+    date: -1,
+  },
+
+  schedules: getLocalStorageItem(STORAGE_KEY, []),
+};
+
 class CalendarForm {
   target: Element;
 
@@ -39,34 +62,24 @@ class CalendarForm {
 
   submitButton: HTMLButtonElement;
 
+  // eslint-disable-next-line no-unused-vars
+  onSubmit?: (e: Event) => void;
+
   #STORAGE_KEY = 'calendar-schedule';
 
-  constructor(target: Element) {
+  constructor(target: Element, options?: CalendarFormOptions) {
     this.target = target;
 
-    this.state = {
-      id: (+new Date()).toString(),
-      title: '',
-      dateStart: {
-        year: -1,
-        month: -1,
-        date: -1,
-      },
-      dateEnd: {
-        year: -1,
-        month: -1,
-        date: -1,
-      },
-
-      schedules: getLocalStorageItem(this.#STORAGE_KEY, []),
-    };
+    this.state = initialState;
 
     this.form = document.createElement('form');
     this.form.classList.add('calendar-form');
 
     this.header = document.createElement('header');
     this.header.classList.add('calendar-form__header');
-    this.header.textContent = '일정 등록';
+    this.header.textContent = options?.headerText ?? '일정 등록';
+
+    this.onSubmit = options?.onSubmit;
 
     this.titleInput = new InputBox({
       parent: this.form,
@@ -133,24 +146,28 @@ class CalendarForm {
   }
 
   addEvent() {
-    this.form.addEventListener('submit', e => {
-      e.preventDefault();
+    this.form.addEventListener(
+      'submit',
+      this.onSubmit?.bind(this as CalendarForm) ??
+        ((e: Event) => {
+          e.preventDefault();
 
-      setLocalStorageItem(
-        this.#STORAGE_KEY,
-        this.state.schedules.concat({
-          id: this.state.id,
-          title: this.state.title,
-          dateStart: this.state.dateStart,
-          dateEnd: this.state.dateEnd,
+          setLocalStorageItem(
+            this.#STORAGE_KEY,
+            this.state.schedules.concat({
+              id: this.state.id,
+              title: this.state.title,
+              dateStart: this.state.dateStart,
+              dateEnd: this.state.dateEnd,
+            }),
+          );
+
+          this.setState({id: (+new Date()).toString()});
+
+          const event = new CustomEvent(DISPATCH_UPDATE_SCHEDULE);
+          document.body.dispatchEvent(event);
         }),
-      );
-
-      this.setState({id: (+new Date()).toString()});
-
-      const event = new CustomEvent(DISPATCH_UPDATE_SCHEDULE);
-      document.body.dispatchEvent(event);
-    });
+    );
   }
 
   onTitleInput(e: Event) {

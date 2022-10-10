@@ -241,6 +241,10 @@ $schedule-default-top: 42px;
 }
 
 .calendar-modal {
+  &--hidden {
+    display: none;
+  }
+
   display: flex;
   justify-content: center;
   align-items: center;

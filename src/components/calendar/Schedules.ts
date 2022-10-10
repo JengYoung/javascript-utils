@@ -1,4 +1,5 @@
 import {CalendarDateInterface} from '.';
+import {OPEN_UPDATE_SCHEDULE_MODAL} from './constants';
 import {CalendarScheduleInterface} from './Form';
 
 export interface ScheduleState extends CalendarDateInterface {
@@ -31,6 +32,8 @@ class Schedule {
         +schedule.dateEnd.date,
       ),
     }));
+
+    this.addEvent();
 
     this.render();
   }
@@ -125,6 +128,7 @@ class Schedule {
           const scheduleElement = document.createElement('div');
           scheduleElement.classList.add('calendar__schedule');
           scheduleElement.textContent = scheduleState.title;
+          scheduleElement.dataset.id = scheduleState.id;
 
           if (scheduleDateStartTimeStamp < dateStartTimeStamp) {
             scheduleElement.classList.add('calendar__schedule--earlier');
@@ -269,6 +273,30 @@ class Schedule {
           )}`;
         });
       }
+    });
+  }
+
+  addEvent() {
+    document.body.addEventListener('click', e => {
+      const scheduleElement = (e.target as HTMLElement).closest(
+        '.calendar__schedule',
+      );
+
+      if (!scheduleElement) return null;
+
+      const info = this.state.schedules.filter(
+        schedule => schedule.id === (scheduleElement as HTMLElement).dataset.id,
+      );
+
+      const event = new CustomEvent(OPEN_UPDATE_SCHEDULE_MODAL, {
+        detail: {
+          state: {...info[0], schedules: this.state.schedules},
+        },
+      });
+
+      document.body.dispatchEvent(event);
+
+      return info;
     });
   }
 }

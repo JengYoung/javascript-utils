@@ -77,6 +77,15 @@ class InputBox {
       ...this.state,
       ...state,
     };
+
+    if (this.input.type === 'date') {
+      const {year, month, date} = this.state as CalendarDateInterface;
+      const value = `${year}-${month}-${date}`;
+
+      this.input.value = value;
+    } else {
+      this.input.value = (this.state as CalendarFormTitleInputInterface).title;
+    }
   }
 
   render() {

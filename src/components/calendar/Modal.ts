@@ -1,3 +1,4 @@
+import {OPEN_UPDATE_SCHEDULE_MODAL} from './constants';
 import CalendarForm from './Form';
 
 interface ModalState {
@@ -38,7 +39,30 @@ class Modal {
     this.modalCloseButton.appendChild(modalCloseButtonLine1);
     this.modalCloseButton.appendChild(modalCloseButtonLine2);
 
-    this.form = new CalendarForm(this.modalInner as Element);
+    this.form = new CalendarForm(this.modalInner as Element, {
+      headerText: '일정 변경',
+      onSubmit(e: Event) {
+        e.preventDefault();
+        // NOTE: this function is bound with CalendarForm Class Component
+        console.log((this as unknown as CalendarForm).state);
+      },
+    });
+
+    this.addEvent();
+  }
+
+  addEvent() {
+    document.body.addEventListener(
+      OPEN_UPDATE_SCHEDULE_MODAL,
+      (e: CustomEventInit) => {
+        this.setState({visible: true});
+        this.form.setState(e.detail.state);
+      },
+    );
+
+    this.modalCloseButton.addEventListener('click', () => {
+      this.setState({visible: false});
+    });
   }
 
   setState(state: Partial<ModalState>) {
@@ -51,10 +75,16 @@ class Modal {
   }
 
   render() {
-    this.form.render();
-    this.modalInner.appendChild(this.modalCloseButton);
-    this.modal.appendChild(this.modalInner);
-    this.root.appendChild(this.modal);
+    if (this.root.contains(this.modal)) this.root.removeChild(this.modal);
+
+    if (this.state.visible) {
+      this.form.render();
+
+      this.modalInner.appendChild(this.modalCloseButton);
+      this.modal.appendChild(this.modalInner);
+
+      this.root.appendChild(this.modal);
+    }
   }
 }
 
