@@ -1,5 +1,10 @@
+import {setLocalStorageItem} from '~/src/storage';
 import {CalendarDateInterface} from '.';
-import {OPEN_UPDATE_SCHEDULE_MODAL} from './constants';
+import {
+  OPEN_UPDATE_SCHEDULE_MODAL,
+  STORAGE_KEY,
+  UPDATE_LOCAL_STORAGE,
+} from './constants';
 import {CalendarScheduleInterface} from './Form';
 
 export interface ScheduleState extends CalendarDateInterface {
@@ -297,6 +302,25 @@ class Schedule {
       document.body.dispatchEvent(event);
 
       return info;
+    });
+
+    document.body.addEventListener('click', e => {
+      const scheduleDeleteButtonElement = (e.target as HTMLElement).closest(
+        '.schedule__delete-btn',
+      );
+
+      if (scheduleDeleteButtonElement) {
+        const nextSchedules = this.state.schedules.filter(
+          schedule =>
+            schedule.id !==
+            (scheduleDeleteButtonElement as HTMLElement).dataset.id,
+        );
+
+        setLocalStorageItem(STORAGE_KEY, nextSchedules);
+
+        const event = new CustomEvent(UPDATE_LOCAL_STORAGE);
+        document.body.dispatchEvent(event);
+      }
     });
   }
 }
