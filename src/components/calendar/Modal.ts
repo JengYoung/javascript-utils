@@ -1,5 +1,6 @@
-import {OPEN_UPDATE_SCHEDULE_MODAL} from './constants';
-import CalendarForm from './Form';
+import {getLocalStorageItem, setLocalStorageItem} from '~/src/storage';
+import {OPEN_UPDATE_SCHEDULE_MODAL, STORAGE_KEY} from './constants';
+import CalendarForm, {CalendarScheduleInterface} from './Form';
 
 interface ModalState {
   visible: boolean;
@@ -43,8 +44,17 @@ class Modal {
       headerText: '일정 변경',
       onSubmit(e: Event) {
         e.preventDefault();
+        const nowState = (this as unknown as CalendarForm).state;
         // NOTE: this function is bound with CalendarForm Class Component
-        console.log((this as unknown as CalendarForm).state);
+
+        const schedules = getLocalStorageItem(STORAGE_KEY);
+
+        const nextSchedules = schedules.map(
+          (schedule: CalendarScheduleInterface) =>
+            schedule.id === nowState.id ? nowState : schedule,
+        );
+
+        setLocalStorageItem(STORAGE_KEY, nextSchedules);
       },
     });
 
