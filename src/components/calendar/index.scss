@@ -1,0 +1,353 @@
+$calendar-line: 1px solid #333333;
+$activeColor: #ffd000;
+$calendar-week-height: 80px;
+$schedule-height: 28px;
+$schedule-default-top: 42px;
+
+#app {
+  display: flex;
+}
+
+.calendar__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.5rem;
+
+  .calender__selects {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 0.75rem;
+  }
+
+  .header__days {
+    display: flex;
+    width: 100%;
+    .days__day {
+      padding-left: 0.5rem;
+      width: calc(100% / 7);
+      font-weight: 500;
+
+      &:first-of-type {
+        color: red;
+      }
+
+      &:last-of-type {
+        color: mediumblue;
+      }
+    }
+  }
+
+  .header__year,
+  .header__month,
+  .header__date {
+    cursor: pointer;
+    height: 40px;
+
+    font-size: 1rem;
+    font-weight: bold;
+
+    border: 1px solid transparent;
+    border-radius: 5px;
+    outline: none;
+
+    transition: all 0.3s;
+
+    &:not(:last-of-type) {
+      margin-right: 0.25rem;
+    }
+
+    &:hover {
+      border: 1px solid lightgray;
+    }
+  }
+}
+
+.calendar {
+  width: 630px;
+
+  .calendar__inner {
+    border-top: $calendar-line;
+    border-left: $calendar-line;
+
+    .calendar__week {
+      display: flex;
+      flex-wrap: wrap;
+      position: relative;
+      height: $calendar-week-height;
+      min-height: calc(#{$calendar-week-height} + #{$schedule-height});
+      box-sizing: border-box;
+
+      @for $order from 0 to 30 {
+        &[data-max-schedule-count='#{$order}'] {
+          height: calc(
+            #{$calendar-week-height} + (#{$schedule-height} * #{$order})
+          );
+        }
+      }
+
+      .calendar__schedule {
+        display: flex;
+        cursor: pointer;
+
+        position: absolute;
+        top: $schedule-default-top;
+        left: 0%;
+
+        span {
+          margin-right: 0.25rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        border: 1px solid lightgray;
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        font-size: 12px;
+        background: #ffffff;
+        padding: 0.25rem 0.5rem;
+        margin: 0 0.25rem;
+
+        transition: all 0.3s;
+
+        $indices: 0, 1, 2, 3, 4, 5, 6;
+
+        @each $index in $indices {
+          &[data-from='#{$index}'] {
+            left: calc(100% / 7 * #{$index});
+          }
+          &[data-to='#{$index}'] {
+            right: calc(100% / 7 * (6 - #{$index}));
+          }
+        }
+
+        @for $order from 0 to 30 {
+          &[data-order='#{$order}'] {
+            top: calc(#{$schedule-default-top} + (28px * #{$order}));
+          }
+        }
+
+        &:hover {
+          $hover-color: rgb(224, 214, 253);
+          background: darken($hover-color, 0.8);
+          border: 1px solid darken($hover-color, 0.8);
+
+          .schedule__delete-btn {
+            display: flex;
+          }
+        }
+
+        &.calendar__schedule--later {
+          margin-right: 1px;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          border-right-color: transparent;
+        }
+
+        &.calendar__schedule--earlier {
+          margin-left: 0;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          border-left-color: transparent;
+        }
+
+        .schedule__delete-btn {
+          flex-shrink: 0;
+
+          cursor: pointer;
+
+          position: relative;
+          display: none;
+          justify-content: center;
+          align-items: center;
+          background: transparent;
+          padding: 0;
+          margin-left: auto;
+          outline: none;
+          border: 0;
+          border-radius: 50%;
+
+          width: 1rem;
+          height: 1rem;
+
+          transition: all 0.3s;
+
+          $delete-btn-active-color: rgb(255, 108, 108);
+
+          .delete-btn__line {
+            position: absolute;
+            width: 0.5rem;
+            height: 1px;
+            background: $delete-btn-active-color;
+            transform: rotate(-45deg);
+            &:first-of-type {
+              transform: rotate(45deg);
+            }
+          }
+
+          &:hover {
+            background: $delete-btn-active-color;
+
+            .delete-btn__line {
+              background: white;
+            }
+          }
+        }
+      }
+    }
+
+    .calendar__date {
+      padding: 0.5rem;
+      box-sizing: border-box;
+
+      width: calc(100% / 7);
+
+      border-right: $calendar-line;
+      border-bottom: $calendar-line;
+
+      &:nth-child(7n + 1) {
+        color: red;
+      }
+
+      &:nth-child(7n) {
+        color: mediumblue;
+      }
+
+      .date__name {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 1.5rem;
+        height: 1.5rem;
+
+        &.date__name--active {
+          border-radius: 50%;
+          background: $activeColor;
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+
+.input-box {
+  width: 100%;
+
+  .input-box__label {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .input-box__input {
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 1px solid #333;
+    outline: none;
+    padding: 10px;
+  }
+
+  &:not(:last-of-type) {
+    margin-bottom: 30px;
+  }
+}
+
+.calendar-form {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  flex-shrink: 0;
+  margin: 0 auto;
+  width: 400px;
+  height: 500px;
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+
+  .calendar-form__header {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: auto;
+  }
+
+  .calendar-form__submit-button {
+    margin-top: auto;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    background: $activeColor;
+    color: #333;
+    outline: none;
+    border: none;
+    filter: brightness(1.05);
+
+    &:hover {
+      cursor: pointer;
+      filter: none;
+      transform: scale(1.03);
+      transition: all 0.3s;
+    }
+  }
+}
+
+.calendar-modal {
+  &--hidden {
+    display: none;
+  }
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: rgba(0, 0, 0, 0.2);
+
+  .calendar-modal__inner {
+    position: relative;
+    .calendar-modal__close-button {
+      cursor: pointer;
+      transition: all 0.3s;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      height: 2rem;
+      width: 2rem;
+      padding: 0;
+      border-radius: 50%;
+      border: 0;
+      background-color: transparent;
+      &:hover {
+        background-color: #eee;
+      }
+
+      .close-button__line {
+        position: absolute;
+        width: 1.5rem;
+        height: 1px;
+        background: black;
+        transform: rotate(-45deg);
+        &:first-of-type {
+          transform: rotate(45deg);
+        }
+      }
+    }
+  }
+}
