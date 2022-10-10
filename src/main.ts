@@ -1,5 +1,6 @@
 import Calendar from './components/calendar';
 import {
+  KEY_ESCAPE,
   OPEN_UPDATE_SCHEDULE_MODAL,
   STORAGE_KEY,
   UPDATE_LOCAL_STORAGE,
@@ -57,6 +58,12 @@ class App {
         visible: false,
         schedules: getLocalStorageItem(STORAGE_KEY, []),
       });
+    });
+
+    window.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === KEY_ESCAPE && this.state.visible) {
+        this.setState({visible: false});
+      }
     });
   }
 
