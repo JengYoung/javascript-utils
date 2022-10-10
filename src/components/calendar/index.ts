@@ -114,10 +114,14 @@ class Calendar {
     this.state = {
       ...this.state,
       ...state,
-      schedules: this.sortedSchedules,
     };
 
+    this.state.schedules = this.sortedSchedules;
     this.state.lastDate = this.lastDate;
+
+    this.schedules.setState({
+      schedules: this.state.schedules,
+    });
 
     this.header.setState({
       year: this.state.year,

@@ -1,5 +1,5 @@
 import {getLocalStorageItem, setLocalStorageItem} from '~/src/storage';
-import {OPEN_UPDATE_SCHEDULE_MODAL, STORAGE_KEY} from './constants';
+import {STORAGE_KEY} from './constants';
 import CalendarForm, {CalendarScheduleInterface} from './Form';
 
 interface ModalState {
@@ -55,6 +55,9 @@ class Modal {
         );
 
         setLocalStorageItem(STORAGE_KEY, nextSchedules);
+
+        const event = new CustomEvent('update:local-storage');
+        document.body.dispatchEvent(event);
       },
     });
 
@@ -62,14 +65,6 @@ class Modal {
   }
 
   addEvent() {
-    document.body.addEventListener(
-      OPEN_UPDATE_SCHEDULE_MODAL,
-      (e: CustomEventInit) => {
-        this.setState({visible: true});
-        this.form.setState(e.detail.state);
-      },
-    );
-
     this.modalCloseButton.addEventListener('click', () => {
       this.setState({visible: false});
     });

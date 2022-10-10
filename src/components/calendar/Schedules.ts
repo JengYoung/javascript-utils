@@ -38,7 +38,7 @@ class Schedule {
     this.render();
   }
 
-  setState(state: ScheduleState) {
+  setState(state: Partial<ScheduleState>) {
     this.state = {
       ...this.state,
       ...state,

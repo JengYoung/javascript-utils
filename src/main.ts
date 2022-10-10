@@ -1,17 +1,88 @@
 import Calendar from './components/calendar';
-import CalendarForm from './components/calendar/Form';
+import {
+  OPEN_UPDATE_SCHEDULE_MODAL,
+  STORAGE_KEY,
+  UPDATE_LOCAL_STORAGE,
+} from './components/calendar/constants';
+import CalendarForm, {
+  CalendarScheduleInterface,
+} from './components/calendar/Form';
 import Modal from './components/calendar/Modal';
+import {getLocalStorageItem} from './storage';
 
-const $app = document.querySelector('#app');
+export interface AppState {
+  visible: boolean;
+  schedules: CalendarScheduleInterface[];
+}
 
-const calendar = new Calendar($app as Element);
+class App {
+  app: Element;
 
-const form = new CalendarForm($app as Element);
+  calendar: Calendar;
 
-const modal = new Modal(document.body as Element, {visible: true});
+  form: CalendarForm;
 
-form.render();
+  modal: Modal;
 
-calendar.render();
+  state: AppState;
 
-modal.render();
+  constructor() {
+    this.app = document.querySelector('#app') as Element;
+
+    this.state = {
+      visible: false,
+      schedules: getLocalStorageItem(STORAGE_KEY, []),
+    };
+
+    this.calendar = new Calendar(this.app as Element);
+    this.form = new CalendarForm(this.app as Element);
+    this.modal = new Modal(document.body as Element, {
+      visible: this.state.visible,
+    });
+
+    this.addEvent();
+  }
+
+  addEvent() {
+    document.body.addEventListener(
+      OPEN_UPDATE_SCHEDULE_MODAL,
+      (e: CustomEventInit) => {
+        this.setState({visible: true});
+        this.modal.form.setState(e.detail.state);
+      },
+    );
+
+    document.body.addEventListener(UPDATE_LOCAL_STORAGE, () => {
+      this.setState({
+        visible: false,
+        schedules: getLocalStorageItem(STORAGE_KEY, []),
+      });
+    });
+  }
+
+  setState(state: Partial<AppState>) {
+    this.state = {
+      ...this.state,
+      ...state,
+    };
+
+    this.form.setState({
+      schedules: this.state.schedules,
+    });
+    this.calendar.setState({
+      schedules: this.state.schedules,
+    });
+
+    this.modal.setState({
+      visible: this.state.visible,
+    });
+  }
+
+  render() {
+    this.form.render();
+    this.calendar.render();
+    this.modal.render();
+  }
+}
+
+new App().render();
