@@ -12,6 +12,8 @@ class Modal {
 
   modal: Element;
 
+  modalCloseButton: HTMLButtonElement;
+
   form: CalendarForm;
 
   constructor(root: Element, state: ModalState) {
@@ -23,6 +25,18 @@ class Modal {
 
     this.modalInner = document.createElement('div');
     this.modalInner.classList.add('calendar-modal__inner');
+
+    this.modalCloseButton = document.createElement('button');
+    this.modalCloseButton.classList.add('calendar-modal__close-button');
+
+    const modalCloseButtonLine1 = document.createElement('div');
+    modalCloseButtonLine1.classList.add('close-button__line');
+
+    const modalCloseButtonLine2 = document.createElement('div');
+    modalCloseButtonLine2.classList.add('close-button__line');
+
+    this.modalCloseButton.appendChild(modalCloseButtonLine1);
+    this.modalCloseButton.appendChild(modalCloseButtonLine2);
 
     this.form = new CalendarForm(this.modalInner as Element);
   }
@@ -38,6 +52,7 @@ class Modal {
 
   render() {
     this.form.render();
+    this.modalInner.appendChild(this.modalCloseButton);
     this.modal.appendChild(this.modalInner);
     this.root.appendChild(this.modal);
   }
