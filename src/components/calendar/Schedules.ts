@@ -235,9 +235,9 @@ class Schedule {
             }
 
             if (i < 1) {
-              (scheduleElement as HTMLElement).dataset.from = `${
+              (scheduleElement as HTMLElement).dataset.from = (
                 Math.abs(+dateStart) + 1
-              }`;
+              ).toString();
             }
 
             if (scheduleDateStartTimeStamp === nowDateStartTimeStamp) {

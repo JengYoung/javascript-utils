@@ -82,7 +82,7 @@ class CalendarHeader {
     };
 
     renderOption('year', this.yearSelect, 1970, new Date().getFullYear() + 30);
-    renderOption('month', this.monthSelect, 0, 11);
+    renderOption('month', this.monthSelect, 1, 12);
     renderOption('date', this.dateSelect, 0, this.state.lastDate);
 
     const days: string[] = readonly([
