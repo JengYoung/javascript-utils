@@ -132,7 +132,6 @@ class Schedule {
 
           const scheduleElement = document.createElement('div');
           scheduleElement.classList.add('calendar__schedule');
-          scheduleElement.textContent = scheduleState.title;
           scheduleElement.dataset.id = scheduleState.id;
 
           if (scheduleDateStartTimeStamp < dateStartTimeStamp) {
@@ -268,8 +267,24 @@ class Schedule {
             }
           }
 
-          scheduleElement.textContent = scheduleState.title;
+          const scheduleDeleteButton = document.createElement('button');
+          scheduleDeleteButton.classList.add('schedule__delete-btn');
+          scheduleDeleteButton.dataset.id = `${scheduleState.id}`;
+
+          const scheduleDeleteButtonLine1 = document.createElement('div');
+          const scheduleDeleteButtonLine2 = document.createElement('div');
+          scheduleDeleteButtonLine1.classList.add('delete-btn__line');
+          scheduleDeleteButtonLine2.classList.add('delete-btn__line');
+
+          scheduleDeleteButton.appendChild(scheduleDeleteButtonLine1);
+          scheduleDeleteButton.appendChild(scheduleDeleteButtonLine2);
+
+          const scheduleText = document.createElement('span');
+          scheduleElement.appendChild(scheduleText);
+          scheduleText.textContent = scheduleState.title;
+
           weekElement.appendChild(scheduleElement);
+          scheduleElement.appendChild(scheduleDeleteButton);
 
           const elem = weekElement;
 
