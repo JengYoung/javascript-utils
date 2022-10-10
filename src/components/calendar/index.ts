@@ -134,17 +134,44 @@ class Calendar {
       ...getLocalStorageItem(STORAGE_KEY, []),
     ];
     item.sort((a: CalendarScheduleInterface, b: CalendarScheduleInterface) => {
-      if (a.dateStart !== b.dateStart) {
-        return (
-          +new Date(a.dateStart.year, a.dateStart.month, a.dateStart.date) -
-          +new Date(b.dateStart.year, b.dateStart.month, b.dateStart.date)
-        );
+      const aDateStartTimeStamp = +new Date(
+        a.dateStart.year,
+        a.dateStart.month,
+        a.dateStart.date,
+      );
+      const bDateStartTimeStamp = +new Date(
+        b.dateStart.year,
+        b.dateStart.month,
+        b.dateStart.date,
+      );
+      const aDateEndTimeStamp = +new Date(
+        a.dateEnd.year,
+        a.dateEnd.month,
+        a.dateEnd.date,
+      );
+      const bDateEndTimeStamp = +new Date(
+        b.dateEnd.year,
+        b.dateEnd.month,
+        b.dateEnd.date,
+      );
+
+      /*
+       * NOTE:
+       * 그리디적으로 접근했다.
+       * 블록을 쌓는 것을 최적화하는 것은 일단 시작 날짜가 우선인 것을 앞에다 놓는다.
+       * 그러면 해당 일정이 길 수록 뒤쪽에 공백이 생길 것인데, 이때 0부터 해당 인덱스까지 접근해서 체크하는 방식이다.
+       *
+       * 만약 같은 날짜라면, 더 일정이 긴 것을 우선적으로 놓는다.
+       */
+
+      if (aDateStartTimeStamp !== bDateStartTimeStamp) {
+        return aDateStartTimeStamp - bDateStartTimeStamp;
       }
 
-      return (
-        +new Date(a.dateEnd.year, a.dateEnd.month, a.dateEnd.date) -
-        +new Date(b.dateEnd.year, b.dateEnd.month, b.dateEnd.date)
-      );
+      const bDiff = bDateEndTimeStamp - bDateStartTimeStamp;
+      const aDiff = aDateEndTimeStamp - aDateStartTimeStamp;
+
+      return bDiff - aDiff;
     });
 
     return item;

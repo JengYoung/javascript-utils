@@ -8,9 +8,14 @@ export interface CalendarFormTitleInputInterface {
 }
 
 export interface CalendarScheduleInterface {
+  id?: string;
   title: string;
   dateStart: CalendarDateInterface;
   dateEnd: CalendarDateInterface;
+}
+
+export interface StorageScheduleInterface extends CalendarScheduleInterface {
+  id: string;
 }
 
 export interface CalendarFormState extends CalendarScheduleInterface {
@@ -40,6 +45,7 @@ class CalendarForm {
     this.target = target;
 
     this.state = {
+      id: (+new Date()).toString(),
       title: '',
       dateStart: {
         year: -1,
@@ -133,11 +139,14 @@ class CalendarForm {
       setLocalStorageItem(
         this.#STORAGE_KEY,
         this.state.schedules.concat({
+          id: this.state.id,
           title: this.state.title,
           dateStart: this.state.dateStart,
           dateEnd: this.state.dateEnd,
         }),
       );
+
+      this.setState({id: (+new Date()).toString()});
 
       const event = new CustomEvent(DISPATCH_UPDATE_SCHEDULE);
       document.body.dispatchEvent(event);

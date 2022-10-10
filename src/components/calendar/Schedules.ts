@@ -76,6 +76,17 @@ class Schedule {
       new Array(7).fill(0),
     );
 
+    const scheduleMap: number[][][] = [];
+    for (let i = 0; i < weeks.length; i += 1) {
+      scheduleMap.push([]);
+      for (let dateIndex = 0; dateIndex < 7; dateIndex += 1) {
+        scheduleMap[i].push([]);
+        for (let k = 0; k < 13; k += 1) {
+          scheduleMap[i][dateIndex].push(0);
+        }
+      }
+    }
+
     this.state.schedules.forEach((scheduleState: CalendarScheduleInterface) => {
       if (this.#checkThisMonthSchedule(scheduleState)) {
         weeks.forEach((weekElement: Element, idx) => {
@@ -96,7 +107,7 @@ class Schedule {
                 month: this.state.month,
                 date: +dateEnd,
               },
-              title: `${scheduleState.title}ㅎㅎ`,
+              title: `${scheduleState.title}`,
             });
 
           const [scheduleDateStartTimeStamp, scheduleDateEndTimeStamp] =
@@ -122,12 +133,91 @@ class Schedule {
             scheduleElement.classList.add('calendar__schedule--later');
           }
 
-          // 해당 날짜와 중복되는 일정 개수를 구한다.
-
           (scheduleElement as HTMLElement).dataset.from = '0';
           (scheduleElement as HTMLElement).dataset.to = '6';
 
+          // NOTE: 이미 구축된 일정을 추가적으로 더 쌓을 필요는 없다. 따라서 해당 flag가 active되면 그냥 넘어간다.
+          let isAlreadyBuilt = false;
+
           for (let i = +dateStart; i <= +dateEnd; i += 1) {
+            /* eslint-disable-next-line no-continue */
+            if (i < 1 || isAlreadyBuilt) continue;
+
+            const nowDateIndex = i - +dateStart;
+
+            const [nowDateStartTimeStamp, nowDateEndTimeStamp] =
+              this.#getScheduleTimeStamp({
+                dateStart: {
+                  year: this.state.year,
+                  month: this.state.month,
+                  date: +i,
+                },
+                dateEnd: {
+                  year: this.state.year,
+                  month: this.state.month,
+                  date: +i,
+                },
+                title: `${scheduleState.title}`,
+              });
+
+            if (
+              scheduleDateStartTimeStamp <= nowDateStartTimeStamp &&
+              scheduleDateEndTimeStamp >= nowDateEndTimeStamp
+            ) {
+              let flag = false;
+              for (
+                let orderIndex = 0;
+                orderIndex < scheduleMap[idx][nowDateIndex].length;
+                orderIndex += 1
+              ) {
+                /* eslint-disable-next-line no-continue */
+                if (flag) continue;
+
+                if (scheduleMap[idx][nowDateIndex][orderIndex] === 0) {
+                  for (let k = nowDateIndex; k <= 6; k += 1) {
+                    if (
+                      scheduleDateStartTimeStamp <=
+                        +new Date(
+                          this.state.year,
+                          this.state.month - 1,
+                          k + +dateStart,
+                        ) &&
+                      scheduleDateEndTimeStamp >=
+                        +new Date(
+                          this.state.year,
+                          this.state.month - 1,
+                          k + +dateStart,
+                        )
+                    ) {
+                      scheduleMap[idx][k][orderIndex] =
+                        +(scheduleState.id as string);
+                    }
+                  }
+                  flag = true;
+                  isAlreadyBuilt = true;
+                }
+              }
+            }
+          }
+
+          for (let i = 0; i < 7; i += 1) {
+            const orderIdx = scheduleMap[idx][i].findIndex(
+              id => id === +(scheduleState.id as string),
+            );
+            if (orderIdx > -1) {
+              if ((scheduleState.id as string) === '1665390940909') {
+                console.log(orderIdx);
+              }
+              (scheduleElement as HTMLElement).dataset.order = `${orderIdx}`;
+            }
+          }
+
+          for (let i = +dateStart; i <= +dateEnd; i += 1) {
+            console.log(
+              i,
+              scheduleState,
+              +scheduleState.dateStart.date - +dateStart,
+            );
             const [nowDateStartTimeStamp, nowDateEndTimeStamp] =
               this.#getScheduleTimeStamp({
                 dateStart: {
@@ -148,20 +238,13 @@ class Schedule {
               scheduleDateStartTimeStamp <= nowDateStartTimeStamp &&
               scheduleDateEndTimeStamp >= nowDateEndTimeStamp
             ) {
-              (scheduleElement as HTMLElement).dataset.order = `${
-                dateScheduleCounts[idx][i - +dateStart]
-              }`;
-
               dateScheduleCounts[idx][i - +dateStart] += 1;
             }
 
-            // 만약 스케줄 일정이 이번 주 일정보다 크면, 이번 주 첫 날부터 쭉 그어져야 한다.
-            if (scheduleDateStartTimeStamp < nowDateStartTimeStamp) {
-              if (+dateStart < 1) {
-                (scheduleElement as HTMLElement).dataset.from = (
-                  -+dateStart + 1
-                ).toString();
-              }
+            if (i < 1) {
+              (scheduleElement as HTMLElement).dataset.from = `${
+                Math.abs(+dateStart) + 1
+              }`;
             }
 
             if (scheduleDateStartTimeStamp === nowDateStartTimeStamp) {
