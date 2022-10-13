@@ -5,12 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:three": "yarn workspace @packages/three run dev",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "lint": "eslint '**/*.{ts,js}'",
     "lint:fix": "eslint '**/*.{ts,js}' --fix"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/**"
+    ]
   },
   "devDependencies": {
     "@types/node": "^18.8.0",
