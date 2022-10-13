@@ -15,5 +15,5 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </p>
   </div>
 `;
-
+export const test = 'test!';
 setupCounter(document.querySelector<HTMLButtonElement>('#counter')!);

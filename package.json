@@ -19,6 +19,7 @@
     ]
   },
   "devDependencies": {
+    "@packages/three": "workspace:^",
     "@types/node": "^18.8.0",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "^5.37.0",

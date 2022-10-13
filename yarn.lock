@@ -175,7 +175,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@packages/three@workspace:packages/three":
+"@packages/three@workspace:^, @packages/three@workspace:packages/three":
   version: 0.0.0-use.local
   resolution: "@packages/three@workspace:packages/three"
   dependencies:
@@ -2441,6 +2441,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "javascript-utils@workspace:."
   dependencies:
+    "@packages/three": "workspace:^"
     "@types/node": ^18.8.0
     "@typescript-eslint/eslint-plugin": latest
     "@typescript-eslint/parser": ^5.37.0
