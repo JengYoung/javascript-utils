@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "esnext",
     "useDefineForClassFields": true,
-    "module": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "moduleResolution": "Node",
+    "allowJs": true,
+    "module": "esnext",
+    "lib": ["esnext", "DOM"],
+    "moduleResolution": "node",
     "rootDir": ".",
     "strict": true,
     "sourceMap": true,
@@ -20,9 +21,6 @@
       "~/*": ["./*"],
       "@/*": ["./src/*"]
     }
-  },
-  "ts-node": {
-    "esm": true
   },
   "include": ["src"]
 }
