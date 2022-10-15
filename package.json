@@ -38,7 +38,6 @@
   },
   "packageManager": "yarn@3.2.4",
   "dependencies": {
-    "@types/three": "^0.144.0",
-    "three": "^0.145.0"
+    "@yarnpkg/pnpify": "^4.0.0-rc.25"
   }
 }

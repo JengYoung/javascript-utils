@@ -21,7 +21,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       }\
     ],\
     "enableTopLevelFallback": true,\
-    "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
+    "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)|(^(?:packages\\\\/three\\\\/\\\\.(?!\\\\.{0,1}(?:\\\\/|$))(?=.)[^/]*?\\\\/?)$)|(^(?:packages\\\\/three(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)|(^(?:packages\\\\/three\\\\/\\\\.pnp\\\\.cjs)$)|(^(?:packages\\\\/three(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
     "fallbackExclusionList": [\
       ["@packages/three", ["workspace:packages/three"]],\
       ["javascript-utils", ["workspace:."]]\
@@ -35,9 +35,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@packages/three", "workspace:packages/three"],\
             ["@types/node", "npm:18.8.0"],\
-            ["@types/three", "npm:0.144.0"],\
             ["@typescript-eslint/eslint-plugin", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:5.37.0"],\
             ["@typescript-eslint/parser", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:5.37.0"],\
+            ["@yarnpkg/pnpify", "npm:4.0.0-rc.25"],\
             ["eslint", "npm:7.32.0"],\
             ["eslint-config-airbnb", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:19.0.4"],\
             ["eslint-config-airbnb-base", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:15.0.0"],\
@@ -45,7 +45,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-import-resolver-typescript", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:3.5.1"],\
             ["eslint-plugin-import", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:2.26.0"],\
             ["sass", "npm:1.55.0"],\
-            ["three", "npm:0.145.0"],\
             ["ts-node", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:10.9.1"],\
             ["tslib", "npm:2.4.0"],\
             ["typescript", "patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=701156"],\
@@ -3332,9 +3331,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["javascript-utils", "workspace:."],\
             ["@packages/three", "workspace:packages/three"],\
             ["@types/node", "npm:18.8.0"],\
-            ["@types/three", "npm:0.144.0"],\
             ["@typescript-eslint/eslint-plugin", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:5.37.0"],\
             ["@typescript-eslint/parser", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:5.37.0"],\
+            ["@yarnpkg/pnpify", "npm:4.0.0-rc.25"],\
             ["eslint", "npm:7.32.0"],\
             ["eslint-config-airbnb", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:19.0.4"],\
             ["eslint-config-airbnb-base", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:15.0.0"],\
@@ -3342,7 +3341,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-import-resolver-typescript", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:3.5.1"],\
             ["eslint-plugin-import", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:2.26.0"],\
             ["sass", "npm:1.55.0"],\
-            ["three", "npm:0.145.0"],\
             ["ts-node", "virtual:0c37cf4b1b58c014627cd6f6babfc6335f91e32402b854f3eab1f6a48f2267a3bd6e0d8d558c79ff755c2e6a14937a98b6b20727441f8cfd116385b013c47909#npm:10.9.1"],\
             ["tslib", "npm:2.4.0"],\
             ["typescript", "patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=701156"],\
