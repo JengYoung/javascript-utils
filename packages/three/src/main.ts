@@ -59,31 +59,74 @@ export class App {
   init() {
     const colors = [
       new THREE.Color(0x6401da),
-      new THREE.Color(0x7401da),
-      new THREE.Color(0x8401da),
-      new THREE.Color(0x9401da),
+      new THREE.Color(0xffffff),
+      new THREE.Color(0xffca00),
+      new THREE.Color(0xa32634),
     ];
 
-    const translation = new THREE.Matrix4().makeTranslation(150, 0, 0);
+    const translation = new THREE.Matrix4().makeTranslation(180, 0, 0);
 
-    for (let i = 0; i < 14; i += 1) {
+    for (let i = 0; i < 15; i += 1) {
       const group = new THREE.Group();
+
+      // NOTE: 추후 벽을 만들 때 활용할 수 있다.
+      // if (i % 5 === 0) {
+      //   const wallGroup = new THREE.Group();
+
+      //   const wallGeometry = new THREE.BoxGeometry(
+      //     this.#innerWidth,
+      //     this.#innerHeight,
+      //     1,
+      //   );
+
+      //   const wallMaterial = new THREE.MeshPhysicalMaterial({
+      //     color: colors[i % 4],
+      //   });
+
+      //   const wall = new THREE.Mesh(wallGeometry, wallMaterial);
+
+      //   // techSticker
+
+      //   const techStickerGeometry = new THREE.CircleGeometry(50, 100);
+      //   const techStickerMaterial = new THREE.MeshPhysicalMaterial({
+      //     // color: colors[i % 4],
+      //     color: 0x124423,
+      //   });
+      //   const techSticker = new THREE.Mesh(
+      //     techStickerGeometry,
+      //     techStickerMaterial,
+      //   );
+
+      //   const rotation2 = new THREE.Matrix4().makeRotationZ(Math.PI / 2);
+      //   const translation2 = new THREE.Matrix4().makeTranslation(180, 0, 0);
+
+      //   techSticker.position.x = -25 * Math.PI;
+      //   techSticker.position.z += 1;
+
+      //   techSticker.applyMatrix4(
+      //     new THREE.Matrix4().multiplyMatrices(rotation2, translation2),
+      //   );
+
+      //   wallGroup.add(techSticker);
+      //   wallGroup.add(wall);
+      //   group.add(wallGroup);
+      // }
 
       for (let j = 0; j < 50; j += 1) {
         const material = new THREE.MeshPhysicalMaterial({color: colors[i % 4]});
 
-        const geometry = new THREE.BoxGeometry(50, 30, 170);
-        const cube = new THREE.Mesh(geometry, material);
+        const geometry = new THREE.BoxGeometry(50, 35, 180);
+        const block = new THREE.Mesh(geometry, material);
 
         const rotation = new THREE.Matrix4().makeRotationZ(
           ((Math.PI * 2) / 50) * j,
         );
 
-        cube.applyMatrix4(
+        block.applyMatrix4(
           new THREE.Matrix4().multiplyMatrices(rotation, translation),
         );
 
-        group.add(cube);
+        group.add(block);
       }
 
       group.position.z = -i * 180;
@@ -106,19 +149,19 @@ export class App {
     let counter = 0;
 
     const cb = () => {
-      for (let i = 0; i < 14; i += 1) {
+      for (let i = 0; i < this.obj.children.length; i += 1) {
         const circle = this.obj.children[i];
-
         if (this.camera.position.z <= circle.position.z) {
           this.#distance -= 180;
 
           circle.position.z = this.#distance;
         }
+        console.log(circle);
       }
 
-      this.camera.position.z -= 3;
+      this.camera.position.z -= 5;
 
-      this.light.position.z -= 3;
+      this.light.position.z -= 5;
 
       counter += 1;
 
