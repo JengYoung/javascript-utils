@@ -5,6 +5,7 @@
  *
  * @see: https://techblog.woowahan.com/7976/
  */
+const path = require('path');
 
 module.exports = {
   globals: {
@@ -20,7 +21,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'import'],
   rules: {
     'import/prefer-default-export': 'off',
     'import/extensions': [
@@ -28,6 +29,8 @@ module.exports = {
       'ignorePackages',
       {
         js: 'never',
+        mjs: 'never',
+        jsx: 'never',
         ts: 'never',
       },
     ],
@@ -37,22 +40,27 @@ module.exports = {
     'import/resolver': {
       node: {
         extensions: ['.js', '.ts'],
-        moduleDirectory: ['node_modules', 'src/'],
+        moduleDirectory: ['src/', 'node_modules'],
       },
-      typescript: {}, // this loads <rootdir>/tsconfig.json to eslint
+      typescript: [
+        path.resolve(__dirname, './tsconfig.json'), // root tsconfig
+        path.resolve(__dirname, './packages/three/tsconfig.json'),
+        /* ...rest of projects path to its tsconfig */
+      ], // this loads <rootdir>/tsconfig.json to eslint,
     },
   },
   overrides: [
     {
-      files: ['*.ts'],
+      files: ['./src/**/*.ts'],
       plugins: ['@typescript-eslint/eslint-plugin'],
       /**
-       * @since
-       * 0번째 인덱스에 `project`를 오버라이딩한 이유는, 이를 삭제할 경우 `CustomEvent`와 같은 Native Interface를
+       * @description
+       * `project`를 오버라이딩한 이유는, 이를 삭제할 경우 `CustomEvent`와 같은 Native Interface를
        * 타입스크립트 컴파일러가 추적하지 못하는 현상 때문입니다.
        */
       parserOptions: {
-        project: ['./tsconfig.json'],
+        extensions: ['.js', '.ts'],
+        project: path.resolve(__dirname, './tsconfig.json'),
       },
     },
   ],
