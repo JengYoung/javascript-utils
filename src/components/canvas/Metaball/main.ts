@@ -2,7 +2,8 @@
  * 메타볼을 실행하는 클래스입니다.
  */
 
-import Canvas from '~/src/main';
+import Canvas from '..';
+import {Metaballs} from './MetaBalls';
 
 export class App {
   target: Element;
@@ -13,6 +14,8 @@ export class App {
 
   height: number;
 
+  metaballs: Metaballs;
+
   constructor(target: Element) {
     this.target = target;
 
@@ -20,10 +23,13 @@ export class App {
     this.height = window.innerHeight;
 
     this.canvas = new Canvas(this.target, this.width, this.height);
+
+    this.metaballs = new Metaballs({ctx: this.canvas.ctx, state: {ballCnt: 2}});
   }
 
   render() {
     this.canvas.render();
+    this.metaballs.render();
   }
 }
 

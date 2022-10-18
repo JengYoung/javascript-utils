@@ -23,11 +23,13 @@ export class Metaball implements MetaballInterface {
   constructor({ctx, state}: MetaballInterface) {
     this.ctx = ctx;
 
-    this.state = {
+    this.state = state;
+
+    this.setState({
       ...state,
       angleStart: 0,
       angleEnd: Math.PI * 2,
-    };
+    });
   }
 
   setState(nowState: Partial<MetaballStateInterface>) {
@@ -35,6 +37,8 @@ export class Metaball implements MetaballInterface {
       ...this.state,
       ...nowState,
     };
+
+    this.render();
   }
 
   render() {
@@ -57,6 +61,8 @@ export class Metaball implements MetaballInterface {
       this.state.angleStart,
       this.state.angleEnd,
     );
+
+    this.ctx.fill();
 
     this.ctx.closePath();
   }

@@ -32,18 +32,24 @@ export class Metaballs {
       new Metaball({
         ctx: this.ctx,
         state: {
-          x: 25,
-          y: 25,
+          x: 200,
+          y: 200,
           r: 40,
+
+          bg: '#752bed',
+          color: 'black',
         },
       }),
 
       new Metaball({
         ctx: this.ctx,
         state: {
-          x: 125,
-          y: 125,
+          x: 325,
+          y: 325,
           r: 100,
+
+          bg: '#752bed',
+          color: 'black',
         },
       }),
     );
