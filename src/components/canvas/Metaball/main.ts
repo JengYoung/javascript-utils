@@ -30,6 +30,15 @@ export class App {
   render() {
     this.canvas.render();
     this.metaballs.render();
+
+    this.animate();
+  }
+
+  animate() {
+    this.canvas.ctx.clearRect(0, 0, this.width, this.height);
+    requestAnimationFrame(() => this.animate());
+
+    this.metaballs.move();
   }
 }
 

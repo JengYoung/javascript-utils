@@ -48,7 +48,6 @@ export class Metaball implements MetaballInterface {
     ) {
       return;
     }
-
     this.ctx.beginPath();
 
     this.ctx.fillStyle = this.state.bg ?? '';
@@ -63,6 +62,7 @@ export class Metaball implements MetaballInterface {
     );
 
     this.ctx.fill();
+    this.ctx.stroke();
 
     this.ctx.closePath();
   }
