@@ -2,8 +2,9 @@ export interface MetaballStateInterface {
   x: number;
   y: number;
   r: number;
-  angleStart: number;
-  angleEnd: number;
+
+  angleStart?: number;
+  angleEnd?: number;
 
   bg?: string;
   color?: string;
@@ -22,7 +23,11 @@ export class Metaball implements MetaballInterface {
   constructor({ctx, state}: MetaballInterface) {
     this.ctx = ctx;
 
-    this.state = state;
+    this.state = {
+      ...state,
+      angleStart: 0,
+      angleEnd: Math.PI * 2,
+    };
   }
 
   setState(nowState: Partial<MetaballStateInterface>) {
@@ -33,6 +38,13 @@ export class Metaball implements MetaballInterface {
   }
 
   render() {
+    if (
+      typeof this.state.angleStart !== 'number' ||
+      typeof this.state.angleEnd !== 'number'
+    ) {
+      return;
+    }
+
     this.ctx.beginPath();
 
     this.ctx.fillStyle = this.state.bg ?? '';
