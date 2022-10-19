@@ -4,6 +4,7 @@
 
 import Canvas from '..';
 import {Metaballs} from './MetaBalls';
+import {Points} from './Points';
 
 export class App {
   target: Element;
@@ -16,6 +17,8 @@ export class App {
 
   metaballs: Metaballs;
 
+  points: Points;
+
   constructor(target: Element) {
     this.target = target;
 
@@ -25,6 +28,14 @@ export class App {
     this.canvas = new Canvas(this.target, this.width, this.height);
 
     this.metaballs = new Metaballs({ctx: this.canvas.ctx, state: {ballCnt: 2}});
+
+    this.points = new Points({
+      width: this.width,
+      height: this.height,
+      gapWeight: 1,
+    });
+
+    console.log(this.points);
   }
 
   render() {
