@@ -49,14 +49,17 @@ export class App {
 
     this.metaballs.move();
 
-    this.metaballs.arr.forEach(metaball => {
-      const {x: x1, y: y1, r} = metaball.state;
+    this.points.points.forEach(({x: x2, y: y2}) => {
+      let total = 0;
+      this.metaballs.arr.forEach(metaball => {
+        const {x: x1, y: y1, r} = metaball.state;
 
-      this.points.points.forEach(({x: x2, y: y2}) => {
-        if ((x1 - x2) ** 2 + (y1 - y2) ** 2 <= r ** 2) {
-          this.canvas.ctx.fillRect(x2, y2, 1, 1);
-        }
+        total += r / ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5;
       });
+
+      if (total >= 1.8) {
+        this.canvas.ctx.fillRect(x2, y2, 1, 1);
+      }
     });
   }
 }
