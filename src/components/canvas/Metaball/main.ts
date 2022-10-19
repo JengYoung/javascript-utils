@@ -32,7 +32,7 @@ export class App {
     this.points = new Points({
       width: this.width,
       height: this.height,
-      gapWeight: 1,
+      gapWeight: 2,
     });
   }
 
@@ -49,7 +49,8 @@ export class App {
 
     this.metaballs.move();
 
-    this.points.points.forEach(({x: x2, y: y2}) => {
+    this.points.points.forEach(({x: x2, y: y2}, i) => {
+      if (i % 2) return;
       let total = 0;
       this.metaballs.arr.forEach(metaball => {
         const {x: x1, y: y1, r} = metaball.state;
@@ -57,8 +58,9 @@ export class App {
         total += r / ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5;
       });
 
-      if (total >= 1.8) {
-        this.canvas.ctx.fillRect(x2, y2, 1, 1);
+      if (total >= 1.2) {
+        this.canvas.ctx.fillStyle = 'orange';
+        this.canvas.ctx.fillRect(x2, y2, 2, 2);
       }
     });
   }

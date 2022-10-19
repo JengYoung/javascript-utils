@@ -50,7 +50,7 @@ export class Metaball implements MetaballInterface {
     }
     this.ctx.beginPath();
 
-    this.ctx.fillStyle = this.state.bg ?? '';
+    this.ctx.fillStyle = 'yellow';
     this.ctx.strokeStyle = this.state.color ?? '';
 
     this.ctx.arc(
@@ -62,7 +62,7 @@ export class Metaball implements MetaballInterface {
     );
 
     this.ctx.fill();
-    // this.ctx.stroke();
+    this.ctx.stroke();
 
     this.ctx.closePath();
   }
