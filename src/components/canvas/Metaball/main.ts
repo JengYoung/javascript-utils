@@ -34,8 +34,6 @@ export class App {
       height: this.height,
       gapWeight: 1,
     });
-
-    console.log(this.points);
   }
 
   render() {
@@ -50,6 +48,16 @@ export class App {
     requestAnimationFrame(() => this.animate());
 
     this.metaballs.move();
+
+    this.metaballs.arr.forEach(metaball => {
+      const {x: x1, y: y1, r} = metaball.state;
+
+      this.points.points.forEach(({x: x2, y: y2}) => {
+        if ((x1 - x2) ** 2 + (y1 - y2) ** 2 <= r ** 2) {
+          this.canvas.ctx.fillRect(x2, y2, 1, 1);
+        }
+      });
+    });
   }
 }
 

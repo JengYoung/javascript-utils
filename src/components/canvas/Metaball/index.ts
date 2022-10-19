@@ -62,7 +62,7 @@ export class Metaball implements MetaballInterface {
     );
 
     this.ctx.fill();
-    this.ctx.stroke();
+    // this.ctx.stroke();
 
     this.ctx.closePath();
   }

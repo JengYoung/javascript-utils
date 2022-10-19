@@ -32,18 +32,27 @@ export class Metaballs {
     this.moveCnt = 0;
   }
 
+  get moveCntRadian() {
+    return this.moveCnt * (Math.PI / 180);
+  }
+
   move() {
+    const weight = 0.5;
     this.arr[0].setState({
-      x: this.arr[0].state.x + Math.sin(this.moveCnt) * 0.5,
-      y: this.arr[0].state.y + Math.sin(this.moveCnt) * 0.5,
+      x: this.arr[0].state.x + Math.sin(this.moveCntRadian) * weight,
+      y: this.arr[0].state.y + Math.sin(this.moveCntRadian) * weight,
     });
 
     this.arr[1].setState({
-      x: this.arr[1].state.x + Math.cos(Math.PI / 2 + this.moveCnt) * 0.5,
-      y: this.arr[1].state.y + Math.cos(Math.PI / 2 + this.moveCnt) * 0.5,
+      x:
+        this.arr[1].state.x +
+        Math.cos(Math.PI / 2 + this.moveCntRadian) * weight,
+      y:
+        this.arr[1].state.y +
+        Math.cos(Math.PI / 2 + this.moveCntRadian) * weight,
     });
 
-    this.moveCnt += 0.02;
+    this.moveCnt += 2;
   }
 
   render() {
