@@ -6,4 +6,6 @@ import {RADIAN} from './constants';
  * @param r : 라디안 값을 인수로 전달받습니다.
  * @return degree값을 반환합니다.
  */
-export const getDegree = (r: number): number => r * RADIAN;
+const getDegree = (r: number): number => r * RADIAN;
+
+export default getDegree;

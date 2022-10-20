@@ -55,7 +55,5 @@ export class MetaballCanvas extends Canvas implements MetaballCanvasInterface {
     this.ctx.fillStyle = metaballGradiation;
 
     this.metaballs.render(this.ctx);
-
-    this.ctx.fill();
   }
 }

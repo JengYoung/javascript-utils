@@ -40,8 +40,17 @@ export class Metaballs implements MetaballsInterface {
   }
 
   render(ctx: CanvasRenderingContext2D) {
-    this.balls.forEach(ball => {
+    this.balls.forEach((ball, idx) => {
       ball.render(ctx);
+      for (let i = idx + 1; i < this.balls.length; i += 1) {
+        const nextBall = this.balls[i];
+
+        // NOTE: update and render curve finally
+        const paths = ball.update(nextBall);
+        if (paths !== null) {
+          ball.renderCurve(ctx, paths);
+        }
+      }
     });
   }
 }

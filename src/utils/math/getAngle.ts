@@ -11,14 +11,16 @@ import {RADIAN} from './constants';
  * @param y1 현재 대상 좌표 1의 y
  * @param x2 비교할 좌표 2의 x
  * @param y2 비교할 좌표 2의 y
- * @param radian 옵셔널하며,
+ * @param degree 옵셔널하며, true일 경우에는 `degree`로 환산한 값을 반환합니다.
  *
  * @return 두 점 간의 각도를 반환합니다.
  */
-export const getAngle = (
+const getAngle = (
   x1: number,
   y1: number,
   x2: number,
   y2: number,
-  {radian = true}: {radian?: boolean},
-) => Math.atan2(y2 - y1, x2 - x1) * (radian ? 1 : RADIAN);
+  {degree = false}: {degree?: boolean},
+) => Math.atan2(y1 - y2, x1 - x2) * (degree ? RADIAN : 1);
+
+export default getAngle;
