@@ -1,5 +1,5 @@
 import Canvas from '..';
-import {Metaball} from './Metaball';
+import {Metaballs} from './Metaballs';
 
 interface MetaballCanvasInterface {
   target: Element;
@@ -8,9 +8,7 @@ interface MetaballCanvasInterface {
 
   height: number;
 
-  metaball1: Metaball;
-
-  metaball2: Metaball;
+  metaballs: Metaballs;
 
   bgGradients: [string, string];
 
@@ -18,28 +16,16 @@ interface MetaballCanvasInterface {
 }
 
 export class MetaballCanvas extends Canvas implements MetaballCanvasInterface {
-  metaball1: Metaball;
-
-  metaball2: Metaball;
-
   bgGradients: [string, string];
 
   gradients: [string, string];
 
+  metaballs: Metaballs;
+
   constructor(target: Element, width: number, height: number) {
     super(target, width, height);
 
-    this.metaball1 = new Metaball({
-      x: 200,
-      y: 200,
-      r: 150,
-    });
-
-    this.metaball2 = new Metaball({
-      x: 500,
-      y: 500,
-      r: 200,
-    });
+    this.metaballs = new Metaballs({num: 2});
 
     this.bgGradients = ['#85ffff', '#c2a4f9'];
     this.gradients = ['#00ffff', '#752bed'];
@@ -55,6 +41,8 @@ export class MetaballCanvas extends Canvas implements MetaballCanvasInterface {
     return result;
   }
 
+  update() {}
+
   render() {
     this.target.appendChild(this.canvas);
 
@@ -66,8 +54,7 @@ export class MetaballCanvas extends Canvas implements MetaballCanvasInterface {
     const metaballGradiation = this.gradient(this.gradients);
     this.ctx.fillStyle = metaballGradiation;
 
-    this.metaball1.render(this.ctx);
-    this.metaball2.render(this.ctx);
+    this.metaballs.render(this.ctx);
 
     this.ctx.fill();
   }

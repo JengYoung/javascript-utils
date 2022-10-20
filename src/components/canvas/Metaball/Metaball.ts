@@ -1,7 +1,10 @@
+import getRandom from '~/src/utils/math/getRandom';
+
 interface MetaballPropInterface {
   x: number;
   y: number;
   r: number;
+  v: number;
 }
 
 interface MetaballStateInterface extends MetaballPropInterface {}
@@ -13,11 +16,12 @@ interface MetaballInterface {
 export class Metaball implements MetaballInterface {
   state: MetaballStateInterface;
 
-  constructor({x, y, r}: MetaballPropInterface) {
+  constructor({x, y, r}: Pick<MetaballPropInterface, 'x' | 'y' | 'r'>) {
     this.state = {
       x,
       y,
       r,
+      v: getRandom(0, 1, {allowNagative: true}),
     };
   }
 
