@@ -25,7 +25,12 @@ export class MetaballCanvas extends Canvas implements MetaballCanvasInterface {
   constructor(target: Element, width: number, height: number) {
     super(target, width, height);
 
-    this.metaballs = new Metaballs({num: 2});
+    this.metaballs = new Metaballs({
+      num: 2,
+      absorbBallNum: 5,
+      canvasWidth: width,
+      canvasHeight: height,
+    });
 
     this.bgGradients = ['#85ffff', '#c2a4f9'];
     this.gradients = ['#00ffff', '#752bed'];
