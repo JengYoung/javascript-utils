@@ -1,13 +1,17 @@
 import {getAngle, getDist, getRandom, PIH} from '~/src/utils/math';
 
-interface MetaballPropInterface {
+interface MetaballBaseInterface {
   x: number;
   y: number;
   r: number;
-  v: [number, number];
+}
+interface MetaballPropInterface extends MetaballBaseInterface {
+  ctx: CanvasRenderingContext2D;
 }
 
-interface MetaballStateInterface extends MetaballPropInterface {}
+interface MetaballStateInterface extends MetaballPropInterface {
+  v: [number, number];
+}
 
 interface MetaballInterface {
   state: MetaballStateInterface;
@@ -27,8 +31,11 @@ interface UpdateReturnTypeInterface {
 export class Metaball implements MetaballInterface {
   state: MetaballStateInterface;
 
-  constructor({x, y, r}: Pick<MetaballPropInterface, 'x' | 'y' | 'r'>) {
+  #absorbWeight = 120;
+
+  constructor({ctx, x, y, r}: Exclude<MetaballPropInterface, 'v'>) {
     this.state = {
+      ctx,
       x,
       y,
       r,
@@ -37,6 +44,10 @@ export class Metaball implements MetaballInterface {
         getRandom(0, 1, {allowNagative: true}),
       ],
     };
+  }
+
+  get ctx() {
+    return this.state.ctx;
   }
 
   get x() {
@@ -53,6 +64,10 @@ export class Metaball implements MetaballInterface {
 
   get v() {
     return this.state.v;
+  }
+
+  get absorbWeight() {
+    return this.#absorbWeight;
   }
 
   update(cmp: Metaball): null | UpdateReturnTypeInterface {
@@ -151,22 +166,74 @@ export class Metaball implements MetaballInterface {
     };
   }
 
-  renderCurve(
-    ctx: CanvasRenderingContext2D,
-    {p1, h1, cmpH1, cmpP1, cmpP2, cmpH2, h2, p2}: UpdateReturnTypeInterface,
-  ) {
-    ctx.beginPath();
-    ctx.moveTo(...p1);
+  setState(state: Partial<MetaballStateInterface>) {
+    this.state = {
+      ...this.state,
+      ...state,
+    };
+  }
 
-    ctx.bezierCurveTo(...h1, ...cmpH1, ...cmpP1);
-    ctx.lineTo(...cmpP2);
-    ctx.bezierCurveTo(...cmpH2, ...h2, ...p2);
+  /* CHECKLIST:
+   1. 일단 전체 공들이 메인에서 벗어나지 않는 로직 짜기.
+   2. 버블의 경우는 메인에서 벗어날 수 있도록 짜기.
+   
+   1)
+   - [x] 일단 메인에서 벗어나는 범위를 정해야 한다.
+   - [x] 예측하기로는, 결국 반지름보다 두 원의 거리와, 벗어나려는 원의 반지름 크기의 합이 현재 원천인 메타볼의 반지름보다 작으면 벗어난 것이라 생각한다.
+   - [x] 그런데 어느 정도 가중치를 조정하여 공을 그 안에서 움직이도록 해야 쫀득한 느낌이 난다.
+   - [x] 이에 대한 코드를 짠다.
 
-    ctx.lineTo(...p1);
+   
+   */
+  animate(base: MetaballBaseInterface) {
+    const {x: bx, y: by, r: br} = base;
 
-    ctx.closePath();
+    if (this.x < 0 || this.y < 0) return;
 
-    ctx.fill();
+    const dist = getDist(this.x, this.y, bx, by);
+
+    if (dist >= br - this.absorbWeight) {
+      const nextV: [number, number] = [
+        (this.v[0] >= 0 ? -1 : 1) * getRandom(0, 1, {allowNagative: false}),
+        (this.v[1] >= 0 ? -1 : 1) * getRandom(0, 1, {allowNagative: false}),
+      ];
+
+      this.setState({
+        x: this.x + nextV[0],
+        y: this.y + nextV[1],
+        v: nextV,
+      });
+      return;
+    }
+
+    this.setState({
+      x: this.x + this.v[0],
+      y: this.y + this.v[1],
+    });
+  }
+
+  renderCurve({
+    p1,
+    h1,
+    cmpH1,
+    cmpP1,
+    cmpP2,
+    cmpH2,
+    h2,
+    p2,
+  }: UpdateReturnTypeInterface) {
+    this.ctx.beginPath();
+    this.ctx.moveTo(...p1);
+
+    this.ctx.bezierCurveTo(...h1, ...cmpH1, ...cmpP1);
+    this.ctx.lineTo(...cmpP2);
+    this.ctx.bezierCurveTo(...cmpH2, ...h2, ...p2);
+
+    this.ctx.lineTo(...p1);
+
+    this.ctx.closePath();
+
+    this.ctx.fill();
   }
 
   getVector(

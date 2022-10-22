@@ -1,6 +1,7 @@
 import {Metaball} from './Metaball';
 
 export interface MetaballsPropsInterface {
+  ctx: CanvasRenderingContext2D;
   num: number;
   absorbBallNum: number;
   canvasWidth: number;
@@ -13,6 +14,8 @@ export interface MetaballsInterface extends MetaballsPropsInterface {
 }
 
 export class Metaballs implements MetaballsInterface {
+  ctx: CanvasRenderingContext2D;
+
   num: number;
 
   absorbBallNum: number;
@@ -28,11 +31,14 @@ export class Metaballs implements MetaballsInterface {
   #absorbedMetaBalls: Metaball[] = [];
 
   constructor({
+    ctx,
     num,
     absorbBallNum,
     canvasWidth,
     canvasHeight,
   }: MetaballsPropsInterface) {
+    this.ctx = ctx;
+
     this.num = num;
     this.absorbBallNum = absorbBallNum;
 
@@ -40,6 +46,7 @@ export class Metaballs implements MetaballsInterface {
     this.canvasHeight = canvasHeight;
 
     this.mainMetaball = new Metaball({
+      ctx: this.ctx,
       x: this.canvasWidth / 2,
       y: this.canvasHeight / 2,
       r: 300,
@@ -51,7 +58,8 @@ export class Metaballs implements MetaballsInterface {
   init() {
     for (let i = 0; i < this.absorbBallNum; i += 1) {
       const metaball = new Metaball({
-        x: this.canvasWidth / 2 - 200,
+        ctx: this.ctx,
+        x: this.canvasWidth / 2,
         y: this.canvasHeight / 2,
         r: 200,
       });
@@ -61,8 +69,9 @@ export class Metaballs implements MetaballsInterface {
 
     for (let i = 0; i < this.num; i += 1) {
       const metaball = new Metaball({
-        x: this.canvasWidth / 2 - 300,
-        y: this.canvasHeight / 2 - 300,
+        ctx: this.ctx,
+        x: this.canvasWidth / 2,
+        y: this.canvasHeight / 2,
         r: 200,
       });
 
@@ -82,6 +91,18 @@ export class Metaballs implements MetaballsInterface {
     return [...this.#absorbedMetaBalls, ...this.#bubbles];
   }
 
+  animate() {
+    this.restMetaballs.forEach(ball => {
+      ball.animate({
+        x: this.mainMetaball.state.x,
+        y: this.mainMetaball.state.y,
+        r: this.mainMetaball.state.r,
+      });
+    });
+
+    this.render(this.ctx);
+  }
+
   render(ctx: CanvasRenderingContext2D) {
     this.mainMetaball.render(ctx);
 
@@ -89,18 +110,14 @@ export class Metaballs implements MetaballsInterface {
       ball.render(ctx);
 
       const mainMetaballPath = ball.update(this.mainMetaball);
-      if (mainMetaballPath !== null) {
-        ball.renderCurve(ctx, mainMetaballPath);
-      }
+      if (mainMetaballPath !== null) ball.renderCurve(mainMetaballPath);
 
       for (let i = idx + 1; i < this.restMetaballs.length; i += 1) {
         const nextBall = this.restMetaballs[i];
 
         // NOTE: update and render curve finally
         const paths = ball.update(nextBall);
-        if (paths !== null) {
-          ball.renderCurve(ctx, paths);
-        }
+        if (paths !== null) ball.renderCurve(paths);
       }
     });
   }
