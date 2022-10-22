@@ -104,8 +104,6 @@ export class Metaballs implements MetaballsInterface {
   }
 
   render(ctx: CanvasRenderingContext2D) {
-    this.mainMetaball.render(ctx);
-
     this.restMetaballs.forEach((ball, idx) => {
       ball.render(ctx);
 
@@ -120,5 +118,7 @@ export class Metaballs implements MetaballsInterface {
         if (paths !== null) ball.renderCurve(paths);
       }
     });
+
+    this.mainMetaball.render(ctx);
   }
 }

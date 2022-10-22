@@ -46,6 +46,10 @@ export class Metaball implements MetaballInterface {
     };
   }
 
+  get gradients() {
+    return ['#00ffff', '#752bed'];
+  }
+
   get ctx() {
     return this.state.ctx;
   }
@@ -74,14 +78,9 @@ export class Metaball implements MetaballInterface {
     const {x: cmpX, y: cmpY, r: cmpR} = cmp;
 
     const dist = getDist(this.x, this.y, cmpX, cmpY);
-    const maxDist = this.r + cmpR * 2.5;
+    const maxDist = (this.r + cmpR) * 3;
 
-    if (
-      this.r === 0 ||
-      cmpR === 0 ||
-      dist > maxDist ||
-      dist <= Math.abs(this.r - cmpR)
-    ) {
+    if (this.r === 0 || cmpR === 0 || dist >= maxDist) {
       return null;
     }
 
@@ -232,7 +231,6 @@ export class Metaball implements MetaballInterface {
     this.ctx.lineTo(...p1);
 
     this.ctx.closePath();
-
     this.ctx.fill();
   }
 
@@ -251,6 +249,7 @@ export class Metaball implements MetaballInterface {
     endAngle: number = Math.PI * 2,
   ) {
     ctx.arc(this.state.x, this.state.y, this.state.r, startAngle, endAngle);
+
     ctx.fill();
   }
 }

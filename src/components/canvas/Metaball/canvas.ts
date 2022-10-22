@@ -27,8 +27,8 @@ export class MetaballCanvas extends Canvas implements MetaballCanvasInterface {
 
     this.metaballs = new Metaballs({
       ctx: this.ctx,
-      num: 2,
-      absorbBallNum: 5,
+      num: 1,
+      absorbBallNum: 11,
       canvasWidth: width,
       canvasHeight: height,
     });
@@ -49,6 +49,7 @@ export class MetaballCanvas extends Canvas implements MetaballCanvasInterface {
 
   fillGradient() {
     this.ctx.clearRect(0, 0, this.width, this.height);
+
     const bgGradiation = this.gradient(this.bgGradients);
     this.ctx.fillStyle = bgGradiation;
 
