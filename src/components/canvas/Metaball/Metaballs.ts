@@ -1,8 +1,10 @@
+import {getRandom} from '~/src/utils/math';
+import {Bubble} from './Bubble';
 import {Metaball} from './Metaball';
 
 export interface MetaballsPropsInterface {
   ctx: CanvasRenderingContext2D;
-  num: number;
+  bubbleNum: number;
   absorbBallNum: number;
   canvasWidth: number;
   canvasHeight: number;
@@ -16,7 +18,7 @@ export interface MetaballsInterface extends MetaballsPropsInterface {
 export class Metaballs implements MetaballsInterface {
   ctx: CanvasRenderingContext2D;
 
-  num: number;
+  bubbleNum: number;
 
   absorbBallNum: number;
 
@@ -32,14 +34,14 @@ export class Metaballs implements MetaballsInterface {
 
   constructor({
     ctx,
-    num,
+    bubbleNum,
     absorbBallNum,
     canvasWidth,
     canvasHeight,
   }: MetaballsPropsInterface) {
     this.ctx = ctx;
 
-    this.num = num;
+    this.bubbleNum = bubbleNum;
     this.absorbBallNum = absorbBallNum;
 
     this.canvasWidth = canvasWidth;
@@ -49,7 +51,11 @@ export class Metaballs implements MetaballsInterface {
       ctx: this.ctx,
       x: this.canvasWidth / 2,
       y: this.canvasHeight / 2,
-      r: 300,
+      r: 200,
+      v: [
+        getRandom(0, 1, {allowNagative: true}),
+        getRandom(0, 1, {allowNagative: true}),
+      ],
     });
 
     this.init();
@@ -62,17 +68,25 @@ export class Metaballs implements MetaballsInterface {
         x: this.canvasWidth / 2,
         y: this.canvasHeight / 2,
         r: 200,
+        v: [
+          getRandom(0, 1, {allowNagative: true}),
+          getRandom(0, 1, {allowNagative: true}),
+        ],
       });
 
       this.#absorbedMetaBalls.push(metaball);
     }
 
-    for (let i = 0; i < this.num; i += 1) {
-      const metaball = new Metaball({
+    for (let i = 0; i < this.bubbleNum; i += 1) {
+      const metaball = new Bubble({
         ctx: this.ctx,
         x: this.canvasWidth / 2,
         y: this.canvasHeight / 2,
         r: 200,
+        v: [
+          getRandom(0, 1, {allowNagative: true}),
+          getRandom(0, 1, {allowNagative: true}),
+        ],
       });
 
       this.#bubbles.push(metaball);
@@ -105,8 +119,6 @@ export class Metaballs implements MetaballsInterface {
 
   render(ctx: CanvasRenderingContext2D) {
     this.restMetaballs.forEach((ball, idx) => {
-      ball.render(ctx);
-
       const mainMetaballPath = ball.update(this.mainMetaball);
       if (mainMetaballPath !== null) ball.renderCurve(mainMetaballPath);
 
@@ -117,6 +129,8 @@ export class Metaballs implements MetaballsInterface {
         const paths = ball.update(nextBall);
         if (paths !== null) ball.renderCurve(paths);
       }
+
+      ball.render(ctx);
     });
 
     this.mainMetaball.render(ctx);

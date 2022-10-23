@@ -1,23 +1,22 @@
 import {getAngle, getDist, getRandom, PIH} from '~/src/utils/math';
 
-interface MetaballBaseInterface {
+export interface MetaballBaseInterface {
   x: number;
   y: number;
   r: number;
 }
-interface MetaballPropInterface extends MetaballBaseInterface {
+export interface MetaballPropInterface extends MetaballBaseInterface {
   ctx: CanvasRenderingContext2D;
-}
-
-interface MetaballStateInterface extends MetaballPropInterface {
   v: [number, number];
 }
 
-interface MetaballInterface {
+export interface MetaballStateInterface extends MetaballPropInterface {}
+
+export interface MetaballInterface {
   state: MetaballStateInterface;
 }
 
-interface UpdateReturnTypeInterface {
+export interface UpdateReturnTypeInterface {
   p1: [number, number];
   h1: [number, number];
   cmpH1: [number, number];
@@ -31,9 +30,9 @@ interface UpdateReturnTypeInterface {
 export class Metaball implements MetaballInterface {
   state: MetaballStateInterface;
 
-  #absorbWeight = 120;
+  #absorbWeight = 100;
 
-  constructor({ctx, x, y, r}: Exclude<MetaballPropInterface, 'v'>) {
+  constructor({ctx, x, y, r}: MetaballPropInterface) {
     this.state = {
       ctx,
       x,
@@ -78,9 +77,9 @@ export class Metaball implements MetaballInterface {
     const {x: cmpX, y: cmpY, r: cmpR} = cmp;
 
     const dist = getDist(this.x, this.y, cmpX, cmpY);
-    const maxDist = (this.r + cmpR) * 3;
+    const maxDist = (this.r + cmpR) * 1.2;
 
-    if (this.r === 0 || cmpR === 0 || dist >= maxDist) {
+    if (dist >= maxDist) {
       return null;
     }
 
@@ -181,27 +180,27 @@ export class Metaball implements MetaballInterface {
    - [x] 예측하기로는, 결국 반지름보다 두 원의 거리와, 벗어나려는 원의 반지름 크기의 합이 현재 원천인 메타볼의 반지름보다 작으면 벗어난 것이라 생각한다.
    - [x] 그런데 어느 정도 가중치를 조정하여 공을 그 안에서 움직이도록 해야 쫀득한 느낌이 난다.
    - [x] 이에 대한 코드를 짠다.
-
-   
    */
   animate(base: MetaballBaseInterface) {
     const {x: bx, y: by, r: br} = base;
 
-    if (this.x < 0 || this.y < 0) return;
-
     const dist = getDist(this.x, this.y, bx, by);
 
     if (dist >= br - this.absorbWeight) {
+      const nextXDirection = this.v[0] >= 0 ? -1 : 1;
+      const nextYDirection = this.v[1] >= 0 ? -1 : 1;
+
       const nextV: [number, number] = [
-        (this.v[0] >= 0 ? -1 : 1) * getRandom(0, 1, {allowNagative: false}),
-        (this.v[1] >= 0 ? -1 : 1) * getRandom(0, 1, {allowNagative: false}),
+        nextXDirection * getRandom(0, 0.5, {allowNagative: false}),
+        nextYDirection * getRandom(0, 0.5, {allowNagative: false}),
       ];
 
       this.setState({
-        x: this.x + nextV[0],
-        y: this.y + nextV[1],
+        x: this.x - this.v[0],
+        y: this.y - this.v[1],
         v: nextV,
       });
+
       return;
     }
 
@@ -228,7 +227,7 @@ export class Metaball implements MetaballInterface {
     this.ctx.lineTo(...cmpP2);
     this.ctx.bezierCurveTo(...cmpH2, ...h2, ...p2);
 
-    this.ctx.lineTo(...p1);
+    // this.ctx.lineTo(...p1);
 
     this.ctx.closePath();
     this.ctx.fill();
