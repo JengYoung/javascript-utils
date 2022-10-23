@@ -11,14 +11,10 @@ interface MetaballCanvasInterface {
   metaballs: Metaballs;
 
   bgGradients: [string, string];
-
-  gradients: [string, string];
 }
 
 export class MetaballCanvas extends Canvas implements MetaballCanvasInterface {
   bgGradients: [string, string];
-
-  gradients: [string, string];
 
   metaballs: Metaballs;
 
@@ -28,13 +24,13 @@ export class MetaballCanvas extends Canvas implements MetaballCanvasInterface {
     this.metaballs = new Metaballs({
       ctx: this.ctx,
       bubbleNum: 5,
-      absorbBallNum: 0,
+      absorbBallNum: 5,
       canvasWidth: width,
       canvasHeight: height,
+      gradients: ['#00ffff', '#752bed'],
     });
 
     this.bgGradients = ['#85ffff', '#c2a4f9'];
-    this.gradients = ['#00ffff', '#752bed'];
   }
 
   gradient(gradients: [string, string]) {
@@ -54,9 +50,6 @@ export class MetaballCanvas extends Canvas implements MetaballCanvasInterface {
     this.ctx.fillStyle = bgGradiation;
 
     this.ctx.fillRect(0, 0, this.width, this.height);
-
-    const metaballGradiation = this.gradient(this.gradients);
-    this.ctx.fillStyle = metaballGradiation;
   }
 
   animate() {

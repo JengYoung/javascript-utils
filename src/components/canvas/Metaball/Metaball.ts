@@ -247,8 +247,10 @@ export class Metaball implements MetaballInterface {
     startAngle: number = 0,
     endAngle: number = Math.PI * 2,
   ) {
+    ctx.beginPath();
     ctx.arc(this.state.x, this.state.y, this.state.r, startAngle, endAngle);
 
+    ctx.closePath();
     ctx.fill();
   }
 }

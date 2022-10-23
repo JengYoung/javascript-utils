@@ -8,6 +8,7 @@ export interface MetaballsPropsInterface {
   absorbBallNum: number;
   canvasWidth: number;
   canvasHeight: number;
+  gradients: [string, string];
 }
 
 export interface MetaballsInterface extends MetaballsPropsInterface {
@@ -28,7 +29,9 @@ export class Metaballs implements MetaballsInterface {
 
   canvasHeight: number;
 
-  #bubbles: Metaball[] = [];
+  gradients: [string, string];
+
+  #bubbles: Bubble[] = [];
 
   #absorbedMetaBalls: Metaball[] = [];
 
@@ -38,6 +41,7 @@ export class Metaballs implements MetaballsInterface {
     absorbBallNum,
     canvasWidth,
     canvasHeight,
+    gradients,
   }: MetaballsPropsInterface) {
     this.ctx = ctx;
 
@@ -57,6 +61,8 @@ export class Metaballs implements MetaballsInterface {
         getRandom(0, 1, {allowNagative: true}),
       ],
     });
+
+    this.gradients = gradients;
 
     this.init();
   }
@@ -82,7 +88,7 @@ export class Metaballs implements MetaballsInterface {
         ctx: this.ctx,
         x: this.canvasWidth / 2,
         y: this.canvasHeight / 2,
-        r: 200,
+        r: 50,
         v: [
           getRandom(0, 1, {allowNagative: true}),
           getRandom(0, 1, {allowNagative: true}),
@@ -105,6 +111,30 @@ export class Metaballs implements MetaballsInterface {
     return [...this.#absorbedMetaBalls, ...this.#bubbles];
   }
 
+  get bubbles() {
+    return this.#bubbles;
+  }
+
+  gradient(gradients: [string, string]) {
+    const result = this.ctx.createLinearGradient(
+      0,
+      0,
+      0,
+      this.ctx.canvas.height,
+    );
+
+    gradients.forEach((gradient, idx) => {
+      result.addColorStop(idx, gradient);
+    });
+
+    return result;
+  }
+
+  fillGradient() {
+    const metaballGradiation = this.gradient(this.gradients);
+    this.ctx.fillStyle = metaballGradiation;
+  }
+
   animate() {
     this.restMetaballs.forEach(ball => {
       ball.animate({
@@ -118,12 +148,33 @@ export class Metaballs implements MetaballsInterface {
   }
 
   render(ctx: CanvasRenderingContext2D) {
-    this.restMetaballs.forEach((ball, idx) => {
+    this.bubbles.forEach((ball, idx) => {
+      if (ball.isBurst) {
+        ball.burst();
+      } else {
+        const mainMetaballPath = ball.update(this.mainMetaball);
+        if (mainMetaballPath !== null) ball.renderCurve(mainMetaballPath);
+
+        for (let i = idx + 1; i < this.bubbles.length; i += 1) {
+          const nextBall = this.bubbles[i];
+          if (!nextBall.isBurst) {
+            // NOTE: update and render curve finally
+            const paths = ball.update(nextBall);
+            if (paths !== null) ball.renderCurve(paths);
+          }
+        }
+      }
+
+      ball.render(ctx);
+    });
+
+    this.absorbedMetaBalls.forEach((ball, idx) => {
+      this.fillGradient();
       const mainMetaballPath = ball.update(this.mainMetaball);
       if (mainMetaballPath !== null) ball.renderCurve(mainMetaballPath);
 
-      for (let i = idx + 1; i < this.restMetaballs.length; i += 1) {
-        const nextBall = this.restMetaballs[i];
+      for (let i = idx + 1; i < this.absorbedMetaBalls.length; i += 1) {
+        const nextBall = this.absorbedMetaBalls[i];
 
         // NOTE: update and render curve finally
         const paths = ball.update(nextBall);
