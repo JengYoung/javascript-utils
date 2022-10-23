@@ -23,7 +23,7 @@ export class MetaballCanvas extends Canvas implements MetaballCanvasInterface {
 
     this.metaballs = new Metaballs({
       ctx: this.ctx,
-      bubbleNum: 5,
+      bubbleNum: 4,
       absorbBallNum: 5,
       canvasWidth: width,
       canvasHeight: height,

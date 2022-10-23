@@ -14,6 +14,7 @@ export interface MetaballStateInterface extends MetaballPropInterface {}
 
 export interface MetaballInterface {
   state: MetaballStateInterface;
+  stickyWeight: number;
 }
 
 export interface UpdateReturnTypeInterface {
@@ -39,10 +40,14 @@ export class Metaball implements MetaballInterface {
       y,
       r,
       v: [
-        getRandom(0, 1, {allowNagative: true}),
-        getRandom(0, 1, {allowNagative: true}),
+        getRandom(0.3, 1, {allowNagative: true}),
+        getRandom(0.3, 1, {allowNagative: true}),
       ],
     };
+  }
+
+  get stickyWeight() {
+    return 1.1;
   }
 
   get gradients() {
@@ -74,10 +79,11 @@ export class Metaball implements MetaballInterface {
   }
 
   update(cmp: Metaball): null | UpdateReturnTypeInterface {
-    const {x: cmpX, y: cmpY, r: cmpR} = cmp;
+    const {x: cmpX, y: cmpY, r: cmpR, stickyWeight: cmpStickyWeight} = cmp;
+    const nowStickyWeight = Math.min(this.stickyWeight, cmpStickyWeight);
 
     const dist = getDist(this.x, this.y, cmpX, cmpY);
-    const maxDist = (this.r + cmpR) * 1.2;
+    const maxDist = (this.r + cmpR) * nowStickyWeight;
 
     if (dist >= maxDist) {
       return null;

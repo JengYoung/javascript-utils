@@ -88,10 +88,10 @@ export class Metaballs implements MetaballsInterface {
         ctx: this.ctx,
         x: this.canvasWidth / 2,
         y: this.canvasHeight / 2,
-        r: 50,
+        r: getRandom(50, 100, {allowNagative: false}),
         v: [
-          getRandom(0, 1, {allowNagative: true}),
-          getRandom(0, 1, {allowNagative: true}),
+          getRandom(0.3, 1, {allowNagative: true}),
+          getRandom(0.3, 1, {allowNagative: true}),
         ],
       });
 
@@ -154,6 +154,13 @@ export class Metaballs implements MetaballsInterface {
       } else {
         const mainMetaballPath = ball.update(this.mainMetaball);
         if (mainMetaballPath !== null) ball.renderCurve(mainMetaballPath);
+
+        for (let i = 0; i < this.absorbedMetaBalls.length; i += 1) {
+          const nextBall = this.absorbedMetaBalls[i];
+
+          const paths = ball.update(nextBall);
+          if (paths !== null) ball.renderCurve(paths);
+        }
 
         for (let i = idx + 1; i < this.bubbles.length; i += 1) {
           const nextBall = this.bubbles[i];

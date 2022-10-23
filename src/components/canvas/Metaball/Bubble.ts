@@ -34,6 +34,10 @@ export class Bubble extends Metaball {
     };
   }
 
+  get stickyWeight() {
+    return 1.05;
+  }
+
   get scale() {
     return this.state.scale;
   }
