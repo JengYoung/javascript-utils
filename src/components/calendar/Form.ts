@@ -1,4 +1,7 @@
-import {getLocalStorageItem, setLocalStorageItem} from '~/src/storage';
+import {
+  getLocalStorageItem,
+  setLocalStorageItem,
+} from '~/src/utils/storage/localStorage';
 import {CalendarDateInterface} from '.';
 import {DISPATCH_UPDATE_SCHEDULE, STORAGE_KEY} from './constants';
 import InputBox from './InputBox';

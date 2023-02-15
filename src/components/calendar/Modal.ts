@@ -1,4 +1,7 @@
-import {getLocalStorageItem, setLocalStorageItem} from '~/src/storage';
+import {
+  getLocalStorageItem,
+  setLocalStorageItem,
+} from '~/src/utils/storage/localStorage';
 import {STORAGE_KEY} from './constants';
 import CalendarForm, {CalendarScheduleInterface} from './Form';
 

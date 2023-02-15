@@ -1,4 +1,4 @@
-import {getLocalStorageItem} from '~/src/storage';
+import {getLocalStorageItem} from '~/src/utils/storage/localStorage';
 import CalendarHeader from './CalendarHeader';
 import DateCell from './Cell';
 import {DISPATCH_UPDATE_SCHEDULE, STORAGE_KEY} from './constants';

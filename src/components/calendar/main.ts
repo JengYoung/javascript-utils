@@ -13,7 +13,7 @@ import CalendarForm, {
   CalendarScheduleInterface,
 } from '@/components/calendar/Form';
 import Modal from '@/components/calendar/Modal';
-import {getLocalStorageItem} from '@/storage';
+import {getLocalStorageItem} from '~/src/utils/storage/localStorage';
 
 export interface AppState {
   visible: boolean;

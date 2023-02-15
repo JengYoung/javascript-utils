@@ -1,4 +1,4 @@
-import {setLocalStorageItem} from '~/src/storage';
+import {setLocalStorageItem} from '~/src/utils/storage/localStorage';
 import {CalendarDateInterface} from '.';
 import {
   OPEN_UPDATE_SCHEDULE_MODAL,

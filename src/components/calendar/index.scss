@@ -271,6 +271,7 @@ $schedule-default-top: 42px;
   padding: 20px;
   border-radius: 20px;
   border: 1px solid #ddd;
+  background-color: #fafafa;
 
   .calendar-form__header {
     font-size: 1.5rem;
@@ -317,6 +318,7 @@ $schedule-default-top: 42px;
 
   .calendar-modal__inner {
     position: relative;
+
     .calendar-modal__close-button {
       cursor: pointer;
       transition: all 0.3s;

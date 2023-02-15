@@ -57,8 +57,8 @@ export class Bubble extends Metaball {
         y: this.ctx.canvas.height / 2,
         r: getRandom(50, 100, {allowNagative: false}),
         v: [
-          getRandom(0, 1, {allowNagative: true}),
-          getRandom(0, 1, {allowNagative: true}),
+          getRandom(0.5, 1, {allowNagative: true}),
+          getRandom(0.5, 1, {allowNagative: true}),
         ],
         scale: 1,
         opacity: 1,
