@@ -62,6 +62,15 @@ module.exports = {
         extensions: ['.js', '.ts'],
         project: path.resolve(__dirname, './tsconfig.json'),
       },
+      rules: {
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': ['error'],
+        'no-shadow': 'off',
+        '@typescript-eslint/no-shadow': ['error'],
+        'no-useless-constructor': 'off',
+        'no-empty-function': 'off',
+        'max-classes-per-file': 'off',
+      },
     },
   ],
 };
