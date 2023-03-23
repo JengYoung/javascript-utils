@@ -32,3 +32,48 @@ export interface IStaticMetaballParams extends IMetaballParams {}
 export interface IDynamicMetaballParams
   extends Canvas2DElement,
     IDynamicMetaballOptions {}
+
+/**
+ * Canvas
+ */
+
+export interface CanvasShape {
+  width: number;
+  height: number;
+}
+
+export enum ECanvasGradientType {
+  'linear' = 'linear',
+  'radial' = 'radial',
+}
+
+export abstract class Canvas implements CanvasShape {
+  abstract type: ECanvasGradientType;
+
+  abstract $canvas: HTMLCanvasElement;
+
+  abstract ctx: CanvasRenderingContext2D;
+
+  abstract width: CanvasShape['width'];
+
+  abstract height: CanvasShape['height'];
+}
+
+export interface IRadialGradientOptions {
+  r0?: number;
+  r1?: number;
+}
+
+interface MetaballCanvasOptions {
+  radialGradient?: IRadialGradientOptions;
+}
+
+export abstract class GradientCanvas extends Canvas {
+  abstract gradients: string[];
+
+  abstract options?: MetaballCanvasOptions;
+}
+
+export interface GradientCanvasShape extends CanvasShape {
+  gradients: string[];
+}
