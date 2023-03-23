@@ -57,6 +57,12 @@ export abstract class Canvas implements CanvasShape {
   abstract width: CanvasShape['width'];
 
   abstract height: CanvasShape['height'];
+
+  abstract draw(background: CanvasGradient | string | CanvasPattern): void;
+
+  abstract mount($target: Element): void;
+
+  abstract render(): void;
 }
 
 export interface IRadialGradientOptions {
@@ -72,8 +78,10 @@ export abstract class GradientCanvas extends Canvas {
   abstract gradients: string[];
 
   abstract options?: MetaballCanvasOptions;
-}
 
-export interface GradientCanvasShape extends CanvasShape {
-  gradients: string[];
+  abstract draw(background: CanvasGradient): void;
+
+  abstract getLinearGradient(): CanvasGradient;
+
+  abstract getRadialGradient(options: IRadialGradientOptions): CanvasGradient;
 }
