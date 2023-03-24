@@ -1,5 +1,6 @@
 import {MetaballCanvas} from './Canvas';
-import {ECanvasGradientType} from './types';
+
+import {ECanvasGradientType, IMetaballDataset} from './types';
 
 export abstract class CanvasAnimation {
   abstract canvas: MetaballCanvas;
@@ -12,8 +13,29 @@ export abstract class CanvasAnimation {
 export class MetaballAnimation implements CanvasAnimation {
   public canvas: CanvasAnimation['canvas'];
 
-  constructor({canvas}: Omit<CanvasAnimation, 'mount' | 'render'>) {
+  public dataset: IMetaballDataset;
+
+  constructor({
+    canvas,
+    dataset,
+  }: {
+    canvas: CanvasAnimation['canvas'];
+    dataset?: IMetaballDataset;
+  }) {
     this.canvas = canvas;
+
+    this.dataset = dataset ?? {
+      static: [],
+      dynamic: [],
+    };
+
+    if (this.dataset?.static?.length || this.dataset?.dynamic?.length) {
+      this.initializeMetaballs(this.dataset);
+    }
+  }
+
+  initializeMetaballs(dataset: IMetaballDataset) {
+    this.canvas.initializeMetaballs(dataset);
   }
 
   mount($target: Element) {
@@ -38,7 +60,22 @@ const app = new MetaballAnimation({
     width: 400,
     height: 400,
     type: ECanvasGradientType.linear,
+    options: {
+      autoplay: true,
+    },
   }),
+  dataset: {
+    static: [{x: 30, y: 100, r: 20}],
+    dynamic: [
+      {
+        x: 30,
+        y: 100,
+        r: 20,
+        v: {x: 0.1, y: 0.1},
+        vWeight: 1,
+      },
+    ],
+  },
 });
 
 app.mount($target);

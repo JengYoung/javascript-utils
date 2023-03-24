@@ -82,6 +82,7 @@ export class MetaballCanvas implements GradientCanvas {
           data: dataset.static,
         },
       });
+
       this.metaballAnimationSubject.subscribe(
         new StaticMetaballsObserver(staticMetaballs, 'static'),
       );
