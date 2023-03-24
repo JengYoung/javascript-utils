@@ -1,5 +1,3 @@
-import {IMoveStrategy} from '../Strategies/types';
-
 /**
  * INFO: Common types
  */
@@ -22,7 +20,6 @@ export interface IMetaballOptions extends IXYWeight {
 export interface IDynamicMetaballOptions extends IMetaballOptions {
   v: IXYWeight;
   vWeight: number;
-  moveStrategy: IMoveStrategy;
 }
 
 export interface IMetaballParams extends Canvas2DElement, IMetaballOptions {}
@@ -72,6 +69,8 @@ export interface IRadialGradientOptions {
 
 interface MetaballCanvasOptions {
   radialGradient?: IRadialGradientOptions;
+  autoplay?: boolean;
+  pause?: boolean;
 }
 
 export abstract class GradientCanvas extends Canvas {
@@ -84,4 +83,26 @@ export abstract class GradientCanvas extends Canvas {
   abstract getLinearGradient(): CanvasGradient;
 
   abstract getRadialGradient(options: IRadialGradientOptions): CanvasGradient;
+}
+
+/**
+ * INFO: MetaballsFactory
+ */
+
+export interface IPushMetaballPayload<MetaballParams> {
+  options: {
+    ctx: Canvas2DElement['ctx'];
+    data: MetaballParams;
+  };
+}
+
+/**
+ * INFO: App, Canvas
+ */
+export type TStaticMetaballDataset = Omit<IStaticMetaballParams, 'ctx'>[];
+export type TDynamicMetaballDataset = Omit<IDynamicMetaballParams, 'ctx'>[];
+
+export interface IMetaballDataset {
+  static?: TStaticMetaballDataset;
+  dynamic?: TDynamicMetaballDataset;
 }

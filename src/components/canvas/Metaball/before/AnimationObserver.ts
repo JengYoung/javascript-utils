@@ -7,7 +7,7 @@ export abstract class MetaballsAnimationObserver {
 }
 
 export class StaticMetaballsObserver implements MetaballsAnimationObserver {
-  constructor(public metaballs: StaticMetaballs) {}
+  constructor(public metaballs: StaticMetaballs, public key: string) {}
 
   update() {
     this.metaballs.moveAll();
@@ -15,7 +15,7 @@ export class StaticMetaballsObserver implements MetaballsAnimationObserver {
 }
 
 export class DynamicMetaballsObserver implements MetaballsAnimationObserver {
-  constructor(public metaballs: DynamicMetaballs) {}
+  constructor(public metaballs: DynamicMetaballs, public key: string) {}
 
   update() {
     this.metaballs.moveAll();

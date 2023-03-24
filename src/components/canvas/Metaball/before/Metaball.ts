@@ -1,4 +1,3 @@
-import {IMoveStrategy} from '../Strategies/types';
 import {
   IDynamicMetaballParams,
   IStaticMetaballParams,
@@ -63,24 +62,13 @@ export class DynamicMetaball implements Metaball {
 
   public vWeight: number;
 
-  public moveStrategy: IMoveStrategy;
-
-  constructor({
-    ctx,
-    x,
-    y,
-    r,
-    v,
-    vWeight,
-    moveStrategy,
-  }: IDynamicMetaballParams) {
+  constructor({ctx, x, y, r, v, vWeight}: IDynamicMetaballParams) {
     this.ctx = ctx;
     this.x = x;
     this.y = y;
     this.r = r;
     this.v = v;
     this.vWeight = vWeight ?? 1;
-    this.moveStrategy = moveStrategy;
   }
 
   get vx() {
@@ -111,7 +99,5 @@ export class DynamicMetaball implements Metaball {
     this.v.y = value;
   }
 
-  move() {
-    this.moveStrategy.move();
-  }
+  move() {}
 }

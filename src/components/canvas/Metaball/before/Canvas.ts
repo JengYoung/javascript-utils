@@ -1,4 +1,18 @@
-import {GradientCanvas, IRadialGradientOptions} from './types';
+import {
+  StaticMetaballsObserver,
+  DynamicMetaballsObserver,
+} from './AnimationObserver';
+import {AnimationSubject} from './AnimationSubject';
+import {
+  DynamicMetaballsFactory,
+  StaticMetaballsFactory,
+} from './MetaballsFactory';
+import {
+  ECanvasGradientType,
+  GradientCanvas,
+  IMetaballDataset,
+  IRadialGradientOptions,
+} from './types';
 
 export class MetaballCanvas implements GradientCanvas {
   $canvas: GradientCanvas['$canvas'];
@@ -13,12 +27,30 @@ export class MetaballCanvas implements GradientCanvas {
 
   gradients: GradientCanvas['gradients'];
 
+  metaballAnimationSubject: AnimationSubject;
+
+  staticMetaballsFactory: StaticMetaballsFactory;
+
+  dynamicMetaballsFactory: DynamicMetaballsFactory;
+
+  options: GradientCanvas['options'];
+
   constructor({
     type,
     width,
     height,
     gradients,
-  }: Omit<GradientCanvas, '$canvas' | 'ctx'>) {
+    options,
+  }: Omit<
+    GradientCanvas,
+    | '$canvas'
+    | 'ctx'
+    | 'render'
+    | 'mount'
+    | 'draw'
+    | 'getLinearGradient'
+    | 'getRadialGradient'
+  >) {
     this.$canvas = document.createElement('canvas');
 
     this.ctx = this.$canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -29,6 +61,42 @@ export class MetaballCanvas implements GradientCanvas {
     this.height = height;
 
     this.gradients = gradients;
+
+    this.metaballAnimationSubject = new AnimationSubject({ctx: this.ctx});
+
+    this.staticMetaballsFactory = new StaticMetaballsFactory();
+    this.dynamicMetaballsFactory = new DynamicMetaballsFactory();
+
+    this.options = options ?? {
+      radialGradient: {r0: 0, r1: 0},
+      autoplay: false,
+      pause: false,
+    };
+  }
+
+  initializeMetaballs(dataset: IMetaballDataset) {
+    if (dataset.static) {
+      const staticMetaballs = this.staticMetaballsFactory.create({
+        options: {
+          ctx: this.ctx,
+          data: dataset.static,
+        },
+      });
+      this.metaballAnimationSubject.subscribe(
+        new StaticMetaballsObserver(staticMetaballs, 'static'),
+      );
+    } else if (dataset.dynamic) {
+      const dynamicMetaballs = this.dynamicMetaballsFactory.create({
+        options: {
+          ctx: this.ctx,
+          data: dataset.dynamic,
+        },
+      });
+
+      this.metaballAnimationSubject.subscribe(
+        new DynamicMetaballsObserver(dynamicMetaballs, 'dynamic'),
+      );
+    }
   }
 
   getLinearGradient() {
@@ -51,6 +119,22 @@ export class MetaballCanvas implements GradientCanvas {
     return result;
   }
 
+  get canvasGradient(): CanvasGradient {
+    switch (this.type) {
+      case ECanvasGradientType.linear: {
+        return this.getLinearGradient();
+      }
+      case ECanvasGradientType.radial: {
+        return this.getRadialGradient(
+          this.options?.radialGradient ?? {r0: 0, r1: 0},
+        );
+      }
+      default: {
+        return this.getLinearGradient();
+      }
+    }
+  }
+
   draw(background: CanvasGradient) {
     this.ctx.clearRect(0, 0, this.width, this.height);
 
@@ -63,11 +147,23 @@ export class MetaballCanvas implements GradientCanvas {
     $target.appendChild(this.$canvas);
 
     this.render();
+
+    if (!this.options?.pause && this.options?.autoplay) {
+      this.animate();
+    }
   }
 
   render() {
-    const canvasGradiation = this.getLinearGradient();
+    this.draw(this.canvasGradient);
 
-    this.draw(canvasGradiation);
+    this.metaballAnimationSubject.notify();
+  }
+
+  animate() {
+    if (this.options?.pause) return;
+
+    this.render();
+
+    requestAnimationFrame(this.animate.bind(this));
   }
 }

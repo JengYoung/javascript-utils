@@ -3,14 +3,9 @@ import {DynamicMetaball, StaticMetaball} from './Metaball';
 abstract class Metaballs<MetaballType> {
   abstract balls: MetaballType[];
 
-  push(metaball: MetaballType) {
-    this.balls.push(metaball);
-  }
-}
+  abstract push(metaball: MetaballType): void;
 
-export interface IPushMetaballPayload<Options> {
-  count: number;
-  options: Options;
+  abstract moveAll(): void;
 }
 
 export class StaticMetaballs implements Metaballs<StaticMetaball> {
@@ -20,9 +15,8 @@ export class StaticMetaballs implements Metaballs<StaticMetaball> {
     this.balls = [];
   }
 
-  push(metaball: StaticMetaball): void {
-    /* eslint-disable-next-line no-console */
-    console.log(metaball);
+  push(metaball: StaticMetaball) {
+    this.balls.push(metaball);
   }
 
   moveAll() {
@@ -38,8 +32,7 @@ export class DynamicMetaballs implements Metaballs<DynamicMetaball> {
   }
 
   push(metaball: DynamicMetaball): void {
-    /* eslint-disable-next-line no-console */
-    console.log(metaball);
+    this.balls.push(metaball);
   }
 
   moveAll() {
