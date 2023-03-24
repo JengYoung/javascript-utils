@@ -24,6 +24,11 @@ export class StaticMetaballs implements Metaballs<StaticMetaball> {
     /* eslint-disable-next-line no-console */
     console.log(metaball);
   }
+
+  moveAll() {
+    /* eslint-disable-next-line no-console */
+    console.log('moveAll!');
+  }
 }
 export class DynamicMetaballs implements Metaballs<DynamicMetaball> {
   balls: DynamicMetaball[];
@@ -35,5 +40,10 @@ export class DynamicMetaballs implements Metaballs<DynamicMetaball> {
   push(metaball: DynamicMetaball): void {
     /* eslint-disable-next-line no-console */
     console.log(metaball);
+  }
+
+  moveAll() {
+    /* eslint-disable-next-line no-console */
+    console.log('moveAll!');
   }
 }

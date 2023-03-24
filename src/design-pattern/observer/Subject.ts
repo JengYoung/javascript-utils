@@ -1,7 +1,7 @@
 import {Observer} from './Observer';
 
 export abstract class Subject {
-  public abstract observers: Observer[];
+  public abstract observers: Set<Observer>;
 
   public abstract subscribe(observer: Observer): void;
 

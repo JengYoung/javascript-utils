@@ -46,6 +46,12 @@ export class StaticMetaballFactory extends MetaballsFactory {
 
     return metaballs;
   }
+
+  create(
+    options: IPushMetaballPayload<IStaticMetaballParams>,
+  ): StaticMetaballs {
+    return super.create(options);
+  }
 }
 
 export class DynamicMetaballFactory extends MetaballsFactory {
