@@ -1,6 +1,12 @@
+import {MoveStrategy} from './Metaballs';
 import {MetaballCanvas} from './Canvas';
 
-import {ECanvasGradientType, IMetaballDataset} from './types';
+import {
+  ECanvasGradientType,
+  IMetaballDataset,
+  IDynamicMetaballMoveStrategy,
+  EMetaballObserverKeys,
+} from './types';
 
 export abstract class CanvasAnimation {
   abstract canvas: MetaballCanvas;
@@ -38,6 +44,10 @@ export class MetaballAnimation implements CanvasAnimation {
     this.canvas.initializeMetaballs(dataset);
   }
 
+  setDynamicMetaballMove({moveStrategy, key}: IDynamicMetaballMoveStrategy) {
+    this.canvas.setDynamicMetaballMoveStrategy({moveStrategy, key});
+  }
+
   mount($target: Element) {
     const $metaballAnimation = document.createElement('div');
     $metaballAnimation.className = 'metaball-animation';
@@ -57,8 +67,8 @@ const $target = document.body;
 const app = new MetaballAnimation({
   canvas: new MetaballCanvas({
     gradients: ['#123141', '#235234'],
-    width: 400,
-    height: 400,
+    width: window.innerWidth,
+    height: window.innerHeight,
     type: ECanvasGradientType.linear,
     options: {
       autoplay: true,
@@ -68,8 +78,8 @@ const app = new MetaballAnimation({
     static: [{x: 30, y: 100, r: 20}],
     dynamic: [
       {
-        x: 30,
-        y: 100,
+        x: 120,
+        y: 60,
         r: 20,
         v: {x: 0.1, y: 0.1},
         vWeight: 1,
@@ -78,4 +88,15 @@ const app = new MetaballAnimation({
   },
 });
 
-app.mount($target);
+function main() {
+  const moveStrategy = new MoveStrategy();
+
+  app.setDynamicMetaballMove({
+    moveStrategy,
+    key: EMetaballObserverKeys.dynamic,
+  });
+
+  app.mount($target);
+}
+
+main();

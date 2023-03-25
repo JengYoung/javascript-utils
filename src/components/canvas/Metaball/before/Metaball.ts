@@ -18,6 +18,8 @@ export abstract class Metaball {
   abstract setY(value: number): void;
 
   abstract setR(value: number): void;
+
+  abstract draw(): void;
 }
 
 export class StaticMetaball implements Metaball {
@@ -47,6 +49,8 @@ export class StaticMetaball implements Metaball {
   setR(value: number) {
     this.x = value;
   }
+
+  draw() {}
 }
 
 export class DynamicMetaball implements Metaball {
@@ -80,7 +84,7 @@ export class DynamicMetaball implements Metaball {
   }
 
   setY(value: number) {
-    this.x = value;
+    this.y = value;
   }
 
   setR(value: number) {
@@ -99,5 +103,23 @@ export class DynamicMetaball implements Metaball {
     this.v.y = value;
   }
 
-  move() {}
+  move() {
+    this.setX(this.x + this.vx);
+    this.setY(this.y + this.vy);
+    this.draw();
+  }
+
+  draw() {
+    this.ctx.save();
+
+    this.ctx.beginPath();
+
+    this.ctx.fillStyle = '#f7f711';
+    this.ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    this.ctx.fill();
+
+    this.ctx.closePath();
+
+    this.ctx.restore();
+  }
 }

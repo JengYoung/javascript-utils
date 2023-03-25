@@ -1,4 +1,4 @@
-import {StaticMetaballs, DynamicMetaballs} from './Metaballs';
+import {StaticMetaballs, DynamicMetaballs, MoveStrategy} from './Metaballs';
 
 export abstract class MetaballsAnimationObserver {
   public abstract metaballs: StaticMetaballs | DynamicMetaballs;
@@ -16,6 +16,10 @@ export class StaticMetaballsObserver implements MetaballsAnimationObserver {
 
 export class DynamicMetaballsObserver implements MetaballsAnimationObserver {
   constructor(public metaballs: DynamicMetaballs, public key: string) {}
+
+  updateMoveStrategy(moveStrategy: MoveStrategy) {
+    this.metaballs.setMoveStrategy(moveStrategy);
+  }
 
   update() {
     this.metaballs.moveAll();

@@ -1,3 +1,4 @@
+import {MoveStrategy} from './Metaballs';
 /**
  * INFO: Common types
  */
@@ -42,6 +43,11 @@ export interface CanvasShape {
 export enum ECanvasGradientType {
   'linear' = 'linear',
   'radial' = 'radial',
+}
+
+export enum EMetaballObserverKeys {
+  'dynamic' = 'dynamic',
+  'static' = 'static',
 }
 
 export abstract class Canvas implements CanvasShape {
@@ -105,4 +111,13 @@ export type TDynamicMetaballDataset = Omit<IDynamicMetaballParams, 'ctx'>[];
 export interface IMetaballDataset {
   static?: TStaticMetaballDataset;
   dynamic?: TDynamicMetaballDataset;
+}
+
+export interface IMetaballObserverKeys {
+  key: EMetaballObserverKeys;
+}
+
+export interface IDynamicMetaballMoveStrategy extends IMetaballObserverKeys {
+  key: EMetaballObserverKeys.dynamic;
+  moveStrategy: MoveStrategy;
 }

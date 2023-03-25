@@ -1,5 +1,7 @@
 import {Observer} from '~/src/design-pattern/observer/Observer';
 import {Subject} from '~/src/design-pattern/observer/Subject';
+import {DynamicMetaballsObserver} from './AnimationObserver';
+import {IDynamicMetaballMoveStrategy} from './types';
 
 interface IAnimationSubjectParams {
   ctx: CanvasRenderingContext2D;
@@ -26,6 +28,18 @@ export class AnimationSubject implements Subject {
   public notify(): void {
     this.observers.forEach(observer => {
       observer.update();
+    });
+  }
+
+  public notifyUpdateMoveStrategy({
+    moveStrategy,
+    key,
+  }: IDynamicMetaballMoveStrategy): void {
+    this.observers.forEach(observer => {
+      if (observer.key === key) {
+        (observer as DynamicMetaballsObserver).updateMoveStrategy(moveStrategy);
+        observer.update();
+      }
     });
   }
 }

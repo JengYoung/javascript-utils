@@ -10,6 +10,7 @@ import {
 import {
   ECanvasGradientType,
   GradientCanvas,
+  IDynamicMetaballMoveStrategy,
   IMetaballDataset,
   IRadialGradientOptions,
 } from './types';
@@ -72,6 +73,13 @@ export class MetaballCanvas implements GradientCanvas {
       autoplay: false,
       pause: false,
     };
+
+    this.init();
+  }
+
+  init() {
+    this.$canvas.width = this.width;
+    this.$canvas.height = this.height;
   }
 
   initializeMetaballs(dataset: IMetaballDataset) {
@@ -86,7 +94,9 @@ export class MetaballCanvas implements GradientCanvas {
       this.metaballAnimationSubject.subscribe(
         new StaticMetaballsObserver(staticMetaballs, 'static'),
       );
-    } else if (dataset.dynamic) {
+    }
+
+    if (dataset.dynamic) {
       const dynamicMetaballs = this.dynamicMetaballsFactory.create({
         options: {
           ctx: this.ctx,
@@ -98,6 +108,16 @@ export class MetaballCanvas implements GradientCanvas {
         new DynamicMetaballsObserver(dynamicMetaballs, 'dynamic'),
       );
     }
+  }
+
+  setDynamicMetaballMoveStrategy({
+    moveStrategy,
+    key,
+  }: IDynamicMetaballMoveStrategy) {
+    this.metaballAnimationSubject.notifyUpdateMoveStrategy({
+      moveStrategy,
+      key,
+    });
   }
 
   getLinearGradient() {
@@ -142,6 +162,7 @@ export class MetaballCanvas implements GradientCanvas {
     this.ctx.fillStyle = background;
 
     this.ctx.fillRect(0, 0, this.width, this.height);
+    this.ctx.save();
   }
 
   mount($target: Element) {
