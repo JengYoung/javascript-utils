@@ -1,4 +1,5 @@
-import {StaticMetaballs, DynamicMetaballs, MoveStrategy} from './Metaballs';
+import {StaticMetaballs, DynamicMetaballs} from './Metaballs';
+import {MoveStrategy} from './Strategies';
 
 export abstract class MetaballsAnimationObserver {
   public abstract metaballs: StaticMetaballs | DynamicMetaballs;

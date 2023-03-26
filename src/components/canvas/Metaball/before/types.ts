@@ -1,4 +1,4 @@
-import {MoveStrategy} from './Metaballs';
+import {MoveStrategy} from './Strategies';
 /**
  * INFO: Common types
  */

@@ -1,4 +1,4 @@
-import {MoveStrategy} from './Metaballs';
+import {MoveStrategy} from './Strategies';
 import {MetaballCanvas} from './Canvas';
 
 import {

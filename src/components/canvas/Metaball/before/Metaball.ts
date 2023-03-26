@@ -75,6 +75,10 @@ export class DynamicMetaball implements Metaball {
     this.vWeight = vWeight ?? 1;
   }
 
+  getCtx() {
+    return this.ctx;
+  }
+
   get vx() {
     return this.v.x;
   }
