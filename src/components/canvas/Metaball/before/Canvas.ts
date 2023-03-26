@@ -111,6 +111,10 @@ export class MetaballCanvas implements GradientCanvas {
     }
   }
 
+  get allMetaballs() {
+    return this.metaballAnimationSubject.allMetaballs;
+  }
+
   setDynamicMetaballMoveStrategy({
     moveStrategy,
     key,

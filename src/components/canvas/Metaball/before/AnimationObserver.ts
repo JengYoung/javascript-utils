@@ -1,7 +1,10 @@
 import {StaticMetaballs, DynamicMetaballs} from './Metaballs';
 import {DrawStrategy, MoveStrategy} from './Strategies';
+import {EMetaballObserverKeys} from './types';
 
 export abstract class MetaballsAnimationObserver {
+  public abstract key: string | EMetaballObserverKeys;
+
   public abstract metaballs: StaticMetaballs | DynamicMetaballs;
 
   public abstract update(): void;

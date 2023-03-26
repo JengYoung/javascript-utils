@@ -1,4 +1,6 @@
-import {DynamicMetaball} from './Metaball';
+import {shouldFuse} from './libs/fuseByForce';
+import {DynamicMetaball, StaticMetaball} from './Metaball';
+import {Canvas} from './types';
 
 abstract class Strategy {
   abstract exec(...args: unknown[]): void;
@@ -87,13 +89,50 @@ export class DrawStrategy implements Strategy {
 
     ctx.beginPath();
 
-    ctx.fillStyle = '#f7f711';
+    ctx.fillStyle = '#ffaa00';
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.closePath();
 
     ctx.restore();
+
+    this.after?.();
+  }
+}
+
+export class FuseStrategy implements Strategy {
+  before?: (...args: unknown[]) => void;
+
+  after?: (...args: unknown[]) => void;
+
+  constructor() {}
+
+  setBefore(callback: (...args: unknown[]) => void) {
+    this.before = callback.bind(this);
+  }
+
+  setAfter(callback: (...args: unknown[]) => void) {
+    this.after = callback.bind(this);
+  }
+
+  exec(ctx: Canvas['ctx'], balls: (DynamicMetaball | StaticMetaball)[]) {
+    this.before?.();
+
+    const {innerWidth, innerHeight} = window;
+
+    for (let cx = 0; cx < innerWidth; cx += 1) {
+      for (let cy = 0; cy < innerHeight; cy += 1) {
+        if (shouldFuse(balls, cx, cy)) {
+          ctx.save();
+
+          ctx.fillStyle = '#ffaa00';
+          ctx.fillRect(cx, cy, 1, 1);
+
+          ctx.restore();
+        }
+      }
+    }
 
     this.after?.();
   }

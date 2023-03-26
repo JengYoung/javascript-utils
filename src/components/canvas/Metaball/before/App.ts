@@ -1,4 +1,4 @@
-import {DrawStrategy, MoveStrategy} from './Strategies';
+import {DrawStrategy, FuseStrategy, MoveStrategy} from './Strategies';
 import {MetaballCanvas} from './Canvas';
 
 import {
@@ -41,6 +41,14 @@ export class MetaballAnimation implements CanvasAnimation {
     }
   }
 
+  get canvasCtx() {
+    return this.canvas.ctx;
+  }
+
+  get allMetaballs() {
+    return this.canvas.allMetaballs;
+  }
+
   initializeMetaballs(dataset: IMetaballDataset) {
     this.canvas.initializeMetaballs(dataset);
   }
@@ -69,24 +77,25 @@ export class MetaballAnimation implements CanvasAnimation {
 
 const $target = document.body;
 
+const {innerWidth, innerHeight} = window;
 const app = new MetaballAnimation({
   canvas: new MetaballCanvas({
     gradients: ['#123141', '#235234'],
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: innerWidth,
+    height: innerHeight,
     type: ECanvasGradientType.linear,
     options: {
       autoplay: true,
     },
   }),
   dataset: {
-    dynamic: Array.from({length: 10}, (_, idx) => {
+    dynamic: Array.from({length: 4}, (_, idx) => {
       const rate = 0.1 * (idx + 1);
       return {
-        x: window.innerWidth * rate,
-        y: window.innerHeight * rate,
-        r: 100 * rate,
-        v: {x: 1 * rate, y: 0.1 / rate},
+        x: innerWidth * rate,
+        y: innerHeight * rate,
+        r: 300 * rate,
+        v: {x: 10 * rate, y: 1 / rate},
         vWeight: 1 * rate,
       };
     }),
@@ -96,6 +105,7 @@ const app = new MetaballAnimation({
 function main() {
   const moveStrategy = new MoveStrategy();
   const drawStrategy = new DrawStrategy();
+  const fuseStrategy = new FuseStrategy();
 
   app.setDynamicMetaballMove({
     moveStrategy,
@@ -105,6 +115,10 @@ function main() {
   app.setDynamicMetaballDraw({
     drawStrategy,
     key: EMetaballObserverKeys.dynamic,
+  });
+
+  drawStrategy.setAfter(() => {
+    fuseStrategy.exec(app.canvasCtx, app.allMetaballs);
   });
 
   app.mount($target);
