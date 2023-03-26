@@ -1,5 +1,5 @@
 import {DynamicMetaball, StaticMetaball} from './Metaball';
-import {MoveStrategy} from './Strategies';
+import {MoveStrategy, DrawStrategy} from './Strategies';
 
 abstract class Metaballs<MetaballType> {
   abstract balls: MetaballType[];
@@ -29,7 +29,10 @@ export class StaticMetaballs implements Metaballs<StaticMetaball> {
 export class DynamicMetaballs implements Metaballs<DynamicMetaball> {
   balls: DynamicMetaball[];
 
-  constructor(public moveStrategy?: MoveStrategy) {
+  constructor(
+    public moveStrategy?: MoveStrategy,
+    public drawStrategy?: DrawStrategy,
+  ) {
     this.balls = [];
   }
 
@@ -37,16 +40,26 @@ export class DynamicMetaballs implements Metaballs<DynamicMetaball> {
     this.moveStrategy = moveStrategy;
   }
 
+  setDrawStrategy(drawStrategy: DrawStrategy) {
+    this.drawStrategy = drawStrategy;
+  }
+
   push(metaball: DynamicMetaball): void {
     this.balls.push(metaball);
   }
 
   moveAll() {
-    if (!this.moveStrategy) return;
+    if (!this.moveStrategy || !this.drawStrategy) return;
 
-    const strategy = this.moveStrategy;
+    const {moveStrategy, drawStrategy} = this;
 
     /* eslint-disable-next-line no-console */
-    this.balls.forEach(strategy.exec.bind(strategy));
+    this.balls.forEach(ball => {
+      const move = moveStrategy.exec.bind(moveStrategy);
+      const draw = drawStrategy.exec.bind(drawStrategy);
+
+      move(ball);
+      draw(ball);
+    });
   }
 }

@@ -1,5 +1,5 @@
 import {StaticMetaballs, DynamicMetaballs} from './Metaballs';
-import {MoveStrategy} from './Strategies';
+import {DrawStrategy, MoveStrategy} from './Strategies';
 
 export abstract class MetaballsAnimationObserver {
   public abstract metaballs: StaticMetaballs | DynamicMetaballs;
@@ -20,6 +20,10 @@ export class DynamicMetaballsObserver implements MetaballsAnimationObserver {
 
   updateMoveStrategy(moveStrategy: MoveStrategy) {
     this.metaballs.setMoveStrategy(moveStrategy);
+  }
+
+  updateDrawStrategy(drawStrategy: DrawStrategy) {
+    this.metaballs.setDrawStrategy(drawStrategy);
   }
 
   update() {

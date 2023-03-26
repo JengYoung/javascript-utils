@@ -41,3 +41,41 @@ export class MoveStrategy implements Strategy {
     this.after?.();
   }
 }
+
+export class DrawStrategy implements Strategy {
+  before?: (...args: unknown[]) => void;
+
+  after?: (...args: unknown[]) => void;
+
+  constructor() {}
+
+  setBefore(callback: (...args: unknown[]) => void) {
+    this.before = callback.bind(this);
+  }
+
+  setAfter(callback: (...args: unknown[]) => void) {
+    this.after = callback.bind(this);
+  }
+
+  exec(metaball: DynamicMetaball) {
+    this.before?.();
+
+    const ctx = metaball.getCtx();
+
+    const {x, y, r} = metaball;
+
+    ctx.save();
+
+    ctx.beginPath();
+
+    ctx.fillStyle = '#f7f711';
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.closePath();
+
+    ctx.restore();
+
+    this.after?.();
+  }
+}

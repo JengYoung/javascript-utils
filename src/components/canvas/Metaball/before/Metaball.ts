@@ -107,23 +107,7 @@ export class DynamicMetaball implements Metaball {
     this.v.y = value;
   }
 
-  move() {
-    this.setX(this.x + this.vx);
-    this.setY(this.y + this.vy);
-    this.draw();
-  }
+  move() {}
 
-  draw() {
-    this.ctx.save();
-
-    this.ctx.beginPath();
-
-    this.ctx.fillStyle = '#f7f711';
-    this.ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-    this.ctx.fill();
-
-    this.ctx.closePath();
-
-    this.ctx.restore();
-  }
+  draw() {}
 }

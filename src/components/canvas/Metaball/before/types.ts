@@ -1,4 +1,4 @@
-import {MoveStrategy} from './Strategies';
+import {DrawStrategy, MoveStrategy} from './Strategies';
 /**
  * INFO: Common types
  */
@@ -120,4 +120,9 @@ export interface IMetaballObserverKeys {
 export interface IDynamicMetaballMoveStrategy extends IMetaballObserverKeys {
   key: EMetaballObserverKeys.dynamic;
   moveStrategy: MoveStrategy;
+}
+
+export interface IDynamicMetaballDrawStrategy extends IMetaballObserverKeys {
+  key: EMetaballObserverKeys.dynamic;
+  drawStrategy: DrawStrategy;
 }

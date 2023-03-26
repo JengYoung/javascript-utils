@@ -1,4 +1,4 @@
-import {MoveStrategy} from './Strategies';
+import {DrawStrategy, MoveStrategy} from './Strategies';
 import {MetaballCanvas} from './Canvas';
 
 import {
@@ -6,6 +6,7 @@ import {
   IMetaballDataset,
   IDynamicMetaballMoveStrategy,
   EMetaballObserverKeys,
+  IDynamicMetaballDrawStrategy,
 } from './types';
 
 export abstract class CanvasAnimation {
@@ -46,6 +47,10 @@ export class MetaballAnimation implements CanvasAnimation {
 
   setDynamicMetaballMove({moveStrategy, key}: IDynamicMetaballMoveStrategy) {
     this.canvas.setDynamicMetaballMoveStrategy({moveStrategy, key});
+  }
+
+  setDynamicMetaballDraw({drawStrategy, key}: IDynamicMetaballDrawStrategy) {
+    this.canvas.setDynamicMetaballDrawStrategy({drawStrategy, key});
   }
 
   mount($target: Element) {
@@ -90,9 +95,15 @@ const app = new MetaballAnimation({
 
 function main() {
   const moveStrategy = new MoveStrategy();
+  const drawStrategy = new DrawStrategy();
 
   app.setDynamicMetaballMove({
     moveStrategy,
+    key: EMetaballObserverKeys.dynamic,
+  });
+
+  app.setDynamicMetaballDraw({
+    drawStrategy,
     key: EMetaballObserverKeys.dynamic,
   });
 

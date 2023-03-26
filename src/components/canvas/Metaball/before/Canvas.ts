@@ -10,6 +10,7 @@ import {
 import {
   ECanvasGradientType,
   GradientCanvas,
+  IDynamicMetaballDrawStrategy,
   IDynamicMetaballMoveStrategy,
   IMetaballDataset,
   IRadialGradientOptions,
@@ -116,6 +117,16 @@ export class MetaballCanvas implements GradientCanvas {
   }: IDynamicMetaballMoveStrategy) {
     this.metaballAnimationSubject.notifyUpdateMoveStrategy({
       moveStrategy,
+      key,
+    });
+  }
+
+  setDynamicMetaballDrawStrategy({
+    drawStrategy,
+    key,
+  }: IDynamicMetaballDrawStrategy) {
+    this.metaballAnimationSubject.notifyUpdateDrawStrategy({
+      drawStrategy,
       key,
     });
   }
