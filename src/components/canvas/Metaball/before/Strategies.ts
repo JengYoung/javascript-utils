@@ -30,11 +30,30 @@ export class MoveStrategy implements Strategy {
     const {
       x,
       y,
+      r,
       v: {x: vx, y: vy},
     } = metaball;
 
     metaball.setX(x + vx);
     metaball.setY(y + vy);
+
+    const ctx = metaball.getCtx();
+
+    const shouldChangeXDirection = () => {
+      return (x - r <= 0 && vx < 0) || (x + r >= ctx.canvas.width && vx > 0);
+    };
+
+    const shouldChangeYDirection = () => {
+      return (y + r >= ctx.canvas.height && vy > 0) || (y - r <= 0 && vy < 0);
+    };
+
+    if (shouldChangeXDirection()) {
+      metaball.setVx(metaball.vx * -1);
+    }
+
+    if (shouldChangeYDirection()) {
+      metaball.setVy(metaball.vy * -1);
+    }
 
     metaball.draw();
 

@@ -70,6 +70,7 @@ module.exports = {
         'no-useless-constructor': 'off',
         'no-empty-function': 'off',
         'max-classes-per-file': 'off',
+        'arrow-body-style': 'off',
       },
     },
   ],

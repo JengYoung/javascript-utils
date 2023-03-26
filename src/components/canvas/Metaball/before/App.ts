@@ -80,16 +80,16 @@ const app = new MetaballAnimation({
     },
   }),
   dataset: {
-    static: [{x: 30, y: 100, r: 20}],
-    dynamic: [
-      {
-        x: 120,
-        y: 60,
-        r: 20,
-        v: {x: 0.1, y: 0.1},
-        vWeight: 1,
-      },
-    ],
+    dynamic: Array.from({length: 10}, (_, idx) => {
+      const rate = 0.1 * (idx + 1);
+      return {
+        x: window.innerWidth * rate,
+        y: window.innerHeight * rate,
+        r: 100 * rate,
+        v: {x: 1 * rate, y: 0.1 / rate},
+        vWeight: 1 * rate,
+      };
+    }),
   },
 });
 
