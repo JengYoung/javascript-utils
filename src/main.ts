@@ -1,1 +1,1 @@
-import '@/components/calendar/main';
+import '@/components/canvas/Metaball/before/App';

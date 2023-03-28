@@ -156,7 +156,6 @@ export class App {
 
           circle.position.z = this.#distance;
         }
-        console.log(circle);
       }
 
       this.camera.position.z -= 5;

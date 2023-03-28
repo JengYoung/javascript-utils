@@ -20,7 +20,7 @@ const getAngle = (
   y1: number,
   x2: number,
   y2: number,
-  {degree = false}: {degree?: boolean},
-) => Math.atan2(y1 - y2, x1 - x2) * (degree ? RADIAN : 1);
+  option?: {degree?: boolean},
+) => Math.atan2(y1 - y2, x1 - x2) * (option?.degree ? RADIAN : 1);
 
 export default getAngle;

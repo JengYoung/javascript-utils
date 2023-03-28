@@ -11,6 +11,7 @@ describe('MinHeap', () => {
     minHeap.heappush([32, 5]);
     minHeap.heappush([3, 10]);
 
+    /* eslint-disable no-console */
     console.log(minHeap.arr);
     expect(minHeap.heappop()[0]).toEqual(1);
     console.log(minHeap.arr);
