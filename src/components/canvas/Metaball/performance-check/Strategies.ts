@@ -86,8 +86,6 @@ export class DrawStrategy implements Strategy {
 
     const {x, y, r} = metaball;
 
-    // ctx.save();
-
     ctx.beginPath();
 
     ctx.fillStyle = '#ffaa00';
@@ -99,8 +97,6 @@ export class DrawStrategy implements Strategy {
     ctx.closePath();
 
     ctx.fill();
-
-    // ctx.restore();
 
     this.after?.();
   }
