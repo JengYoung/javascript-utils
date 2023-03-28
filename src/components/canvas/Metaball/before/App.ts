@@ -1,4 +1,4 @@
-import {DrawStrategy, FuseStrategy, MoveStrategy} from './Strategies';
+import {DrawStrategy, MoveStrategy, OptimizedFuseStrategy} from './Strategies';
 import {MetaballCanvas} from './Canvas';
 
 import {
@@ -95,7 +95,7 @@ const app = new MetaballAnimation({
         x: innerWidth * rate,
         y: innerHeight * rate,
         r: 300 * rate,
-        v: {x: 10 * rate, y: 1 / rate},
+        v: {x: 0.5 * rate, y: 0.5 / rate},
         vWeight: 1 * rate,
       };
     }),
@@ -105,7 +105,8 @@ const app = new MetaballAnimation({
 function main() {
   const moveStrategy = new MoveStrategy();
   const drawStrategy = new DrawStrategy();
-  const fuseStrategy = new FuseStrategy();
+  // const fuseStrategy = new FuseStrategy();
+  const fuseStrategy = new OptimizedFuseStrategy();
 
   app.setDynamicMetaballMove({
     moveStrategy,
@@ -117,7 +118,7 @@ function main() {
     key: EMetaballObserverKeys.dynamic,
   });
 
-  drawStrategy.setAfter(() => {
+  moveStrategy.setBefore(() => {
     fuseStrategy.exec(app.canvasCtx, app.allMetaballs);
   });
 
