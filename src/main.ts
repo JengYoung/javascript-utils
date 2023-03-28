@@ -1,1 +1,1 @@
-import '@/components/canvas/Metaball/before/App';
+import '~/src/components/canvas/Metaball/performance-check/App';
