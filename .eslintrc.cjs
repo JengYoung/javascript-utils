@@ -71,6 +71,7 @@ module.exports = {
         'no-empty-function': 'off',
         'max-classes-per-file': 'off',
         'arrow-body-style': 'off',
+        'no-restricted-syntax': 'off',
       },
     },
   ],
