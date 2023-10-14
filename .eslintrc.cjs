@@ -34,7 +34,8 @@ module.exports = {
         ts: 'never',
       },
     ],
-    'class-methods-use-this': 0,
+    'class-methods-use-this': 'off',
+    'no-restricted-syntax': 'off',
   },
   settings: {
     'import/resolver': {
@@ -71,7 +72,6 @@ module.exports = {
         'no-empty-function': 'off',
         'max-classes-per-file': 'off',
         'arrow-body-style': 'off',
-        'no-restricted-syntax': 'off',
       },
     },
   ],
