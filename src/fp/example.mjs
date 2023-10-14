@@ -31,3 +31,11 @@ go(
   prices => reduce(add, prices),
   console.log,
 );
+
+go(
+  products,
+  filter(p => p.price < 20000),
+  map(p => p.price),
+  reduce(add),
+  console.log,
+);
