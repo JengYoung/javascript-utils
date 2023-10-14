@@ -34,3 +34,11 @@ export function reduce(f, acc, iter) {
 
   return acc;
 }
+
+export function go(...args) {
+  return reduce((a, f) => f(a), args);
+}
+
+export function pipe(f, ...fs) {
+  return (...as) => go(f(...as), ...fs);
+}

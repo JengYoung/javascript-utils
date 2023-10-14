@@ -1,4 +1,4 @@
-import {filter, map, reduce} from './index.mjs';
+import {filter, go, map, reduce} from './index.mjs';
 
 const products = [
   {name: '반팔티', price: 15000},
@@ -22,4 +22,12 @@ console.log(
       map(p => p.price, products),
     ),
   ),
+);
+
+go(
+  products,
+  res => filter(p => p.price < 20000, res),
+  res => map(p => p.price, res),
+  prices => reduce(add, prices),
+  console.log,
 );
