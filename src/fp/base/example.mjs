@@ -1,4 +1,4 @@
-import {filter, go, map, reduce} from './index.mjs';
+import {filter, go, map, pipe, reduce} from './index.mjs';
 
 const products = [
   {name: '반팔티', price: 15000},
@@ -37,5 +37,17 @@ go(
   filter(p => p.price < 20000),
   map(p => p.price),
   reduce(add),
+  console.log,
+);
+
+const totalPrice = pipe(
+  map(p => p.price),
+  reduce(add),
+);
+
+go(
+  products,
+  filter(p => p.price < 20000),
+  totalPrice,
   console.log,
 );

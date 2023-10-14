@@ -7,7 +7,7 @@
   const curry =
     f =>
     (a, ..._) =>
-      _.length ? f(a, ..._) : (..._) => f(a, ..._);
+      _.length ? f(a, ..._) : (...__) => f(a, ...__);
 
   const mult = curry((a, b, c) => a * b * c);
   console.log(mult(1)(2, 3));
