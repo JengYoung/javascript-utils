@@ -62,6 +62,12 @@ const products = [
 
   console.log(map(a => a * a, gen()));
 
+  /**
+   * @description
+   * Map 객체 역시 이터러블 프로토콜을 따른다.
+   * 하지만 Map에는 map 프로토타입 메서드가 존재하지 않는다.
+   * 그렇지만 map 함수를 통해 다형성을 바탕으로 원하는 결과를 처리할 수 있다.
+   */
   const m = new Map();
 
   m.set('a', 10);

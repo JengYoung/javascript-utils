@@ -36,6 +36,8 @@ module.exports = {
     ],
     'class-methods-use-this': 'off',
     'no-restricted-syntax': 'off',
+    'no-console': 'warn',
+    'no-param-reassign': 'warn',
   },
   settings: {
     'import/resolver': {
