@@ -10,13 +10,24 @@ L.range = function* range(length) {
 };
 
 L.map = function* map(f, iter) {
-  for (const a of iter) yield f(a);
+  iter = iter[Symbol.iterator]();
+
+  let cur;
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
+
+    yield f(a);
+  }
 };
 
 L.filter = function* filter(f, iter) {
-  for (const a of iter) {
-    if (f(a)) {
-      yield a;
-    }
+  iter = iter[Symbol.iterator]();
+
+  let cur;
+
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
+
+    yield f(a);
   }
 };

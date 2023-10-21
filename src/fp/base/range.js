@@ -1,6 +1,6 @@
 import {reduce} from './index.mjs';
 
-export const range = (to, from = 0, res = []) => {
+const range = (to, from = 0, res = []) => {
   if (to <= from) {
     return res;
   }
