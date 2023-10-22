@@ -31,9 +31,23 @@ const entries = function* entries(obj) {
   }
 };
 
+const isIterable = a => a && a[Symbol.iterator];
+function* flatten(iter) {
+  for (const a of iter) {
+    if (isIterable(a)) {
+      for (const b of a) {
+        yield b;
+      }
+    } else {
+      yield a;
+    }
+  }
+}
+
 export const L = {
   range,
   map,
   filter,
   entries,
+  flatten,
 };
