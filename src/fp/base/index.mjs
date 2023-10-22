@@ -1,5 +1,5 @@
 export function curry(f) {
-  return (a, ..._) => (_.length ? f(a, ..._) : (..._) => f(a, ..._));
+  return (a, ..._) => (_.length ? f(a, ..._) : (...__) => f(a, ...__));
 }
 
 /**
@@ -60,7 +60,10 @@ export const reduce = curry((f, acc, iter) => {
     acc = iter.next().value;
   }
 
-  for (const a of iter) {
+  let cur;
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
+
     acc = f(acc, a);
   }
 
@@ -82,3 +85,7 @@ export const range = (to, from = 0, res = []) => {
 
   return range(to, from + 1, [...res, from]);
 };
+
+export const join = curry((sep, iter) =>
+  reduce((a, b) => `${a}${sep}${b}`, iter),
+);

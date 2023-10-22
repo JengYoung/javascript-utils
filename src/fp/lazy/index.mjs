@@ -1,15 +1,15 @@
-export const L = {};
+import {curry} from '../base/index.mjs';
 
-L.range = function* range(length) {
+const range = curry(function* range(length) {
   let i = 0;
 
   while (i < length) {
     yield i;
     i += 1;
   }
-};
+});
 
-L.map = function* map(f, iter) {
+const map = curry(function* map(f, iter) {
   iter = iter[Symbol.iterator]();
 
   let cur;
@@ -18,9 +18,9 @@ L.map = function* map(f, iter) {
 
     yield f(a);
   }
-};
+});
 
-L.filter = function* filter(f, iter) {
+const filter = curry(function* filter(f, iter) {
   iter = iter[Symbol.iterator]();
 
   let cur;
@@ -30,4 +30,19 @@ L.filter = function* filter(f, iter) {
 
     yield f(a);
   }
+});
+
+const entries = function* entries(obj) {
+  for (const k in obj) {
+    const value = [k, obj[k]];
+
+    yield value;
+  }
+};
+
+export const L = {
+  range,
+  map,
+  filter,
+  entries,
 };
