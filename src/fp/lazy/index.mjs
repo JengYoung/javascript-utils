@@ -10,25 +10,16 @@ const range = curry(function* range(length) {
 });
 
 const map = curry(function* map(f, iter) {
-  iter = iter[Symbol.iterator]();
-
-  let cur;
-  while (!(cur = iter.next()).done) {
-    const a = cur.value;
-
+  for (const a of iter) {
     yield f(a);
   }
 });
 
 const filter = curry(function* filter(f, iter) {
-  iter = iter[Symbol.iterator]();
-
-  let cur;
-
-  while (!(cur = iter.next()).done) {
-    const a = cur.value;
-
-    yield f(a);
+  for (const a of iter) {
+    if (f(a)) {
+      yield a;
+    }
   }
 });
 

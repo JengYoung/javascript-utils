@@ -1,5 +1,3 @@
-import {L} from '../lazy/index.mjs';
-
 export function curry(f) {
   return (a, ..._) => (_.length ? f(a, ..._) : (...__) => f(a, ...__));
 }
@@ -91,5 +89,3 @@ export const range = (to, from = 0, res = []) => {
 export const join = curry((sep, iter) =>
   reduce((a, b) => `${a}${sep}${b}`, iter),
 );
-
-export const find = (f, iter) => go(iter, L.filter(f), take(1), ([a]) => a);
